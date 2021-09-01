@@ -1,0 +1,50 @@
+https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array/
+
+Method 1- Set, Space: O(N), Time:O(N)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<set>
+#include<vector>
+
+using namespace std;
+
+void print(vector<int> arr, int k)
+{
+    set<int> s;
+    int len=arr.size();
+    
+    for(int i=0;i<len;i++)
+    {
+        s.insert(arr[i]);
+    }
+    
+    int count=0;
+    set<int>::iterator it=s.begin();
+    
+    while(count<k-1 && it!=s.end())
+    {
+        it++;
+        count++;
+        
+    }
+    
+    cout<<*it;
+    
+}
+
+int main()
+{
+    vector<int> arr={7, 10, 4, 3, 20, 15};
+    int k=5;
+    print(arr,k);
+
+    return 0;
+}
