@@ -1,0 +1,19 @@
+https://www.geeksforgeeks.org/write-a-program-to-reverse-an-array-or-string/
+
+string reverseWord(string str){
+    
+    int len=str.length();
+    int i=0,j=len-1;
+    string ans=str;
+    
+    while(i<j)
+    {
+        char a=str[i];
+        str[i]=str[j];
+        str[j]=a;
+        i++;
+        j--;
+    }
+    
+    return str;
+    
