@@ -1,0 +1,39 @@
+https://practice.geeksforgeeks.org/problems/kadanes-algorithm-1587115620/1
+
+Time: O(N), Space:O(1)
+
+class Solution{
+    public:
+    // arr: input array
+    // n: size of array
+    //Function to find the sum of contiguous subarray with maximum sum.
+    long long max_ele(long long a, long long b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    long long maxSubarraySum(int arr[], int n){
+        
+        long long prev,curr, max;
+        prev=arr[0];
+        curr=arr[0];
+        max=arr[0];
+        
+        for(int i=1;i<n;i++)
+        {
+            curr=max_ele(prev+arr[i],arr[i]);
+            if(max<curr)
+            {
+                max=curr;
+            }
+            prev=curr;
+        }
+        
+        return max;
+        
+    }
+};
