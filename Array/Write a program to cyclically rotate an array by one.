@@ -1,0 +1,18 @@
+https://www.geeksforgeeks.org/c-program-cyclically-rotate-array-one/
+
+Time: O(N), Space:O(1)
+
+void rotate(int arr[], int n)
+{
+    int h=n-1;
+    int last=arr[h];
+    
+    for(int i=h-1;i>=0;i--)
+    {
+        arr[i+1]=arr[i];
+    }
+    
+    arr[0]=last;
+    
+    
+}
