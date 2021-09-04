@@ -1,0 +1,40 @@
+https://practice.geeksforgeeks.org/problems/array-subset-of-another-array2317/1#
+
+Time:O(M+N), Space:O(M)
+
+string isSubset(int arr1[], int arr2[], int n, int m) {
+    
+    unordered_map<int,int> mp;
+    
+    for(int i=0;i<m;i++)
+    {
+        mp[arr2[i]]++;
+    }
+    
+    for(int i=0;i<n;i++)
+    {
+        if(mp.find(arr1[i])!=mp.end())
+        {
+            mp[arr1[i]]--;
+            if(mp[arr1[i]]==0)
+            {
+                mp.erase(arr1[i]);
+            }
+        }
+    }
+    
+    string ans;
+    
+    if(mp.size()==0)
+    {
+        ans="Yes";
+    }
+    else
+    {
+        ans="No";
+    }
+    
+    return ans;
+    
+    
+}
