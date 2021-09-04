@@ -1,0 +1,124 @@
+https://practice.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1 
+
+Time: O(N^2), Space:O(N)
+
+class Solution{
+  public:
+  
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+  
+    int minJumps(int arr[], int n){
+        // Your code here
+        
+        vector<int> dp(n,INT_MAX);
+        dp[0]=0;
+        
+        //dp[i]-> mins num of jumps to reach i from 0, we need dp[n-1]
+        //j -> positions from where u can reach i; j[0,i-1]
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                if(j+arr[j]>=i && dp[j]!=INT_MAX)
+                {
+                    dp[i]=min(dp[i],dp[j]+1);
+                }
+            }
+            
+        }
+        
+        if(dp[n-1]==INT_MAX)
+        {
+            return -1;
+        }
+        
+        return dp[n-1];
+    }
+};
+
+
+
+Method 2
+
+Time: O(N), Space:O(1)
+
+class Solution{
+  public:
+  
+    int max(int a,int b)
+    {
+        if(a<=b)
+        {
+            return b;
+        }
+        return a;
+    }
+  
+    int minJumps(int arr[], int n){
+        // Your code here
+        
+        if(n<=1)
+        {
+            return 0;
+        }
+        
+        if(arr[0]==0)
+        {
+            return -1;
+        }
+        
+        int max_reach=arr[0];  //max index u can reach from current index
+        int jump=1;  //no of jumps to reac max from curent index
+        int step=arr[0];  //no of steps remaining to reach max from curent
+        
+        
+        for(int i=1;i<n;i++)
+        {
+            if(i==n-1)
+            {
+                return jump;
+            }
+            
+            //u went to the first index, took 1 step
+            
+            step--;
+            
+            //max reeach from this index will be max (max_reach, i+arr[i])
+            max_reach=max(max_reach,i+arr[i]);
+            
+            if(step==0)
+            {
+                //if step becomes 0, jump to next ladder
+                
+                jump++;
+                
+                if(i>=max_reach)
+                {
+                    return -1;   //u cant move ahead
+                }
+                
+                step=max_reach-i; //remaining steps to reach max from current index
+                
+                
+                
+            }
+            
+            
+            
+            
+            
+        }
+        
+        return -1;
+        
+        
+    }
+};
