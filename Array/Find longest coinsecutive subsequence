@@ -1,0 +1,121 @@
+https://practice.geeksforgeeks.org/problems/longest-consecutive-subsequence2449/1#
+
+
+Method 1:
+
+Time: O(NlogN), Space:O(N)
+
+public:
+    // arr[] : the input array
+    // N : size of the array arr[]
+    
+    //Function to return length of longest subsequence of consecutive integers.
+    int findLongestConseqSubseq(int arr[], int n)
+    {
+      //Your code here
+      
+      if(n==0)
+      {
+          return 0;
+      }
+      
+      sort(arr,arr+n);
+      
+      int start=0,end=0;
+      
+      
+      vector<int> a;
+      a.push_back(arr[0]);
+      
+      //push only distinct element in the array
+      for(int i=1;i<n;i++)
+      {
+          if(arr[i]!=arr[i-1])
+          {
+              a.push_back(arr[i]);
+          }
+      }
+      
+      int len=a.size();
+      
+      int count=1;   //array has 1 element then ans will be min 1
+      int diff=1;   //hence sub_seq length will be min 1
+      
+      for(int i=1;i<len;i++)
+      {
+          if((a[i]-a[i-1])==1)
+          {
+              count++;
+          }
+          else
+          {
+              count=1;
+          }
+          
+          if(diff<count)
+          {
+              diff=count;
+          }
+      }
+      
+      return diff;
+    } 
+      
+};
+
+
+Method 2:
+
+Time: O(N), Space:O(N)
+
+public:
+    // arr[] : the input array
+    // N : size of the array arr[]
+    
+    //Function to return length of longest subsequence of consecutive integers.
+    int findLongestConseqSubseq(int arr[], int n)
+    {
+      //Your code here
+      
+        if(n==0)
+        {
+            return 0;
+        }
+        unordered_set<int> s;
+        
+        int ans=0;
+        //create a hash set
+        for(int i=0;i<n;i++)
+        {
+            s.insert(arr[i]);
+        }
+        
+        
+        //for every element in array, check if arr[i]-1 is present in hash,
+        //if present do nothing, it is a part of the se
+        //if not present, it is the start, find cons elements
+        for(int i=0;i<n;i++)
+        {
+            if(s.find(arr[i]-1)==s.end())
+            {
+                int start_element=arr[i];
+                
+                while(s.find(start_element)!=s.end())
+                {
+                    start_element++;
+                    
+            
+                }
+                
+                if(ans<start_element-arr[i])
+                {
+                    ans=start_element-arr[i];
+                }
+                
+                
+            }
+        }
+        
+        return ans;
+    }
+};
