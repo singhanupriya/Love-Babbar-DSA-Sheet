@@ -1,0 +1,104 @@
+
+
+Method 1:
+
+Logic: Merge arrays and store in a new array, find median
+
+Time: O(m+n), Space:O(m+n)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int median(int arr[],int n)
+{
+    
+    if(n%2==0)
+    {
+        return (arr[n/2-1]+arr[n/2])/2;
+    }
+    
+    return arr[n/2];
+}
+
+int getMedian(int arr1[],int m,int arr2[], int n)
+{
+    if(m==0 && n==0)
+    {
+        return -1;
+    }
+    
+    if(m==0)
+    {
+        return median(arr2,n);
+    }
+    if(n==0)
+    {
+        return median(arr1,m);
+    }
+    
+    vector<int> res;
+    
+    int i=0,j=0;
+    
+    while(i<m && j<n)
+    {
+        if(arr1[i]<=arr2[j])
+        {
+            res.push_back(arr1[i]);
+            i++;
+        }
+        else
+        {
+            res.push_back(arr2[j]);
+            j++;
+        }
+    }
+    
+    while(i<m)
+    {
+        res.push_back(arr1[i]);
+        i++;
+    }
+    
+    while(j<n)
+    {
+        res.push_back(arr2[j]);
+        j++;
+    }
+    
+    if((m+n)%2==0)
+    {
+        return (res[(m+n)/2-1]+res[(m+n)/2])/2;
+    }
+    return res[(m+n)/2];
+    
+}
+
+
+
+int main()
+{
+    int arr1[]={900 };
+    int arr2[]=  {5, 8, 10, 20};
+    int n=4;
+    int m=1;
+    cout<<getMedian(arr1,m,arr2, n);
+
+    return 0;
+}
+
+
+
+Method 2:
+
+Logic: Merge arrays and keep a counter, get the middle elements
