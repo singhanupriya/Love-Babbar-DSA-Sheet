@@ -1,0 +1,91 @@
+https://www.geeksforgeeks.org/rearrange-array-in-alternating-positive-negative-items-with-o1-extra-space-set-2/
+
+Time: O(N), Space:O(1)
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+void swap(int& x, int& y)
+{
+    int temp;
+    temp=x;
+    x=y;
+    y=temp;
+}
+
+void arrange(int arr[],int n)
+{
+    //separate neg and pos nos, send all neg nos in the front of the array
+
+    int m=0,l=0;
+    
+    while(m<n)
+    {
+        if((arr[m]<0 && arr[l]<0) || (arr[m]>0 && arr[l]<0))
+        {
+            m++;
+            l++;
+        }
+        
+        else if(arr[m]<0 && arr[l]>0)
+        {
+            swap(arr[l],arr[m]);
+            m++;
+            l++;
+        }
+        
+        else
+        {
+            m++;
+        }
+    }
+        
+        //after this l will point to the first positive no index
+        
+        int i=0;
+        
+        if((arr[i]>=0) || (l==n))
+        {
+            
+            cout<<"Not possible\n";
+            return;  
+            //if first element is positive then no neg element, no not possible
+            //or if l goes out of bound then no positive no
+        }
+        
+        //if we come down here means 1st index is negative and some positive element is present
+        
+        int j=1;
+        
+        while(j<l)
+        {
+            swap(arr[j],arr[l]);
+            l++;
+            j+=2;
+        }
+    
+    
+    for(int i=0;i<n;i++)
+    {
+        cout<<arr[i]<<" ";
+    }
+    
+}
+
+int main()
+{
+    int arr[]={-5, 3, -2, 5, -6, 4, -4, 9, -1, 8} ;
+    arrange(arr,10);
+
+    return 0;
+}
