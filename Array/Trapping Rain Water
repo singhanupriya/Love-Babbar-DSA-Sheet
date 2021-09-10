@@ -1,0 +1,96 @@
+https://practice.geeksforgeeks.org/problems/trapping-rain-water-1587115621/1#
+
+
+Brute force
+
+Method 1:
+
+Find water stored at each index, water will not be stored at index 0 and n-1.
+Water stored at each index=min(left max height, max right height)-current height, sum of all will be the ans
+
+Time: O(n^2), Space: O(1)
+
+public:
+    long long min(long long a,long long b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    long long trappingWater(int arr[], int n){
+        
+        long long sum=0,left_max=INT_MIN,right_max=INT_MIN;
+        
+        //find water stored at each index
+        //water cannot be stored at indec 0 and n-1
+        
+        for(int i=1;i<n-1;i++)
+        {
+            
+            for(int j=0;j<i;j++)
+            {
+                if(left_max<arr[j])
+                {
+                    left_max=arr[j];
+                }
+            }
+            
+            for(int j=i+1;j<n;j++)
+            {
+                if(right_max<arr[j])
+                {
+                    right_max=arr[j];
+                }
+            }
+            
+            sum=sum+min(left_max,right_max)-arr[i];
+            
+        }
+        
+        return sum;
+        
+    }
+};
+
+Method 2:
+
+Time: O(N), Space:O(N)
+
+Use 2 arrays one that stores max left height at each index and other that stores max right height at each index
+int trap(vector<int>& arr) {
+        
+        int n=arr.size();
+        
+        int left_max[n];  //left to right traversal, left max at any index
+        int right_max[n];  //right to left traversal, right max at any index
+        
+        left_max[0]=arr[0];
+        right_max[n-1]=arr[n-1];
+        
+        //left to right
+        for(int i=1;i<n;i++)
+        {
+            left_max[i]=max(arr[i],left_max[i-1]);
+        }
+        
+        //right traveral
+        for(int i=n-2;i>=0;i--)
+        {
+            right_max[i]=max(arr[i],right_max[i+1]);
+        }
+        
+        long long sum=0;
+        
+        //no water at index 0 and n-1
+        for(int i=0;i<n;i++)
+        {
+            sum=sum+min(left_max[i],right_max[i])-arr[i];
+        }
+        
+        return sum;
+        
+    }
+use these values and traverse the array once
