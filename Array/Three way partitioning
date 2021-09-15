@@ -1,0 +1,72 @@
+https://www.geeksforgeeks.org/three-way-partitioning-of-an-array-around-a-given-range/
+
+Time: O(N), Space:O(1)
+
+Three pointer
+
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+
+using namespace std;
+
+void arrange(int arr[], int n, int low, int high)
+{
+    int l=0,r=n-1,m=0;
+    int count=0;
+    
+    while(m<=r)
+    {
+        if(arr[m]<low && arr[l]<low)
+        {
+            m++;l++;
+            count++;
+        }
+        
+        
+        else if(arr[m]<low && arr[l]>=low)
+        {
+            swap(arr[m],arr[l]);
+            m++;
+            l++;
+            count++;
+        }
+        else if(arr[m]>high)
+        {
+            swap(arr[m],arr[r]);
+            r--;
+            count++;
+            
+        }
+        else
+        {
+            m++;
+            count++;
+        }
+    }
+    
+    for (int i=0; i<n; i++)
+        cout << arr[i] << " ";
+        
+        cout<<"\n"<<count;
+    
+
+}
+
+int main()
+{
+    int arr[] = {1, 14, 5, 20, 4, 2, 54, 20, 87,
+                98, 3, 1, 32};
+    int n = sizeof(arr)/sizeof(arr[0]);
+ 
+    arrange(arr, n, 10, 20);
+ 
+   
+}
