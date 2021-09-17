@@ -1,0 +1,74 @@
+https://www.geeksforgeeks.org/common-elements-in-all-rows-of-a-given-matrix/
+
+Time:O(MN), Space:O(N), n-col
+
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<unordered_map>
+#include<vector>
+
+using namespace std;
+
+void common(vector<vector<int>> matrix, int m , int n)
+{
+    
+    //insert first elements in map and set count to 1.
+    
+    unordered_map<int,int> mp;
+    
+    
+    for(int i=0;i<n;i++)
+    {
+        mp[matrix[0][i]]=1;
+    }
+    
+    //for remaining elements
+    
+    for(int i=1;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            
+            //if present in map and no duplicate in row, if ith row then it has occured i times total, one for each row
+            if(mp[matrix[i][j]]==i)
+            {
+                mp[matrix[i][j]]=i+1;
+                
+                //if at last row and count of element == no of rows, print it
+                if(i==m-1 && mp[matrix[i][j]]==m)
+                {
+                    cout<<matrix[i][j]<<" ";
+                }
+            }
+            
+        }
+    }
+    
+}
+
+int main()
+{
+    
+    vector<vector<int>> matrix={
+        {1, 2, 1, 4, 8},
+        {3, 7, 8, 5, 1},
+        {8, 7, 7, 3, 1},
+        {8, 1, 2, 7, 9},
+    };
+    
+    int m=matrix.size();
+    int n=matrix[0].size();
+    
+    
+    common(matrix, m,n);
+
+    return 0;
+}
