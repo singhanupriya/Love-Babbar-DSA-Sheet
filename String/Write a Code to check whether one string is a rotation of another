@@ -1,0 +1,110 @@
+
+
+Method 1: 
+
+1. S2 rotation of S1?  if s2 is substring of s1+s1
+
+Time:O(N), Space;O(1)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<unordered_map>
+
+using namespace std;
+
+bool rotate(string s1, string s2)
+{
+    string temp=s1+s1;
+    return(temp.find(s2)!=string::npos);
+}
+
+int main()
+{
+    string s1 = "AACD", s2 = "ACDA";
+    cout<<rotate(s1,s2);
+
+    return 0;
+}
+
+
+Method 2:
+
+s2 rotation of s1?
+
+Push elements of s1 in queue 1 and s2 in queue 2.
+while no of opertaions < len of string, pop front of q2 and push back, at any point q1==q2 return true
+
+Time: O(N), Space:O(n)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<queue>
+
+using namespace std;
+
+bool rotate(string s1, string s2)
+{
+    int l1=s1.length();
+    int l2=s2.length();
+    
+    if(l1!=l2)
+    {
+        return false;
+    }
+    
+    queue<char> q1;
+    queue<char> q2;
+    
+    for(int i=0;i<l1;i++)
+    {
+        q1.push(s1[i]);
+    }
+    
+    
+    for(int i=0;i<l2;i++)
+    {
+        q2.push(s2[i]);
+    }
+    
+    int k=0;
+    
+    while(k<l1)
+    {
+        char a=q2.front();
+        q2.pop();
+        q2.push(a);
+        k++;
+        
+        if(q1==q2)
+        {
+            return true;
+        }
+        
+    }
+    
+    return false;
+    
+}
+
+int main()
+{
+    string s1 = "ABCD", s2 = "CDAB";
+    cout<<rotate(s1,s2);
+
+    return 0;
+}
+
