@@ -1,0 +1,108 @@
+https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/
+https://leetcode.com/problems/rotate-image/submissions/
+
+Brute:
+Time:O(N^2), Space:O(N^2)
+1. Take another matrix, first row of input matrix becomes last col of output matrix, 2nd row -> 2nd last col, so on
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+
+void rotate(vector<vector<int>> matrix) 
+{
+        
+    
+    int n=matrix.size();
+        
+    vector<vector<int>> m1(n,vector<int>(n,0));
+    
+    
+        
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            m1[j][n-i-1]=matrix[i][j];
+        }
+    }
+    
+       
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            cout<<m1[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+    
+        
+        
+        
+        
+}
+
+int main()
+{
+    
+    
+    vector<vector<int>> matrix{ 
+                        { 1, 2, 3, 4 },
+                      { 5, 6, 7, 8 },
+                      { 9, 10, 11, 12 },
+                      { 13, 14, 15, 16 } 
+        
+    };
+    
+   rotate(matrix);
+    
+    
+
+    return 0;
+}
+
+Method 2:
+Find inplace transpose of the matrix, swap(m[i][j],m[j][i]) then reverse every row.
+Time:O(N^2), Space:O(1)
+
+
+class Solution {
+public:
+    void swap(int& a, int& b)
+    {
+        int temp=a;
+        a=b;
+        b=temp;
+    }
+    
+    void rotate(vector<vector<int>>& matrix) {
+        
+        int n=matrix.size();
+        
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<=i;j++)
+            {
+                swap(matrix[i][j],matrix[j][i]);
+            }
+        }
+        
+        
+        for(int i=0;i<n;i++)
+        {
+            reverse(matrix[i].begin(),matrix[i].end());
+        }
+        
+    }
+};
