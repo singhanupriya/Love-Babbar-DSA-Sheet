@@ -1,0 +1,45 @@
+https://www.geeksforgeeks.org/print-all-the-duplicates-in-the-input-string/
+
+Time:O(N), Space:O(N)
+
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<unordered_map>
+
+using namespace std;
+
+void duplicate(string s)
+{
+    int len=s.length();
+    unordered_map<char,int> m;
+    
+    for(int i=0;i<len;i++)
+    {
+        m[s[i]]++;
+    }
+    
+    for(auto x:m)
+    {
+        if(x.second>1)
+        {
+            cout<<x.first<<" "<<x.second<<"\n";
+        }
+    }
+    
+}
+
+int main()
+{
+    string s="test string";
+    duplicate(s);
+
+    return 0;
+}
