@@ -1,0 +1,115 @@
+
+
+//If u can't use map, use array[26]
+
+class Solution {
+public:
+    bool isIsomorphic(string str1, string str2) {
+        
+        
+        int m=str1.length();
+        int n=str2.length();
+        
+        if(m!=n)
+        {
+            return false;
+        }
+        
+        //map chars of str1 to str2
+        
+        unordered_map<char,char> m1;
+        
+        //check if element of str used already in mapping m1
+        unordered_map<char,bool> m2;
+        
+        for(int i=0;i<n;i++)
+        {
+            
+            //if none of them present, map to each other and mark s2 as visited
+            if(m1.find(str1[i])==m1.end() && m2.find(str2[i])==m2.end())
+            {
+                m1[str1[i]]=str2[i];
+                m2[str2[i]]=1;
+            }
+            
+            //s1 ka char not present but s2 ka char is visited them many to one
+            else if(m1.find(str1[i])==m1.end() && m2.find(str2[i])!=m2.end())
+            {
+                return false;
+            }
+            //if s1 is visisted and not mapped to same then false; one to many
+            else if(m1.find(str1[i])!=m1.end() && str2[i]!=m1[str1[i]])
+            {
+                return false;
+            }
+            
+            
+        }
+        
+        return true;
+        
+        
+    }
+};
+
+
+Array method
+
+
+
+/// 256 CHARS using extended ASCII
+
+//ASCI value stored ------>int map[256], ASCI value int stored at that index
+
+public:
+    //Function to check if two strings are isomorphic.
+    bool areIsomorphic(string str1, string str2)
+    {
+        
+        // Your code here
+        
+        int m=str1.length();
+        int n=str2.length();
+        
+        if(m!=n)
+        {
+            return false;
+        }
+        
+        //map chars of str1 to str2
+        
+        int m1[256];
+        
+        //check if element of str used already in mapping m1
+        bool m2[256]={false};
+        
+        memset(m1,-1,sizeof(m1));
+        
+        
+        for(int i=0;i<n;i++)
+        {
+            
+            //if none of them present, map to each other and mark s2 as visited
+            if(m1[str1[i]]==-1 && m2[str2[i]]==0)
+            {
+                m1[str1[i]]=str2[i];
+                m2[str2[i]]=true;
+            }
+            
+            //s1 ka char not present but s2 ka char is visited them many to one
+            else if(m1[str1[i]]==-1 && m2[str2[i]]==1)
+            {
+                return false;
+            }
+            //if s1 is visisted and not mapped to same then false; one to many
+            else if(m1[str1[i]]!=-1 && str2[i]!=m1[str1[i]])
+            {
+                return false;
+            }
+            
+            
+        }
+        
+        return true;
+        
+    }
