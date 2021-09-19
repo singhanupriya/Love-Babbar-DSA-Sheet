@@ -1,0 +1,83 @@
+https://practice.geeksforgeeks.org/problems/find-the-string-in-grid0111/1#
+
+Time:O(r*c*8*s), s-len of string, r-row, c-col, Space:O(1)
+
+public:
+
+    bool search(vector<vector<char>>grid,int r,int c,int row,int col, string word)
+    {
+        //if the start doesnt match with the first char of string return false
+        if(grid[r][c]!=word[0])
+        {
+            return false;
+        }
+        
+        int len=word.length();
+        
+        //if it matches then check for the remaining string in all 8 directions
+        
+        int x[]={-1,-1,-1,0,1,1,1,0};
+        int y[]={-1,0,1,1,1,0,-1,-1};
+        
+        //iterate in all directions
+        for(int dir=0;dir<8;dir++)
+        {
+            int k,rd=r+x[dir],cd=c+y[dir];
+            
+            //check for the remainng string, 1st char already matched above
+            for(k=1;k<len;k++)
+            {
+                if(rd>=row || rd<0 || cd>=col || cd<0)
+                {
+                    break;
+                }
+                
+                if(grid[rd][cd]!=word[k])
+                {
+                    break;
+                }
+                
+                rd+=x[dir];
+                cd+=y[dir];  //keep moving in that direction
+            }
+            
+            if(k==len)
+            {
+                return true;
+            }
+            
+            
+        }
+        
+        return false;
+        
+        
+    }
+
+	vector<vector<int>>searchWord(vector<vector<char>>grid, string word){
+	    // Code here
+	    
+	    int row=grid.size();
+	    int col=grid[0].size();
+	    
+	    vector<vector<int>> res;
+	    
+	    //search thruout the entire matrix matrix
+	    for(int i=0;i<row;i++)
+	    {
+	        for(int j=0;j<col;j++)
+	        {   
+	            //if search is true, add the starting point
+	            if(search(grid,i,j,row,col,word))
+	            {
+	                vector<int> point;
+	                point.push_back(i);
+	                point.push_back(j);
+	                res.push_back(point);
+	            }
+	        }
+	    }
+	    
+	    return res;
+	}
+};
