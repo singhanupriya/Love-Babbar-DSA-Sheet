@@ -33,3 +33,58 @@ public:
     
     
     Optimised: https://leetcode.com/problems/group-anagrams/discuss/1398888/C%2B%2BPython-Group-by-sorted-string-group-by-count-characters-Solutions-Clean-and-Concise
+    
+    Compress every work like geek to e2g1k1, use this as key and vector of string as map
+    
+    Time:O(NS), Space:O(NS)
+    
+    public:
+    vector<vector<string> > Anagrams(vector<string>& string_list) {
+        //code here
+        
+        
+        
+        unordered_map<string,vector<string>> m;
+        
+        //eg g1e2k1-->[geek,keeg]
+        
+        int n=string_list.size();
+        
+        for(int i=0;i<n;i++)
+        {
+            
+            //for every string find compressed string
+            
+            int count[256]={0};
+            string s=string_list[i];
+            int s_len=string_list[i].length();
+            
+            for(int j=0;j<s_len;j++)
+            {
+                count[s[j]]++;
+            }
+            
+            //key of map
+            string temp="";
+            for(int j=0;j<256;j++)
+            {
+                if(count[j]>0)
+                {
+                    temp+=char(j)+to_string(count[j]);
+                }
+            }
+            
+            m[temp].push_back(s);
+            
+            
+        }
+        
+        vector<vector<string>> res;
+        
+        for(auto it:m)
+        {
+            res.push_back(it.second);
+        }
+        
+        return res;
+    }
