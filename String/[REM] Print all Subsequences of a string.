@@ -1,0 +1,41 @@
+
+
+Method 1: Will not handle duplicates
+Brute Time:O(2 ^n), Space:call stack O(no of chars)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+
+using namespace std;
+
+void print(string input, string output)
+{
+    if(input.length()==0)
+    {
+        cout<<output<<" ";
+        return;
+    }
+    
+    //include first char in output and recurse on remaining in out
+    print(input.substr(1),output+input[0]);
+    
+    //exclude first char in output and recurse on remaining in out
+    print(input.substr(1),output);
+    
+}
+
+int main()
+{
+    string input="aaa";
+    string output="";
+    print(input,output);
+
+    return 0;
+}
