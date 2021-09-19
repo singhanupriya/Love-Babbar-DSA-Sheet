@@ -1,0 +1,112 @@
+https://www.geeksforgeeks.org/find-count-number-given-string-present-2d-character-array/
+Same logic as https://www.geeksforgeeks.org/search-a-word-in-a-2d-grid-of-characters/
+
+Just keep a counter
+
+Time:O(r*c*8*s), r-row,c-col,s-length of word
+Space:O(1)
+
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<unordered_set>
+#include<vector>
+
+using namespace std;
+
+bool search(vector<vector<char>>grid,int r,int c,int row,int col, string word)
+    {
+        //if the start doesnt match with the first char of string return false
+        if(grid[r][c]!=word[0])
+        {
+            return false;
+        }
+        
+        int len=word.length();
+        
+        //if it matches then check for the remaining string in all 8 directions
+        
+        int x[]={-1,-1,-1,0,1,1,1,0};
+        int y[]={-1,0,1,1,1,0,-1,-1};
+        
+        //iterate in all directions
+        for(int dir=0;dir<8;dir++)
+        {
+            int k,rd=r+x[dir],cd=c+y[dir];
+            
+            //check for the remainng string, 1st char already matched above
+            for(k=1;k<len;k++)
+            {
+                if(rd>=row || rd<0 || cd>=col || cd<0)
+                {
+                    break;
+                }
+                
+                if(grid[rd][cd]!=word[k])
+                {
+                    break;
+                }
+                
+                rd+=x[dir];
+                cd+=y[dir];  //keep moving in that direction
+            }
+            
+            if(k==len)
+            {
+                return true;
+            }
+            
+            
+        }
+        
+        return false;
+        
+        
+    }
+
+    int count(vector<vector<char>>grid, string word){
+	    // Code here
+	    
+	    int row=grid.size();
+	    int col=grid[0].size();
+	    
+	    int ans=0;
+	    
+	    //search thruout the entire matrix matrix
+	    for(int i=0;i<row;i++)
+	    {
+	        for(int j=0;j<col;j++)
+	        {   
+	            //if search is true, add the starting point
+	            if(search(grid,i,j,row,col,word))
+	            {
+	                ans++;
+	            }
+	        }
+	    }
+	    
+	    return ans;
+	}
+int main()
+{
+    vector<vector<char>> input 
+                        { 
+                        {'B','B','A','B','B','M'},
+                       {'C','B','M','B','B','A'},
+                       {'I','B','A','B','B','G'},
+                       {'G','O','Z','B','B','I'},
+                       {'A','B','B','B','B','C'},
+                       {'M','C','I','G','A','M' }
+                        };
+   
+    cout<<count(input,"MAGIC");
+
+    return 0;
+}
