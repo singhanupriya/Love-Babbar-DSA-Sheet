@@ -1,0 +1,72 @@
+https://practice.geeksforgeeks.org/problems/smallest-distant-window3132/1#
+
+Sliding window
+
+Time:O(N), Space:O(N)
+
+string findSubString(string str)
+    {
+        // Your code goes here  
+        
+        unordered_map<char,int> m1;
+        int n=str.length();
+        
+        for(int i=0;i<n;i++)
+        {
+            m1[str[i]]++;
+        }
+        
+        int window=m1.size();
+        
+        
+        
+        unordered_map<char,int> m;
+        
+        int i=0,j=0;
+        int ans=INT_MAX;
+        int start=-1,end=-1;
+        
+       
+        
+        while(j<n)
+        {
+            m[str[j]]++;
+            
+            
+            
+            
+            
+            if(m.size()==window)
+            {
+                
+                
+                while(m.size()==window)
+                {
+                    if(ans>j-i+1)
+                    {
+                        ans=j-i+1;
+                        start=i;
+                        end=j;
+                    }
+                    
+                    m[str[i]]--;
+                    if(m[str[i]]==0)
+                    {
+                        m.erase(str[i]);
+                    }
+                    i++;
+                }
+                
+                
+                
+            }
+            
+            j++;
+            
+            
+        }
+        
+        return str.substr(start,end-start+1);
+        
+        
+    }
