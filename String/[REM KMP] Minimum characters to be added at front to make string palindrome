@@ -1,0 +1,60 @@
+
+
+Method 1:
+DP Time:O(N^2), Space:O(N^2)
+
+Length of string -longest pall subseq, #insertions=#deletions, LPS=LCS(s,rev(s))
+
+
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int lcs(string a, string b)
+{
+    int m=a.length();
+    int n=b.length();
+    
+    vector<vector<int>> dp(m+1,vector<int>(n+1,0));
+    
+    for(int i=1;i<=m;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(a[i-1]==b[j-1])
+            {
+                dp[i][j]=1+dp[i-1][j-1];
+            }
+            else
+            {
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+    }
+    
+    return dp[m][n];
+}
+
+int main()
+{
+    string a="BABABAA";
+    string rev=a;
+    reverse(a.begin(),a.end());
+    int len_lps=lcs(a,rev);
+    
+    
+    cout<<a.length()-len_lps;
+
+    return 0;
+}
