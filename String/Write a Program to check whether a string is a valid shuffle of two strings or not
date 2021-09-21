@@ -1,0 +1,131 @@
+https://www.programiz.com/java-programming/examples/check-valid-shuffle-of-strings
+
+
+Method 1:
+
+1. Check if len(s1+s2)==len(shuffled string)
+2. Sort(s1+s2)==sort(shuffled string)
+
+Time:O(s1+s2)log(s1+s2), Space:O(1)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<algorithm>
+
+using namespace std;
+
+bool shuffle(string s1,string s2, string res)
+{
+    int m=s1.length();
+    int n=s2.length();
+    int p=res.length();
+    
+    if(p!=m+n)
+    {
+        return false;
+    }
+    
+    string sum=s1+s2;
+    sort(sum.begin(),sum.end());
+    
+    sort(res.begin(),res.end());
+    
+    if(sum!=res)
+    {
+        return false;
+    }
+    return true;
+}
+
+int main()
+{
+    string s1="XY";
+    string s2="12";
+    string res="Y1X2";
+    cout<<shuffle(s1,s2,res);
+
+    return 0;
+}
+
+Method 2
+
+1. Check if len(s1+s2)==len(shuffled string)
+2. Use unordered_map to match chars
+
+Time:O(s1+s2), Space:O(s1+s2)
+
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<unordered_map>
+#include<algorithm>
+
+using namespace std;
+
+bool shuffle(string s1,string s2, string res)
+{
+    int m1=s1.length();
+    int n=s2.length();
+    int p=res.length();
+    
+    if(p!=m1+n)
+    {
+        return false;
+    }
+    
+    unordered_map<char,int> m;
+    
+    for(int i=0;i<m1;i++)
+    {
+        m[s1[i]]++;
+    }
+    
+    for(int i=0;i<n;i++)
+    {
+        m[s2[i]]++;
+    }
+    
+    for(int i=0;i<p;i++)
+    {
+        if(m.find(res[i])!=m.end())
+        {
+            m[res[i]]--;
+            if(m[res[i]]==0)
+            {
+                m.erase(res[i]);
+            }
+        }
+    }
+    
+    if(m.size()==0)
+    {
+        return true;
+    }
+    return false;
+    
+}
+
+int main()
+{
+    string s1="XY";
+    string s2="12";
+    string res="Y21x";
+    cout<<shuffle(s1,s2,res);
+
+    return 0;
+}
+
