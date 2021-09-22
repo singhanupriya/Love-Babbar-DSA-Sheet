@@ -1,0 +1,40 @@
+https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1#
+
+Prints all permutations (including duplicates)
+
+Time:O(n*n!), n!->no of permutations, n->time to print each
+Space:O(1)
+
+public:
+	    void swap(char& a,char& b)
+	    {
+	        char temp=a;
+	        a=b;
+	        b=temp;
+	    }
+	    
+	    void permute(string s, int l, int r, vector<string>& res)
+	    {
+	        if(l==r)
+	        {
+	            res.push_back(s);
+	        }
+	        else
+	        {
+	            for(int i=l;i<=r;i++)
+	            {
+	                swap(s[l],s[i]);
+	                permute(s,l+1,r,res);
+	                swap(s[l],s[i]);
+	            }
+	        }
+	    }
+	    
+		vector<string>find_permutation(string S)
+		{
+		    vector<string> res;
+		    permute(S,0,S.length()-1,res);
+		    sort(res.begin(),res.end());
+		    return res;
+		}
+};
