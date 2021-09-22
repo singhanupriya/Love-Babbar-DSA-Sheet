@@ -1,0 +1,58 @@
+https://www.geeksforgeeks.org/split-the-binary-string-into-substrings-with-equal-number-of-0s-and-1s/
+
+Time:O(N), Space:O(1)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+
+
+#include <bits/stdc++.h>
+#include <string>
+using namespace std;
+
+int count(string str)
+{
+    int count1=0;
+    int count0=0;
+    int cnt=0;
+    for(int i=0;i<str.length();i++)
+    {
+        if(str[i]=='0')
+        {
+            count0++;
+        }
+        else
+        {
+            count1++;
+        }
+        
+        if(count0==count1)
+        {
+            cnt++;
+        }
+    }
+    
+    if(cnt==0)
+    {
+        return -1;
+    }
+    return cnt;
+    
+}
+
+
+int main()
+{
+    string str = "0100110101";
+    
+ 
+    cout << count(str );
+ 
+    return 0;
+}
