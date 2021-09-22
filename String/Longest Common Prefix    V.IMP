@@ -1,0 +1,45 @@
+https://leetcode.com/problems/longest-common-prefix/submissions/
+
+1. Set the ans to the first word in array
+2. Now compare every word with ans, update ans to be matching chars after each iteration
+
+Time:O(N*s), Space:O(1)
+
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        
+        int n=strs.size();
+        
+        if(n==0)
+        {
+            return "";
+        }
+        
+        string ans=strs[0];
+        
+        for(int i=1;i<n;i++)
+        {
+            int j;
+            for(j=0;j<strs[i].size();j++)
+            {
+                if(ans[j]!=strs[i][j] || j>=ans.size())
+                {
+                    break;
+                }
+            }
+            
+            //if it breaks at j means till (j-1) same chars
+            //eg if it breaks at j=1 means 0th char was matching so len=1;
+            ans=ans.substr(0,j);
+            if(ans=="")
+            {
+                return ans;
+            }
+        }
+        
+        return ans;
+        
+    }
+};
