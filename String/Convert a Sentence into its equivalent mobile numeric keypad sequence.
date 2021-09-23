@@ -1,0 +1,65 @@
+https://www.geeksforgeeks.org/convert-sentence-equivalent-mobile-numeric-keypad-sequence/
+
+Time:O(N), Space:O(26)
+
+1. Store all nos corresponding to chars in array eg 'A' at index 0 is "2", 'B' is at index 1 "22", etc.
+2. Parse the string and get the value at that index and add to ans.
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<string>
+#include<typeinfo>
+
+using namespace std;
+
+string convert(string str,string arr[])
+{
+    int n=str.length();
+    
+    string ans="";
+    
+    for(int i=0;i<n;i++)
+    {
+        if(str[i]==' ')
+        {
+            ans=ans+"0";
+        }
+        else
+        {
+            int index=str[i]-'A';
+            
+            string key=arr[index];
+            ans=ans+key;
+        }
+    }
+    
+    return ans; 
+    
+}
+
+int main()
+{
+    string arr[]={"2","22","222",
+                    "3","33","333",
+                    "4","44","444",
+                    "5","55","555",
+                    "6","66","666",
+                    "7","77","777","7777",
+                    "8","88","888",
+                    "9","99","999","9999"
+                   };
+    
+    string str="HELLO WORLD";
+    cout<<convert(str,arr);
+    
+    
+
+    return 0;
+}
