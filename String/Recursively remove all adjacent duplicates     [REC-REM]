@@ -1,0 +1,71 @@
+https://practice.geeksforgeeks.org/problems/consecutive-elements2306/1#
+
+M1-
+Time:O(N), Space:O(N)
+
+string removeConsecutiveCharacter(string s)
+    {
+        // code here.
+        
+        queue<char> q;
+        string ans="";
+        
+        int n=s.length();
+        
+        if(n==0)
+        {
+            return ans;
+        }
+        
+        q.push(s[0]);
+        
+        for(int i=1;i<n;i++)
+        {
+            if(s[i]!=q.back())
+            {
+                q.push(s[i]);
+            }
+        }
+        
+        while(!q.empty())
+        {
+            ans=ans+q.front();
+            q.pop();
+        }
+        
+        return ans;
+    }
+    
+    
+    M2- 
+    Time:O(N), Space:O(1)
+    
+    string removeConsecutiveCharacter(string s)
+    {
+        // code here.
+        
+        
+        string ans="";
+        
+        int n=s.length();
+        
+        if(n==0)
+        {
+            return ans;
+        }
+        
+       
+        for(int i=0;i<n-1;i++)
+        {
+            if(s[i]!=s[i+1])
+            {
+                ans=ans+s[i];
+            }
+        }
+        
+        ans=ans+s[n-1];
+        
+       
+        
+        return ans;
+    }
