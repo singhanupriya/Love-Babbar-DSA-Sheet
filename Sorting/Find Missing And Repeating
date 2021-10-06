@@ -1,0 +1,38 @@
+https://practice.geeksforgeeks.org/problems/find-missing-and-repeating2512/1#
+
+Time:O(N), Space:O(1)
+
+1. use absolute value of every element as index, if visisted for the first time,make it neg, if already neg, then repeating.
+2. Traverse array again, first positive index is missing element.
+
+
+int *findTwoElement(int *arr, int n) {
+        // code here
+        
+        int *ans=new int[2];
+        
+        for(int i=0;i<n;i++)
+        {
+            if(arr[abs(arr[i])-1]>0)
+            {
+                arr[abs(arr[i])-1]=(-1)*arr[abs(arr[i])-1];
+            }
+            else
+            {
+                ans[0]=abs(arr[i]);
+                
+            }
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            if(arr[i]>0)
+            {
+                ans[1]=i+1;
+                break;
+            }
+        }
+        
+        return ans;
+    }
+};
