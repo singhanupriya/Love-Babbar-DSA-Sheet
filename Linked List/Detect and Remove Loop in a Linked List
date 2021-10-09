@@ -4,6 +4,7 @@ Time:O(N), Space:O(1)
 
 1. Detect if loop.
 2. if yes, follow steps to find start of the loop.
+Corner case: If theyy meet at the head----.check this
 3. Move slow to head, keep fast where it is, while slow->next!=fast->next (this will be the node just before the start of the loop).
 4. Fast->next=NULL
 
@@ -53,20 +54,34 @@ void remove_loop(Node* head)
 		}
 	}
 	
-	if(p!=q)
+	if(p==q)
 	{
-		cout<<"No loop\n";
-		return;
+	
+		p=head;
+		//there can be a case where fast and slow meet at the head itself, so we need to check
+		
+		//IMP
+		if(p==q)//meetng at head
+		{
+			while(q->next!=p)
+			{
+				q=q->next;
+			}
+		}
+		else
+		{
+			while(p->next!=q->next)
+			{
+				p=p->next;
+				q=q->next;
+			}
+		}
+		
+		q->next=NULL;
+	
 	}
 	
-	//move slow pointer to head once loop is detected
-	p=head;
-	while(p->next!=q->next)
-	{
-		p=p->next;
-		q=q->next;
-	}
-	q->next=NULL;
+	
 	
 }
 
