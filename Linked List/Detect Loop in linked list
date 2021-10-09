@@ -1,0 +1,81 @@
+https://practice.geeksforgeeks.org/problems/detect-loop-in-linked-list/1#
+
+M1- Change the value to each node that u visit to some value outside of the data range like -1, while traversing if the value of a given node is already -1, then true. 
+Time:O(n), Space:O(1)
+
+class Solution
+{
+    public:
+    //Function to check if the linked list has a loop.
+    bool detectLoop(Node* head)
+    {
+        // your code here
+        
+        Node* p=head;
+        while(p!=NULL)
+        {
+            if(p->data==-1)
+            {
+                return true;
+            }
+            p->data=-1;
+            p=p->next;
+        }
+        return false;
+    }
+};
+
+
+M2: Store address of each node in hash table, traverse, if address already present, loop
+Time:O(N), Space:O(N)
+
+
+bool detectLoop(Node* head)
+    {
+        // your code here
+        
+        unordered_set<Node*> s;
+        
+        Node* p=head;
+        
+        while(p!=NULL)
+        {
+            
+            if(s.find(p)!=s.end())
+            {
+                return true;
+            }
+            
+            s.insert(p);
+            p=p->next;
+        }
+        
+        return false;
+    }
+    
+    
+    M3: Choose a fast and slow pointer, if they meet, loop.
+    Time:O(N), Space:O(1)
+    
+    bool detectLoop(Node* head)
+    {
+        // your code here
+        
+        Node* p=head;
+        Node* q=head;
+        while(q->next!=NULL && q->next->next!=NULL)
+        {
+            
+            p=p->next;
+            q=q->next->next;
+            if(p==q)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+M4: Use a flag in the Node class, if node is visisted flag=1, before visiting check if flag==1 then return true.
+Time:O(N), Space:O(1)
