@@ -1,0 +1,88 @@
+https://www.geeksforgeeks.org/find-first-node-of-loop-in-a-linked-list/
+
+Floyd’s Cycle-Finding Algorithm
+
+1. Detect if a loop exists, if yes, keep fast pointer where it is, bring the slow pointer to head, now move them one by one, where they meet is the starting point.
+
+Time:O(N), Space:O(1)
+
+#include<iostream>
+
+using namespace std;
+
+class Node{
+	public:
+		int data;
+		Node* next;
+		
+		Node(int x)
+		{
+			data=x;
+			next=NULL;
+		}
+};
+
+void print(Node* head)
+{
+	Node* p=head;
+	while(p!=NULL)
+	{
+		cout<<p->data<<" ";
+		p=p->next;
+	}
+	cout<<"\n";
+}
+
+Node* loop(Node* head)
+{
+	Node* p=head;
+	Node* q=head;
+	
+	while(q->next!=NULL && q->next->next!=NULL)
+	{
+		p=p->next;
+		q=q->next->next;
+		
+		if(p==q)
+		{
+			break;
+		}
+	}
+	
+	if(p!=q)
+	{
+		cout<<"No loop\n";
+		return NULL;
+	}
+	
+	p=head;
+	while(p!=q)
+	{
+		p=p->next;
+		q=q->next;
+	}
+	
+	cout<<p->data<<"\n";
+	return p;
+	
+}
+
+int main()
+{
+	Node* head=new Node(1);
+	Node* second=new Node(2);
+	Node* three=new Node(3);
+	Node* four=new Node(4);
+	Node* five=new Node(5);
+	
+	head->next=second;
+	second->next=three;
+	three->next=four;
+	four->next=five;
+	five->next=second;
+	
+	//print(head);
+	
+	Node* loop_start=loop(head);
+	cout<<loop_start;
+}
