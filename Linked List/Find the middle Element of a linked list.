@@ -1,0 +1,34 @@
+https://leetcode.com/problems/middle-of-the-linked-list/
+
+Given the head of a singly linked list, return the middle node of the linked list.
+
+If there are two middle nodes, return the second middle node.
+
+2 pointer
+Time:O(N), Space:O(1)
+ 
+
+public:
+    ListNode* middleNode(ListNode* head) {
+        
+        
+        
+        ListNode* p=head;
+        ListNode* q=head;
+        
+        while(q->next!=NULL && q->next->next!=NULL)
+        {
+            p=p->next;
+            q=q->next->next;
+            
+        }
+        
+        if(q->next!=NULL)
+        {
+            return p->next;
+        }
+        
+        return p;
+        
+    }
+};
