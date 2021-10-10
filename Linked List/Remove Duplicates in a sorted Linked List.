@@ -1,0 +1,36 @@
+https://practice.geeksforgeeks.org/problems/remove-duplicate-element-from-sorted-linked-list/1#
+
+2 pointer approach
+
+Time:O(N), Space:O(1)
+
+Node *removeDuplicates(Node *head)
+{
+ // your code goes here
+ 
+    if(head==NULL || head->next==NULL)
+    {
+        return head;
+    }
+    
+    Node* p=head;
+    Node* q=head->next;
+    
+    while(q!=NULL)
+    {
+        if(p->data==q->data)
+        {
+            Node* temp=p->next;
+            p->next=q->next;
+            q=p->next;
+            free(temp);
+            
+        }
+        else
+        {
+            p=p->next;
+            q=q->next;
+        }
+    }
+    
+    return head;
