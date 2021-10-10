@@ -1,0 +1,44 @@
+https://practice.geeksforgeeks.org/problems/remove-duplicates-from-an-unsorted-linked-list/1
+
+Use unordered_set as a hash table.
+
+Time:O(N), Space:O(N)
+
+
+Node * removeDuplicates( Node *head) 
+    {
+     // your code goes here
+     
+     if(head==NULL || head->next==NULL)
+     {
+         return head;
+     }
+     
+     unordered_set<int> s;
+     
+     Node* p=head;
+     Node* q=head->next;
+     
+     s.insert(p->data);
+     
+     while(q!=NULL)
+     {
+         if(s.find(q->data)==s.end())
+         {
+             s.insert(q->data);
+             q=q->next;
+             p=p->next;
+         }
+         else
+         {
+             Node* temp=p->next;
+             p->next=q->next;
+             q=p->next;
+             delete(temp);
+         }
+         
+     }
+     
+     return head;
+     
+    }
