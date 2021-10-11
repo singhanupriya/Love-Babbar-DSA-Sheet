@@ -1,0 +1,51 @@
+https://practice.geeksforgeeks.org/problems/intersection-of-two-sorted-linked-lists/1
+
+Time:O(N+M), Space:O(M+N)
+
+1. p=head1, q=head2; if p->data==q->data, add to dummy
+2. Else if(p->data < q->data) , p++     (move the smaller node)
+3. Else q++
+
+void insert(Node* head,int val)
+{
+    struct Node* p=head;
+    while(p->next!=NULL)
+    {
+        p=p->next;
+    }
+    struct Node* q=new Node(val);
+    p->next=q;
+}
+
+Node* findIntersection(Node* head1, Node* head2)
+{
+    // Your Code Here
+    if(head1==NULL || head2==NULL)
+    {
+        return NULL;
+    }
+    
+    struct Node* dummy=new Node(0);
+    struct Node* p=head1;
+    struct Node* q=head2;
+    
+    while(p!=NULL && q!=NULL)
+    {
+        if(p->data==q->data)
+        {
+            insert(dummy, p->data);
+            p=p->next;
+            q=q->next;
+        }
+        else if(p->data < q->data)
+        {
+            p=p->next;
+        }
+        else
+        {
+            q=q->next;
+        }
+    }
+    
+    return dummy->next;
+}
