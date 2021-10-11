@@ -1,0 +1,27 @@
+https://practice.geeksforgeeks.org/problems/circular-linked-list/1#
+
+1. Traverse till the last element, if last->next==head, return true
+
+Time:O(N), Space:O(1)
+
+bool isCircular(Node *head)
+{
+   // Your code here
+   
+   Node* p=head;
+   if(head==NULL)
+   {
+       return true;
+   }
+   
+   while(p->next!=NULL && p->next!=head)
+   {
+       p=p->next;
+   }
+   
+   if(p->next==head)
+   {
+       return true;
+   }
+   return false;
+}
