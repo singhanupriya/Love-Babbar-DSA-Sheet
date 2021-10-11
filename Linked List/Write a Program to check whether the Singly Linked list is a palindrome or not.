@@ -1,0 +1,186 @@
+https://practice.geeksforgeeks.org/problems/check-if-linked-list-is-pallindrome/1#
+
+
+M1- use an auxilary space like vector, deque, stack,etc.
+
+Time:O(N), Space:O(N)
+
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+class Node{
+	public:
+		int data;
+		Node* next;
+		
+		Node(int x)
+		{
+			data=x;
+			next=NULL;
+		}
+};
+
+
+bool isPalindrome(Node *head)
+    {
+        //Your code here
+        
+        if(head==NULL || head->next==NULL)
+        {
+            return true;
+        }
+        vector<int> res;
+        
+        struct Node* p=head;
+        while(p!=NULL)
+        {
+            res.push_back(p->data);
+            p=p->next;
+        }
+        
+        int n=res.size();
+        int j=n-1;
+        int i=0;
+        
+        while(i<j)
+        {
+            if(res[i]!=res[j])
+            {
+                return false;
+            }
+            else
+            {
+                i++;
+                j--;
+            }
+        }
+        
+        return true;
+        
+        
+    }
+
+int main()
+{
+	Node* head=new Node(2);
+	Node* second=new Node(2);
+	Node* three=new Node(2);
+	Node* four=new Node(2);
+	
+	head->next=second;
+	second->next=three;
+	three->next=four;
+	
+	cout<<isPalindrome(head);
+}
+
+M2:
+1. use 2 pointer, find mid of LL
+2. Reverse second half of LL [IMP- q will be changed as the LL is modified]
+3. Compare first and second half
+
+Time:O(N), Space:O(1)
+
+
+class Solution{
+  public:
+    //Function to check whether the list is palindrome.
+    bool isPalindrome(Node *head)
+    {
+        //Your code here
+        
+        if(head==NULL || head->next==NULL)
+        {
+            return true;
+        }
+        
+        Node* p=head;
+        Node* q=head;
+        int count=0;
+        
+        
+        while(q->next!=NULL && q->next->next!=NULL)
+        {
+            p=p->next;
+            q=q->next->next;
+        }
+        
+        if(q->next==NULL)
+        {
+            count=1;
+        }
+        
+        //cout<<"count "<<count<<"\n";
+        
+        //p points to mid element
+        //loop breaks if q->next==null or q->next->nxt==null
+        //reverse the second half
+        
+        Node* curr=p->next;
+        Node* prev=NULL;
+        Node* next=NULL;
+        
+        while(curr!=NULL)
+        {
+            next=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next;
+        }
+        
+        p->next=prev; //reversed second half
+        
+        //print(head);
+        
+        
+        
+        Node* temp1=head;
+        Node* temp2=p->next;
+        
+        //cout<<q->data<<"\n";
+        
+        if(count==1)
+        {
+            //cout<<"yes\n";
+            while(temp1!=p && temp2!=NULL)
+            {
+                if(temp1->data!=temp2->data)
+                {
+                    return false;
+                }
+                else 
+                {
+                    temp1=temp1->next;
+                    temp2=temp2->next;
+                }
+            }
+        }
+        else
+        {
+            while(temp1!=p->next && temp2!=NULL)
+            {
+                if(temp1->data!=temp2->data)
+                {
+                    return false;
+                }
+                else 
+                {
+                    temp1=temp1->next;
+                    temp2=temp2->next;
+                }
+            }
+        }
+        
+        return true;
+    }
+};
