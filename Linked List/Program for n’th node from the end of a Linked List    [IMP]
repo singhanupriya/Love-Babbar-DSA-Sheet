@@ -1,0 +1,48 @@
+https://practice.geeksforgeeks.org/problems/nth-node-from-end-of-linked-list/1#
+
+Time:O(N), Space:O(1)
+
+1. Take p,q->poitning to head.
+2. move q n steps, rem dist of q from end (len-n).
+3. Now move both p and q till q reaches end, p covers len-n.
+
+Corner case: n>len and n=len
+
+int getNthFromLast(Node *head, int n)
+{
+       // Your code here
+       
+    if(head==NULL)
+    {
+        return -1;
+    }
+       
+    Node* p=head;
+    Node* q=head;
+    
+    int i=0;
+    
+    while(i<n-1)   //if n is greater than length
+    {
+        
+        q=q->next;
+        if(q==NULL)
+        {
+            return -1;
+        }
+        i++;
+    }
+    
+    if(q==NULL)  //if n is equal to length
+    {
+        return head->data;
+    }
+    
+    while(q->next!=NULL)
+    {
+        p=p->next;
+        q=q->next;
+    }
+    
+    return p->data;
+}
