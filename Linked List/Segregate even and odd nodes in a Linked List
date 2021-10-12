@@ -1,0 +1,65 @@
+https://practice.geeksforgeeks.org/problems/segregate-even-and-odd-nodes-in-a-linked-list5035/1#
+
+1. Create a dummy even head and odd head.
+2. Traverse LL, change links, even->even and odd->odd.
+3. Attach them. Delete dummy heads
+
+Time:O(N), Space:O(1)
+
+
+Node* divide(int N, Node *head){
+        // code here
+        
+        if(head==NULL || head->next==NULL)
+        {
+            return head;
+        }
+        
+        Node* even=new Node(0);
+        Node* odd=new Node(0);
+        
+        Node* p=even;
+        Node* q=odd;
+        
+        Node* temp=head;
+        while(temp!=NULL)
+        {
+            if(temp->data%2==0)
+            {
+                p->next=temp;
+                p=p->next;
+            }
+            else
+            {
+                q->next=temp;
+                q=q->next;
+            }
+            temp=temp->next;
+        }
+        
+        Node* new_head=NULL;
+        if(even->next)
+        {
+            new_head=even->next;
+            if(odd->next)
+            {
+                p->next=odd->next;
+                q->next=NULL;
+            }
+            else
+            {
+                p->next=NULL;
+            }
+        }
+        else
+        {
+            new_head=odd->next;
+            q->next=NULL;
+        }
+        
+        delete(even);
+        delete(odd);
+        
+        return new_head;
+        
+    }
