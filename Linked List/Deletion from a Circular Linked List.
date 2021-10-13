@@ -1,0 +1,141 @@
+https://www.geeksforgeeks.org/deletion-circular-linked-list/
+
+Time:O(N), Space:O(1)
+
+#include<iostream>
+
+using namespace std;
+
+class Node{
+	public:
+		int data;
+		Node* next;
+		
+		Node(int x)
+		{
+			data=x;
+			next=NULL;
+		}
+};
+
+void print(Node* head)
+{
+	Node* p=head;
+	cout<<p->data<<" ";
+	
+	while(p->next!=head)
+	{
+		
+		p=p->next;
+		cout<<p->data<<" ";
+	}
+	cout<<"\n";
+}
+
+
+Node* delete1(Node** head, int val)
+{
+	
+	//empty list
+	if(head==NULL)
+	{
+		cout<<"Empty list\n";
+		return NULL;
+	}
+	
+	//single node
+	if((*head)->next==*head)
+	{
+		if((*head)->data==val)
+		{
+			cout<<"Head deleted, now empty\n";
+			delete(*head);
+			delete(head);
+			return NULL;
+		}
+		else
+		{
+			cout<<"Node not found\n";
+			return (*head);
+		}
+	}
+	
+	//if head is to be deleted
+	
+	Node* p=*head;
+	
+	if((*head)->data==val)
+	{
+		while(p->next!=*head)
+		{
+			p=p->next;
+		}
+		p->next=(*head)->next;
+		delete(*head);
+		*head=p->next;
+		return (p->next);
+	}
+	
+	Node* q=(*head)->next;
+	while(q->data!=val && q->next!=*head)  //element not found or till last is not reached
+	{
+		q=q->next;
+		p=p->next;
+	}
+	
+	//if reached till last but element not found
+	if(q->next==*head && q->data!=val)
+	{
+		cout<<"Node not found\n";
+		return (*head);
+	}
+	
+	//if last element to be deleted or any element before that
+	p->next=q->next;
+	delete(q);
+	return *head;
+}
+
+
+
+int main()
+{
+	Node* head=new Node(1);
+	//head->next=head;   //single element
+	
+	/*
+	Node* second=new Node(2);
+	Node* three=new Node(3);
+	Node* four=new Node(4);
+	
+	head->next=second;
+	second->next=three;
+	three->next=four;
+	four->next=head;
+	*/
+	print(head);
+	
+	//Node* new_head=delete1(&head,2);   //delete middle node
+	//print(new_head);
+	
+	
+	//Node* new_head=delete1(&head,1);  //delete head
+	//print(new_head);
+	
+	//Node* new_head=delete1(&head,4);   //delete last element
+	//print(new_head);
+	
+	//Node* new_head=delete1(&head,7);   //element not found
+	//print(new_head);
+	
+	Node* new_head=delete1(&head,1);   //single element and head to be deleted
+	print(new_head);
+	
+	//Node* new_head=delete1(&head,3);   //single element and node not found
+	//print(new_head);
+	
+	
+	
+	
+	
+}
