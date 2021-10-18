@@ -1,5 +1,114 @@
 https://www.geeksforgeeks.org/rotate-doubly-linked-list-n-nodes/
 
+
+M1- Change links
+
+Time:O(N), Space:O(1)
+
+#include<iostream>
+
+using namespace std;
+
+class Node{
+	public:
+		int data;
+		Node* next;
+		Node* prev;
+		
+		Node(int val)
+		{
+			data=val;
+			next=NULL;
+			prev=NULL;
+		}
+};
+
+void traverse(Node* head)
+{
+	Node* n=head;
+	
+	while(n!=NULL)
+	{
+		std::cout<<n->data<<" ";
+		n=n->next;
+	}
+	std::cout<<"\n";
+	
+	
+}
+
+
+
+Node* rotate(Node* head,int n)   //change links
+{
+	if(head==NULL)
+	{
+		cout<<"Empty\n";
+		return NULL;
+	}
+	
+	Node* p=head;
+	int i=1;
+	while(p!=NULL && i<n)
+	{
+		p=p->next;
+		i++;
+	}
+	
+	Node* q=head;
+	while(q->next!=NULL)
+	{
+		q=q->next;
+	}
+	q->next=head;
+	head->prev=q;
+	
+	Node* temp=p->next;
+	p->next=NULL;
+	temp->prev=NULL;
+	return temp;
+	
+	
+	
+	
+}
+
+
+
+
+int main()
+{
+	Node* head=new Node(1);
+	Node* second=new Node(2);
+	Node* three=new Node(3);
+	Node* four=new Node(4);
+	Node* five=new Node(5);
+	
+	head->next=second;
+	second->prev=head;
+	second->next=three;
+	three->prev=second;
+	three->next=four;
+	four->prev=three;
+	four->next=five;
+	five->prev=four;
+	
+	traverse(head);
+	
+	Node* new_head=rotate(head,2);
+	traverse(new_head);
+	
+	
+	
+
+	
+	
+	return 0;
+}
+
+
+M2-
+
 Time:O(N), Space:O(1)
 
 #include<iostream>
