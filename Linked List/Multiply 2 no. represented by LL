@@ -1,0 +1,31 @@
+https://practice.geeksforgeeks.org/problems/multiply-two-linked-lists/1#
+
+1. Generate two numbers sum=sum*10+p->data
+2. Multiply
+
+Time:O(M+N), Space:O(1)
+
+long long  multiplyTwoLists (Node* l1, Node* l2)
+{
+  //Your code here
+  long long s1=0,s2=0;
+  Node* p=l1;
+  Node* q=l2;
+  long long N=1000000007;
+  
+  while(p!=NULL)
+  {
+      s1=(s1*10+(p->data))%N;
+      p=p->next;
+  }
+  
+  while(q!=NULL)
+  {
+      s2=(s2*10+(q->data))%N;
+      q=q->next;
+  }
+  
+  return (s1*s2)%N;
+  
+  
+}
