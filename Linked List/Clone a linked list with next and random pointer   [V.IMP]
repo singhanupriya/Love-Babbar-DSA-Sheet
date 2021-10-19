@@ -1,0 +1,107 @@
+https://practice.geeksforgeeks.org/problems/clone-a-linked-list-with-next-and-random-pointer/1
+
+M1
+
+1. Use a hash map<Node*,Node*> to store a node of orignal LL and its copy.
+Eg:Node1 Node1=new Node(Node1->data), Node2 Node2, etc;
+2. Travserse orignal LL, map next and arb to copies of next and arb; like m[head]->next=m[head->next] and m[head]->arb=m[head->arb]
+
+Time:O(N), Space:O(N)
+
+public:
+    Node *copyList(Node *head)
+    {
+        //Write your code here
+        unordered_map<Node*,Node*> m;
+        
+        Node* p=head;
+        
+        while(p!=NULL)
+        {
+            m[p]=new Node(p->data);
+            p=p->next;
+        }
+        
+        p=head;
+        
+        while(p!=NULL)
+        {
+            if(p->next!=NULL)
+            {
+                m[p]->next=m[p->next];
+            }
+            if(p->arb!=NULL)
+            {
+                m[p]->arb=m[p->arb];
+            }
+           
+            p=p->next;
+        }
+        
+        return m[head];
+    }
+
+};
+
+
+M2
+
+1. Create a copy of every node behind it. Eg 1->2->3 becomes 1->1->2->2->3->3
+2. Map arb pointer, copy->arb=org->arb->next
+3. Separate orign and copy, copy=head->next; org->next=org->next->next else null, copy->next=copy->next->next else numm
+4. Return head of copy
+
+Time:O(N) 3 traversals, Space:O(1)
+
+lass Solution
+{
+    public:
+    Node *copyList(Node *head)
+    {
+        //Write your code here
+        
+        Node* p=head;
+        
+        while(p!=NULL)
+        {
+            Node* temp=new Node(p->data);
+            temp->next=p->next;
+            p->next=temp;
+            p=temp->next;
+        }
+        
+        p=head;
+        Node* temp=NULL;
+        Node* new_head=p->next;
+        
+        while(p!=NULL)
+        {
+            temp=p->next;
+            if(p->arb!=NULL)
+            {
+                temp->arb=p->arb->next;
+            }
+            //p->next=temp->next;
+            p=temp->next;
+            
+            
+        }
+        
+        Node* original = head, *copy = head->next;
+ 
+    // save the start of copied linked list
+    temp = copy;
+ 
+    // now separate the original list and copied list
+    while (original && copy)
+    {
+        original->next =
+         original->next? original->next->next : original->next;
+ 
+        copy->next = copy->next?copy->next->next:copy->next;
+        original = original->next;
+        copy = copy->next;
+    }
+        
+        return temp;
+    }
