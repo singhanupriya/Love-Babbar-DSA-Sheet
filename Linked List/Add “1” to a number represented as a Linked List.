@@ -1,0 +1,63 @@
+https://practice.geeksforgeeks.org/problems/add-1-to-a-number-represented-as-linked-list/1
+
+1. Reverse
+2. If LSB<9, just add 1 and break
+3. if LSB==9 && LSB->NEXT!=null, lsb=0
+4. if LSB==9 && LSB->NEXT==null, lsb=0 and create a new node(1) break
+lsb=lsb->next
+
+Time:O(N) && Space:O(1)
+
+class Solution
+{
+    public:
+    Node* reverse(Node* head)
+    {
+        Node* prev=NULL;
+        Node* next=NULL;
+        Node* curr=head;
+        
+        while(curr!=NULL)
+        {
+            next=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next;
+        }
+        
+        return prev;
+    }
+    
+    Node* addOne(Node *head) 
+    {
+        // Your Code here
+        // return head of list after adding one
+        Node* rev_head=reverse(head);
+        Node* p=rev_head;
+        
+        while(p!=NULL)
+        {
+            if(p->data<9)
+            {
+                p->data=p->data+1;
+                break;
+            }
+            else if(p->data==9 && p->next!=NULL)
+            {
+                p->data=0;
+            }
+            else if(p->data==9 && p->next==NULL)
+            {
+                p->data=0;
+                Node* q=new Node(1);
+                p->next=q;
+                break;
+            }
+            p=p->next;
+            
+        }
+        
+        Node* final=reverse(rev_head);
+        return final;
+    }
+};
