@@ -1,0 +1,39 @@
+https://practice.geeksforgeeks.org/problems/reverse-level-order-traversal/1#
+
+Use queue, push right then left, reverse vector
+Time:O(N), Space:O(N)
+
+vector<int> reverseLevelOrder(Node *root)
+{
+    // code here
+    
+    vector<int> res;
+    if(root==NULL)
+    {
+        return res;
+    }
+    
+    queue<Node*> q;
+    q.push(root);
+    
+    while(!q.empty())
+    {
+        Node* temp=q.front();
+        q.pop();
+        
+        res.push_back(temp->data);
+        
+        if(temp->right)
+        {
+            q.push(temp->right);
+        }
+        if(temp->left)
+        {
+            q.push(temp->left);
+        }
+    }
+    
+    reverse(res.begin(),res.end());
+    return res;
+    
+}
