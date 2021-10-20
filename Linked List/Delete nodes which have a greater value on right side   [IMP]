@@ -1,0 +1,65 @@
+https://practice.geeksforgeeks.org/problems/delete-nodes-having-greater-value-on-right/1
+
+1. Delete nodes whose following nodes are greater than it. Last node will always be there in the ans as it has no following nodes
+2. Rev the LL, first node=max, start from p=head->next, if  p>=max, max=p p=p->next else max->next=p->next temo=p p=p->next delete(temo)
+
+Time:O(N), Space:O(1)
+
+
+class Solution
+{
+    public:
+    
+    Node* rev(Node* head)
+    {
+        Node* curr=head;
+        Node* prev=NULL;
+        Node* next=NULL;
+        
+        while(curr!=NULL)
+        {
+            next=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next;
+        }
+        
+        return prev;
+    }
+    
+    Node *compute(Node *head)
+    {
+        // your code goes here
+        if(head==NULL || head->next==NULL)
+        {
+            return head;
+        }
+        
+        Node* rev_head=rev(head);
+        Node* max=rev_head;
+        
+        Node* p=rev_head->next;
+        
+        while(p!=NULL)
+        {
+            if(p->data < max->data)
+            {
+                Node* temp=p;
+                max->next=p->next;
+                p=p->next;
+                delete(temp);
+            }
+            else
+            {
+                max=p;
+                p=p->next;
+            }
+            
+        }
+        
+        Node* final=rev(rev_head);
+        return final;
+    }
+    
+};
+   
