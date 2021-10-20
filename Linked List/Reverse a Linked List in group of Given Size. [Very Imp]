@@ -1,0 +1,92 @@
+https://www.geeksforgeeks.org/reverse-a-list-in-groups-of-given-size/
+
+rev(head,k)
+1. Use iterative reversal with counter.
+2. if(next), head->next=rev(next,k), return prev
+
+#include<iostream>
+
+using namespace std;
+
+class Node{
+	public:
+		int data;
+		Node* next;
+		
+		Node(int x)
+		{
+			data=x;
+			next=NULL;
+		}
+};
+
+void print(Node* head)
+{
+	Node* p=head;
+	
+	while(p!=NULL)
+	{
+		cout<<p->data<<" ";
+		p=p->next;
+	}
+	cout<<"\n";
+}
+
+Node* rev(Node* head, int k)
+{
+	if(head==NULL || head->next==NULL)
+	{
+		return head;
+	}
+	Node* curr=head;
+	Node* prev=NULL;
+	Node* next=NULL;
+	
+	int i=0;
+	
+	while(curr!=NULL && i<k)
+	{
+		next=curr->next;
+		curr->next=prev;
+		prev=curr;
+		curr=next;
+		i++;
+	}
+	
+	if(next!=NULL)
+	{
+		head->next=rev(next,k);
+	}
+	return prev;
+	
+}
+
+
+
+
+int main()
+{
+	Node* head=new Node(1);
+	Node* second=new Node(2);
+	Node* three=new Node(3);
+	Node* four=new Node(4);
+	Node* five=new Node(5);
+	Node* six=new Node(6);
+	Node* seven=new Node(7);
+	Node* eight=new Node(8);
+	
+	head->next=second;
+	second->next=three;
+	three->next=four;
+	four->next=five;
+	five->next=six;
+	six->next=seven;
+	seven->next=eight;
+	
+	print(head);
+	
+	
+	
+	Node* rev_head=rev(head,3);
+	print(rev_head);
+}
