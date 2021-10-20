@@ -1,0 +1,87 @@
+https://www.geeksforgeeks.org/create-a-mirror-tree-from-the-given-binary-tree/
+
+V.V.V.IMP If you do this, u are only swapping the values stored in varibales left and right biy not actually the left and right childs   Node* left=mirror(root->left);   left->variable storing address of this
+	Node* right=mirror(root->right);
+	
+	swap(left,right);  ------> swap(root->left,root->right)
+   
+   Time:O(N), Space:O(h)
+   
+
+#include<iostream>
+#include<algorithm>
+
+using namespace std;
+
+class Node{
+	public:
+		int data;
+		Node* left;
+		Node* right;
+		
+		Node(int val)
+		{
+			data=val;
+			left=NULL;
+			right=NULL;
+		}
+};
+
+void inorder(Node* root)
+{
+	if(root)
+	{
+		inorder(root->left);
+		cout<<root->data<<" ";
+		inorder(root->right);
+	}
+	
+}
+
+void swap(Node* left, Node* right)
+{
+	
+}
+
+Node* mirror(Node* root)
+{
+	if(!root)
+	{
+		return NULL;
+	}
+	
+	if(root->left==NULL && root->right==NULL)
+	{
+		return root;
+	}
+	
+	Node* left=mirror(root->left);
+	Node* right=mirror(root->right);
+	
+	std::swap(root->left,root->right);
+	
+	return root;
+}
+
+int main()
+{
+	Node* root=new Node(5);
+	Node* second=new Node(3);
+	Node* three=new Node(6);
+	Node* four=new Node(2);
+	Node* five=new Node(4);
+	
+	root->left=second;
+	root->right=three;
+	
+	second->left=four;
+	second->right=five;
+	
+	inorder(root);
+	cout<<"\n";
+	
+	Node* new_root=mirror(root);
+	inorder(new_root);
+	
+	return 0;
+}
