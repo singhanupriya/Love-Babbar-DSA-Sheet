@@ -1,0 +1,42 @@
+https://practice.geeksforgeeks.org/problems/level-order-traversal/1
+
+Use queue
+
+Time:O(N), Space:O(N)
+
+vector<int> levelOrder(Node* node)
+    {
+      //Your code here
+      
+      vector<int> res;
+      
+      if(node==NULL)
+      {
+          return res;
+      }
+      
+      queue<Node*> q;
+      q.push(node);
+      
+      while(!q.empty())
+      {
+          Node* curr=q.front();
+          q.pop();
+          
+          res.push_back(curr->data);
+          
+          if(curr->left)
+          {
+              q.push(curr->left);
+          }
+          if(curr->right)
+          {
+              q.push(curr->right);
+          }
+          
+          
+          
+      }
+      
+      return res;
+    }
