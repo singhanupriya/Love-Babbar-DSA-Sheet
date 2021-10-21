@@ -1,0 +1,19 @@
+https://www.techiedelight.com/postorder-tree-traversal-iterative-recursive/
+
+Recursive
+Time:O(N), Space:O(H)
+
+void postorder(Node* root)
+{
+	if(root)
+	{
+		
+		
+		postorder(root->left);
+		postorder(root->right);
+		cout<<root->data<<" ";
+	}
+}
+
+
+Iterative
