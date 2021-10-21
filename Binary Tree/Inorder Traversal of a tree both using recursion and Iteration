@@ -1,0 +1,41 @@
+https://www.techiedelight.com/inorder-tree-traversal-iterative-recursive/
+
+Recursion
+
+Time:O(N), Space:O(H)
+
+void inorder(Node* root)
+{
+	if(root)
+	{
+		inorder(root->left);
+		cout<<root->data<<" ";
+		inorder(root->right);
+	}
+	
+}
+
+Iterative
+Time:O(N), Space:O(H)
+
+void inorder_ite(Node* root)
+{
+	stack<Node*> s;
+	
+	while(!s.empty() || root!=NULL)
+	{
+		if(root!=NULL)
+		{
+			s.push(root);
+			root=root->left;
+		}
+		else
+		{
+			Node* temp=s.top();
+			s.pop();
+			cout<<temp->data<<" ";
+			root=temp->right;
+		}
+	}
+	cout<<"\n";
+}
