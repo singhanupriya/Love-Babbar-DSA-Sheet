@@ -1,0 +1,70 @@
+https://practice.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1#
+
+1. use map<int,int>to store vertical level and data
+2. queue<Node*,int>, keep updating map
+3. vertical=q.front().second; left=vertcal-1, right=vertical+1
+
+Time:O(N), Space:O(N)
+
+public:
+    vector <int> bottomView(Node *root) {
+        // Your Code Here
+        
+         vector<int> res;
+        if(!root)
+        {
+            return res;
+        }
+        
+        //get limits of the verticals
+        int start=0;
+        int end=0;
+        
+        unordered_map<int,int> m;//inceasing order of index
+        queue<pair<Node*,int>> q;
+        
+        q.push(make_pair(root,0));
+        int vertical=0;
+        
+        while(!q.empty())
+        {
+            Node* temp=q.front().first;
+            vertical=q.front().second;
+            
+            if(start>vertical)
+            {
+                start=vertical;
+            }
+            
+            if(end<vertical)
+            {
+                end=vertical;
+            }
+            
+            q.pop();
+            
+            m[vertical]=temp->data;
+            
+            
+            if(temp->left)
+            {
+                q.push(make_pair(temp->left,vertical-1));
+            }
+            if(temp->right)
+            {
+                q.push(make_pair(temp->right,vertical+1));
+            }
+        }
+        
+        //last index is vertical +1
+        
+        for(int i=start;i<=end;i++)
+        {
+            if(m.find(i)!=m.end()) // all verticals may not exist
+            {
+                res.push_back(m[i]);
+            }
+        }
+        
+        return res;
+    }
