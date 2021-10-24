@@ -1,6 +1,14 @@
-
 https://practice.geeksforgeeks.org/problems/diagonal-traversal-of-binary-tree/1#
 
+M:
+1. Start from root, push it to vector:
+    if left exists, push that to queue.
+    if right Keepmoving right of root
+      else
+         ifq->not empty, root=q.front and pop
+         else root=null and stop
+         
+    Time:O(N), Space:O(N) 
 
 vector<int> diagonal(Node *root)
 {
@@ -19,7 +27,7 @@ vector<int> diagonal(Node *root)
    {
        res.push_back(curr->data);
        
-       if(curr->left);
+       if(curr->left)
        {
            q.push(curr->left);
        }
