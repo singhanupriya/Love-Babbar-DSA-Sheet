@@ -1,0 +1,114 @@
+https://practice.geeksforgeeks.org/problems/boundary-traversal-of-binary-tree/1#
+
+1. Root if not leaf + left nodes except leaf + all leaf + all right view except leaf in reverse
+2. Make a isleaf fn.
+3. For left, start from root->left, if it is not leaf push in ans vector, if left exist go left else go right
+4. For leaves, use inorder traversal
+5. For right, create a temp stack as we want this in rev, start from root->right, push if not leave, go right if right exists else go left.
+
+Time:O(N), Space:O(H)
+
+
+class Solution {
+public:
+    bool isLeaf(Node* root)
+    {
+        if(!root->left && !root->right)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    void left(Node* root,vector<int>& res)
+    {
+        Node* curr=root->left;
+        while(curr)
+        {
+            if(!isLeaf(curr))
+            {
+                res.push_back(curr->data);
+            }
+            if(curr->left)
+            {
+                curr=curr->left;
+            }
+            else
+            {
+                curr=curr->right;
+            }
+        }
+    }
+    
+    void leaf(Node* root,vector<int>& res)
+    {
+        if(isLeaf(root))
+        {
+            res.push_back(root->data);
+        }
+        if(root->left)
+        {
+            leaf(root->left,res);
+            
+        }
+        if(root->right)
+        {
+            leaf(root->right,res);
+            
+        }
+    }
+    
+    void right(Node* root,vector<int>& res)
+    {
+        stack<Node*> s;
+        Node* curr=root->right;
+        
+        while(curr)
+        {
+            if(!isLeaf(curr))
+            {
+                s.push(curr);
+            }
+            if(curr->right)  //it is not a leaf node so if no right left has to be there
+            {
+                curr=curr->right;
+            }
+            else
+            {
+                curr=curr->left;
+            }
+            
+        }
+        
+        while(!s.empty())
+        {
+            Node* temp=s.top();
+            s.pop();
+            res.push_back(temp->data);
+        }
+    }
+    
+    
+    
+    vector <int> printBoundary(Node *root)
+    {
+        //Your code here
+        vector<int> res;
+        if(!root)
+        {
+            return res;
+        }
+        
+        if(!isLeaf(root))
+        {
+            res.push_back(root->data);
+            
+        }
+        
+        left(root,res);
+        leaf(root,res);
+        right(root,res);
+        
+        return res;
+    }
+};
