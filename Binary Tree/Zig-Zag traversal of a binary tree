@@ -1,0 +1,141 @@
+https://practice.geeksforgeeks.org/problems/zigzag-tree-traversal/1#
+M1-
+1. Use queue like level order.
+2. At every level, create a temporary vector, if odd level, reverse this temp vector.
+3. Push temp elements to ans vector.
+
+Time:O(N), Space:O(N)
+
+class Solution{
+    public:
+    //Function to store the zig zag order traversal of tree in a list.
+    vector <int> zigZagTraversal(Node* root)
+    {
+    	// Code here
+    	vector<int> res;
+    	
+    	if(!root)
+    	{
+    	    return res;
+    	}
+    	
+    	queue<Node*> q;
+    	int level=0;
+    	q.push(root);
+    	
+    	while(!q.empty())
+    	{
+    	    int size=q.size();
+    	    vector<int> temp;
+    	    
+    	    for(int i=0;i<size;i++)
+    	    {
+    	        Node* curr=q.front();
+    	        q.pop();
+    	        temp.push_back(curr->data);
+    	        
+    	        if(curr->left)
+    	        {
+    	            q.push(curr->left);
+    	        }
+    	        
+    	        if(curr->right)
+    	        {
+    	            q.push(curr->right);
+    	        }
+    	        
+    	    }
+    	    
+    	    if(level%2!=0)
+    	    {
+    	        reverse(temp.begin(),temp.end());
+    	    }
+    	    
+    	    for(int i=0;i<temp.size();i++)
+    	    {
+    	        res.push_back(temp[i]);
+    	    }
+    	    level++;
+    	    
+    	}
+    	
+    	return res;
+    }
+};
+
+
+M2-
+1. Use deque, int level=0
+2. At even levels, pop from front, insert from back left and right
+3. At odd levels, pop from back, insert from front right and left
+
+Time:O(N), Space:O(N)
+
+class Solution{
+    public:
+    //Function to store the zig zag order traversal of tree in a list.
+    vector <int> zigZagTraversal(Node* root)
+    {
+    	// Code here
+    	
+    	vector<int> res;
+    	if(!root)
+    	{
+    	    return res;
+    	}
+    	
+    	deque<Node*> q;
+    	int level=0;
+    	q.push_back(root);
+    	
+    	while(!q.empty())
+    	{
+    	    int size=q.size();
+    	    
+    	    for(int i=0;i<size;i++)
+    	    {
+    	        Node* temp;
+    	        
+    	        if(level%2==0)
+    	        {
+    	            temp=q.front();
+    	            q.pop_front();
+    	        }
+    	        else
+    	        {
+    	            temp=q.back();
+    	            q.pop_back();
+    	        }
+    	        
+    	        res.push_back(temp->data);
+    	        
+    	        if(level%2==0)
+    	        {
+    	            if(temp->left)
+    	            {
+    	                q.push_back(temp->left);
+    	            }
+    	            if(temp->right)
+    	            {
+    	                q.push_back(temp->right);
+    	            }
+    	        }
+    	        else
+    	        {
+    	            if(temp->right)
+    	            {
+    	                q.push_front(temp->right);
+    	            }
+    	            if(temp->left)
+    	            {
+    	                q.push_front(temp->left);
+    	            }
+    	        }
+    	    }
+    	    level++;
+    	}
+    	
+    	return res;
+    	
+    }
+};
