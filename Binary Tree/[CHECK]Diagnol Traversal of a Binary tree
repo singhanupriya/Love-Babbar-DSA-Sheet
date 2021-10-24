@@ -1,0 +1,48 @@
+
+https://practice.geeksforgeeks.org/problems/diagonal-traversal-of-binary-tree/1#
+
+
+vector<int> diagonal(Node *root)
+{
+   // your code here
+    vector<int> res;
+   
+   if(!root)
+   {
+       return res;
+   }
+   
+   queue<Node*> q;
+   Node* curr=root;
+   
+   while(curr)
+   {
+       res.push_back(curr->data);
+       
+       if(curr->left);
+       {
+           q.push(curr->left);
+       }
+       
+       if(curr->right)
+       {
+           curr=curr->right;
+       }
+       else
+       {
+           if (!q.empty()) {
+                curr =q.front();
+                q.pop();
+            }
+            else {
+                // All the right childs traversed and no
+                // left child left
+                curr = NULL;
+            }
+           
+           
+       }
+   }
+   
+   return res;
+   
