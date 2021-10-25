@@ -1,0 +1,36 @@
+https://practice.geeksforgeeks.org/problems/transform-to-sum-tree/1#
+
+1. Base: If lead node, node->data=0, if !node then node->data=0;
+2. Store node->data in temp, node->data=node->left->data + node->right->data and return temp+node->Data
+
+Time:O(N), Space:O(H)
+
+int sum(Node* root)
+    {
+        if(!root)
+        {
+            return 0;
+        }
+        
+        if(!root->left && !root->right)
+        {
+            int a=root->data;
+            root->data=0;
+            return a;
+        }
+        
+        int temp=root->data;
+        root->data=sum(root->left)+sum(root->right);
+        return (temp+root->data);
+    }
+    
+    void toSumTree(Node *node)
+    {
+        // Your code here
+        if(!node)
+        {
+            return;
+        }
+        int ans=sum(node);
+    }
+};
