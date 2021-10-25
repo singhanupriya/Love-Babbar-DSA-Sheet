@@ -1,0 +1,51 @@
+https://practice.geeksforgeeks.org/problems/binary-tree-to-dll/1#
+
+1. Set 2 pointers-head and prev both NULL.
+2. Do inorder travsersal, 
+  if prev is null and u reach leftmost, it is the head of the DLL, set both head and prev as root.
+  else set prev->right=root(next) and root->left=prev(left) and move prev ahead i.e. prev=root.
+3. Use pointer to pointer head and prev variables and their address need to change.
+
+Time:O(N), Space:O(H)
+
+
+class Solution
+{
+    public: 
+    
+    void dll(Node* root, Node** head,Node** prev)
+    {
+        if(!root)
+        {
+            return;
+        }
+        
+         //prev can be accessed in all rec calls
+        dll(root->left,head,prev);
+        
+        
+        
+        if(*prev==NULL)
+        {
+            *head=root;
+        }
+        else
+        {
+            root->left=*prev;
+            (*prev)->right=root;
+        }
+        *prev=root;
+        dll(root->right,head,prev);
+        
+        
+    }
+    //Function to convert binary tree to doubly linked list and return it.
+    Node * bToDLL(Node *root)
+    {
+        // your code here
+        Node* head=NULL;
+        Node* prev=NULL;
+        dll(root,&head,&prev);
+        return head;
+    }
+};
