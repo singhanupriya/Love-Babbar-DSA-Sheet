@@ -1,0 +1,52 @@
+https://practice.geeksforgeeks.org/problems/binary-tree-to-bst/1
+
+1. Inorder of BST is sorted
+2. Get inorder, sort it, change the node values
+
+Time:O(N), Space:O(H)
+
+class Solution{
+  public:
+    // The given root is the root of the Binary Tree
+    // Return the root of the generated BST
+    
+    void inorder(Node* root, vector<int>& res)
+    {
+        if(root)
+        {
+            inorder(root->left,res);
+            res.push_back(root->data);
+            
+            inorder(root->right,res);
+        }
+    }
+    
+    void convert(Node* root, vector<int> res,int& i)
+    {
+        if(root)
+        {
+            convert(root->left,res,i);
+            root->data=res[i];
+            i++;
+            convert(root->right,res,i);
+        }
+    }
+    
+    Node *binaryTreeToBST (Node *root)
+    {
+        //Your code goes here
+        
+        if(!root)
+        {
+            return NULL;
+        }
+        
+        vector<int> res;
+        inorder(root,res);
+        sort(res.begin(),res.end());
+        int i=0;
+        convert(root,res,i);
+        return root;
+        
+    }
+};
