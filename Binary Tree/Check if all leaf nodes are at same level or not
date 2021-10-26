@@ -1,0 +1,59 @@
+https://practice.geeksforgeeks.org/problems/leaf-at-same-level/1
+
+1. store the height of the first node u visit in a variable
+2. Keep traversing the tree, whenever u visit a node check if its height matches with the prev stored value
+
+Time:O(N), Space:O(N)
+
+
+class Solution{
+  public:
+    /*You are required to complete this method*/
+    
+    void leaf(Node* root,int& m, int h, int& ans)
+    {
+        if(!root)
+        {
+            return;
+        }
+        
+        if(ans==0)
+        {
+            return;
+        }
+        
+        if(!root->left && !root->right)
+        {
+            if(m==-1) //first time visiting leaf
+            {
+                m=h;
+            }
+            else
+            {
+                if(m!=h)  //else check if the height is equal to prev stored value of height
+                {
+                    ans=0;
+                    return;
+                }
+            }
+        }
+        
+        leaf(root->left,m,h+1,ans);
+        leaf(root->right,m,h+1,ans);
+    }
+    
+    bool check(Node *root)
+    {
+        //Your code here
+        
+        int ans=1;
+        int h=0;
+        int m=-1;
+        leaf(root,m,h,ans);
+        if(ans==0)
+        {
+            return false;
+        }
+        return true;
+    }
+};
