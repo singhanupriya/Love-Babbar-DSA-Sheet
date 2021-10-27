@@ -1,0 +1,58 @@
+https://practice.geeksforgeeks.org/problems/construct-tree-1/1#
+
+Time:O(N),Space:O(N)
+
+
+class Solution{
+    public:
+    
+    int start_pre=0;
+    
+    Node* build(int in[],int pre[], int inStrt, int inEnd,unordered_map<int,int>& mp)
+    {
+        
+        //static int preIndex = 0;
+ 
+    if (inStrt > inEnd)
+        return NULL;
+ 
+    /* Pick current node from Preorder traversal using preIndex
+    and increment preIndex */
+    int curr = pre[start_pre];
+    start_pre++;
+    struct Node* tNode = new Node(curr);
+ 
+    /* If this node has no children then return */
+    if (inStrt == inEnd)
+        return tNode;
+ 
+    /* Else find the index of this node in Inorder traversal */
+    int inIndex = mp[curr];
+ 
+    /* Using index in Inorder traversal, construct left and
+    right subtress */
+    tNode->left = build(in, pre, inStrt, inIndex - 1, mp);
+    tNode->right = build(in, pre, inIndex + 1, inEnd, mp);
+ 
+    return tNode;
+    }
+    
+    
+    Node* buildTree(int in[],int pre[], int n)
+    {
+        // Code here
+        if(n==0)
+        {
+            return NULL;
+        }
+        
+        unordered_map<int,int> mp;
+        for(int i=0;i<n;i++)
+        {
+            mp[in[i]]=i;
+        }
+        
+        //int pre_start=0;
+        Node* root=build(in,pre,0,n-1,mp);
+        return root;
+    }
