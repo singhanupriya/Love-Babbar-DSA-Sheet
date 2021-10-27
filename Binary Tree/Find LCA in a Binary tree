@@ -1,0 +1,48 @@
+https://practice.geeksforgeeks.org/problems/lowest-common-ancestor-in-a-binary-tree/1#
+
+1. If no root, return NULL
+2. If root==n1 || n2, return root
+3. search for n1 nd n2 in the tree, left and right, u are returning the node only if it is found
+4. If both left and right exist, means they are on either side of the root, return root.
+5. If only left both on left side, return left and same for right
+6. else return null and they are not found.
+
+Time:O(N), Space:O(H)
+
+Node* lca(Node* root ,int n1 ,int n2 )
+    {
+       //Your code here 
+       
+       if(!root)
+       {
+           return NULL;
+       }
+       
+       if(root->data==n1 || root->data==n2)
+       {
+           return root;
+       }
+       
+       //search for n1 and n2 in the tree
+       Node* left=lca(root->left,n1,n2);
+       Node* right=lca(root->right,n1,n2);
+       
+       //if one is on the right side and one on the left, return root
+       
+       if(left && right)
+       {
+           return root;
+       }
+       
+       if(left) //if only left exixts, both of left side
+       {
+           return left;
+       }
+       
+       if(right)
+       {
+           return right;
+       }
+       
+       return NULL;
+    }
