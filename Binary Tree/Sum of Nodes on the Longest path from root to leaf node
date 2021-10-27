@@ -1,0 +1,62 @@
+https://practice.geeksforgeeks.org/problems/sum-of-the-longest-bloodline-of-a-tree/1#
+
+Time:O(N), Space:O(H)
+
+1. Create a variable height, max_height, val at each height(val) and ans.
+2. Traverse the tree, keep increasing height ans value at each step.
+3. Once the current height becomes equal to max_height, check if ans=max(ans,val)
+
+
+
+public:
+    int max(int a,int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    void sum(Node* root, int h, int& max_height,int val, int& ans)
+    {
+        if(!root)
+        {
+            return;
+        }
+        
+        val=val + root->data;
+        max_height=max(max_height,h);
+        
+        if(max_height==h)
+        {
+            ans=max(ans,val);
+        }
+        
+        if(root->left)
+        {
+            sum(root->left,h+1,max_height,val,ans);
+        }
+        
+        if(root->right)
+        {
+            sum(root->right,h+1,max_height,val,ans);
+        }
+    }
+    
+    int sumOfLongRootToLeafPath(Node *root)
+    {
+        //code here
+        
+        if(!root)
+        {
+            return 0;
+        }
+        
+        int max_height=0;
+        int ans=0;
+        
+        sum(root,0,max_height,0,ans);
+        return ans;
+    }
+};
