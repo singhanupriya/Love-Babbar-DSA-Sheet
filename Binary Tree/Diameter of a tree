@@ -1,0 +1,59 @@
+https://practice.geeksforgeeks.org/problems/diameter-of-binary-tree/1
+
+1. A node can be a part of the ans or not.
+2. find temp=height at that node.
+3.  opt=max(temp,left+right+1)  -->max(not part of ans, part of ans)
+4. res=max(opt,res)
+5. return temp---->it will return the temp ans to the parent node considering it is not a part of the ans.
+
+Time:O(N), Space:O(H)
+
+class Solution {
+  public:
+    // Function to return the diameter of a Binary Tree.
+    int max(int a,int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int dia(Node* root,int& res)
+    {
+        if(!root)
+        {
+            return 0;
+        }
+        
+        int left=dia(root->left,res);
+        int right=dia(root->right,res);
+        
+        //if a node is not a part of the ans, it will just forward the height to parent node
+        int temp=max(left,right)+1;
+        
+        //max of (not part of ans, part of ans)
+        
+        int option=max(temp,left+right+1);
+        res=max(res,option);
+        
+        //it passes the ans up considering it is not a part of the ans
+        return temp;
+    }
+    
+    int diameter(Node* root) {
+        // Your code here
+        
+        if(!root)
+        {
+            return 0;
+        }
+        
+        int res=INT_MIN;
+        dia(root,res);
+        
+        return res;
+        
+    }
+};
