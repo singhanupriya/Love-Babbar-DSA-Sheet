@@ -1,0 +1,45 @@
+https://practice.geeksforgeeks.org/problems/check-if-tree-is-isomorphic/1#
+
+Isomorpic means trees are either structurally same or mirror.
+
+1. Check if both roots are sam value.
+2. Either (iso(left(root1),left(root2)) && iso(right(root1),right(root2))) || (iso(left(root1),right(root1)) && iso(right(root1),left(root2)))
+
+Time:O(min(n1,n2))
+n1->no of nodes in tree 1
+n2->no of nodes in tree 2  //if one the trees end u dont have to check further
+
+
+class Solution{
+  public:
+    // Return True if the given trees are isomotphic. Else return False.
+    bool isIsomorphic(Node *root1,Node *root2)
+    {
+    //add code here.
+    
+        if(!root1 && !root2)
+        {
+            return true;
+        }
+        
+        if(!root1 || !root2)  //if only one root present
+        {
+            return false;
+        }
+        
+        if(root1->data!=root2->data)
+        {
+            return false;
+        }
+        
+        bool a=isIsomorphic(root1->left,root2->left) && isIsomorphic(root1->right,root2->right);
+        bool b=isIsomorphic(root1->left,root2->right) && isIsomorphic(root1->right,root2->left);
+        
+        if(a || b)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+};
