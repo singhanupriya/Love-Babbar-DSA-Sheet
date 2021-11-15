@@ -1,0 +1,71 @@
+https://practice.geeksforgeeks.org/problems/minimum-element-in-bst/1#
+
+Time:O(N), Space:O(H)
+
+void inorder(Node* root,vector<int>& res)
+{
+    if(root)
+    {
+        inorder(root->left,res);
+        res.push_back(root->data);
+        inorder(root->right,res);
+    }
+}
+
+
+int minValue(Node* root) {
+    // Code here
+    if(!root)
+    {
+        return -1;
+    }
+    
+    
+    vector<int> res;
+    inorder(root,res);
+    return res[0];
+    
+    
+    
+}
+
+Iterative
+Time:O(H), Space:O(H)
+
+int minValue(Node* root) {
+    // Code here
+    
+    if(!root)
+    {
+        return -1;
+    }
+    
+    stack<Node*> s;
+    s.push(root);
+    
+    Node* curr=root;
+    
+    
+    
+    while(!s.empty() || curr)
+    {
+        curr=curr->left;
+        
+        if(curr)
+        {
+            s.push(curr);
+        }
+        else
+        {
+            Node* temp=s.top();
+            //return temp->data;
+            
+            
+            s.pop();
+            return temp->data;
+            curr=curr->right;
+        }
+    }
+    
+    
+}
