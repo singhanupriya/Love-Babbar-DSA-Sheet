@@ -1,0 +1,35 @@
+https://practice.geeksforgeeks.org/problems/lowest-common-ancestor-in-a-bst/1#
+
+1. If n1==root || n2==root, return root.
+2. If both values of on diff sides of root, return root.
+3. If both on left side, search on left else search on right.
+
+Time:O(H), Space:O(H)
+
+Node* LCA(Node *root, int n1, int n2)
+{
+   //Your code here
+   
+   if(!root)
+   {
+       return NULL;
+   }
+   
+   if(root->data==n1 || root->data==n2)
+   {
+       return root;
+   }
+   
+   if((root->data > n1 && root->data < n2)||(root->data < n1 && root->data > n2))
+   {
+       return root;
+   }
+   else if(root->data > n1 && root->data > n2)
+   {
+       return LCA(root->left,n1,n2);
+   }
+   else
+   {
+       return LCA(root->right,n1,n2);
+   }
+}
