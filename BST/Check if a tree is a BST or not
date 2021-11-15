@@ -1,0 +1,46 @@
+https://practice.geeksforgeeks.org/problems/check-for-bst/1#
+
+Time:O(N), Space:O(H)
+
+1. Keep a prev node=NULL.  IMP---> We are passing Node*& prev so that prev is always updated with latest value
+2. Move left, if prev->data >= root->data, ans=false
+3. prev=root
+4. move right
+
+public:
+    //Function to check whether a Binary Tree is BST or not.
+    
+    void check(Node* root, Node*& prev,bool& ans)
+    {
+        if(!root || ans==false)
+        {
+            return;
+        }
+        
+        check(root->left,prev,ans);
+        
+        if(prev!=NULL && root->data <= prev->data)
+        {
+            ans=false;
+        }
+        prev=root;
+        check(root->right,prev,ans);
+    }
+    
+    bool isBST(Node* root) 
+    {
+        // Your code here
+        
+        if(!root)
+        {
+            return true;
+        }
+        
+        bool ans=true;
+        Node* prev=NULL;
+        check(root,prev,ans);
+        return ans;
+    }
+};
+
+
