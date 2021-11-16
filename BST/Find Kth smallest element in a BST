@@ -1,0 +1,40 @@
+https://practice.geeksforgeeks.org/problems/find-k-th-smallest-element-in-bst/1#
+
+Time:O(N), Space:O(1)
+
+use inorder and keep a counter of nodes visisted
+
+void inorder(Node* root, int& k,int limit,int& ans)
+    {
+        if(root && k<limit)
+        {
+            inorder(root->left,k,limit,ans);
+            k++;
+            
+            if(k==limit) /there can be a case where k>no of elements so we need to verify that  final k=limit else ans=-1
+            {
+                ans=root->data;
+            }
+            
+            
+            inorder(root->right,k,limit,ans);
+        }
+    }
+    
+    int KthSmallestElement(Node *root, int K) {
+        // add code here.
+        
+        if(!root)
+        {
+            return -1;
+        }
+        
+        /
+        
+        int k=0;
+        int ans=-1;
+        
+        inorder(root,k,K,ans);
+        
+        return ans;
+    }
