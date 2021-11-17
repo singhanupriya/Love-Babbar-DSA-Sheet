@@ -1,0 +1,57 @@
+https://practice.geeksforgeeks.org/problems/binary-tree-to-bst/1#
+
+1. Store inorder of BT in array, sort it and place in BST as inorder
+Time:O(N logN), space;O(N)
+
+
+class Solution{
+  public:
+    // The given root is the root of the Binary Tree
+    // Return the root of the generated BST
+    
+    void inorder(Node* root,vector<int>& in)
+    {
+        if(root)
+        {
+            inorder(root->left,in);
+            in.push_back(root->data);
+            inorder(root->right,in);
+        }
+    }
+    
+    Node* check(Node* root,vector<int>& in,int& count)
+    {
+        if(!root)
+        {
+            return NULL;
+        }
+        
+        if(root->left)
+        {
+            check(root->left,in,count);
+        }
+        root->data=in[count];
+        count++;
+        if(root->right)
+        {
+            check(root->right,in,count);
+        }
+        return root;
+    }
+    
+    Node *binaryTreeToBST (Node *root)
+    {
+        //Your code goes here
+        vector<int> in;
+        
+        inorder(root,in);
+        
+        sort(in.begin(),in.end());
+        
+        int count=0;
+        
+        return check(root,in,count);
+        
+        
+    }
+};
