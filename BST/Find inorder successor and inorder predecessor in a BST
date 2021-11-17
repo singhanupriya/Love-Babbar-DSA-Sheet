@@ -1,0 +1,64 @@
+https://practice.geeksforgeeks.org/problems/predecessor-and-successor/1#
+https://www.geeksforgeeks.org/inorder-predecessor-successor-given-key-bst/
+
+1. use binary search to find key, keep updating pre and suc
+2. if key is present, right most of left will be pre and left most of right will be suc
+3. else return pre n suc in step 1
+
+Time:O(log n), worse:o(N)
+spec:O(H)
+
+
+
+void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
+{
+
+// Your code goes here
+
+    if(!root)
+    {
+        return;
+    }
+    
+    if(key > root->key)
+    {
+        pre=root;
+        findPreSuc(root->right,pre,suc,key);
+        
+    }
+    
+    else if(key < root->key)
+    {
+        suc=root;
+        findPreSuc(root->left,pre,suc,key);
+        
+    }
+    
+    else
+    {
+        if(root->left)
+        {
+            Node* temp=root->left;
+            while(temp->right)
+            {
+                temp=temp->right;
+            }
+            pre=temp;
+
+        }
+        
+        if(root->right)
+        {
+            Node* temp=root->right;
+            while(temp->left)
+            {
+                temp=temp->left;
+            }
+            suc=temp;
+
+        }
+    }
+    
+    return;
+
+}
