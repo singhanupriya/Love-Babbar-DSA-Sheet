@@ -1,0 +1,38 @@
+https://www.geeksforgeeks.org/flatten-bst-to-sorted-list-increasing-order/?web=1&wdLOR=c75F5FFA7-EB4B-409D-B33A-ED671DB8C0CA
+
+Time:O(N), Space:O(H)
+
+1. Create a dummy node, set prev=dummy
+2. Do inorder tarversal, prev->left=null,prev->right=root,prev=root
+
+
+void inorder(node* root,node*& prev)
+{
+    if(root)
+    {
+        inorder(root->left,prev);
+        prev->left=NULL;
+        prev->right=root;
+        prev=root;
+        inorder(root->right,prev);
+    }
+}
+
+node* flatten(node* root)
+{
+    if(!root)
+    {
+        return NULL;
+    }
+    node* dummy=new node(-1);
+    node* prev=dummy;
+    
+    inorder(root,prev);
+    
+    node* curr=dummy->right;
+    
+    delete dummy;
+    return curr;
+    
+    
+}
