@@ -1,0 +1,47 @@
+https://practice.geeksforgeeks.org/problems/check-whether-bst-contains-dead-end/1
+
+Time:O(N), Space:O(H)
+
+1. The root will have range (min,max),left->(min,root-1), right->(root+1,max)
+2. On leaf node, if min<=max, then dead end
+
+
+void check(Node* root,int min,int max,bool& ans)
+{
+    if(ans==true)
+    {
+        return;
+    }
+    
+    if(!root->left && !root->right && min>=max)
+    {
+        ans=true;
+    }
+    
+    if(root->left)
+    {
+        check(root->left,min,root->data-1,ans);
+    }
+    
+    if(root->right)
+    {
+        check(root->right,(root->data)+1,max,ans);
+    }
+}
+
+bool isDeadEnd(Node *root)
+{
+    //Your code here
+    
+    if(!root)
+    {
+        return true;
+    }
+    
+    int min=1;
+    int max=INT_MAX;
+    bool ans=false;
+    
+    check(root,min,max,ans);
+    return ans;
+}
