@@ -1,0 +1,139 @@
+https://practice.geeksforgeeks.org/problems/median-of-bst/1#
+
+Morris traversal
+
+Time:O(N), Space:O(1)
+
+
+
+int count(Node* root)
+
+{
+        Node* curr=root;
+        int k=0;
+        
+        while(curr )
+        {
+            if(!curr->left)
+            {
+                k++;
+                
+                curr=curr->right;
+            }
+            
+            else
+            {
+                Node* prev=curr->left;
+                
+                while(prev->right!=NULL && prev->right!=curr)
+                {
+                    prev=prev->right;
+                }
+                
+                if(!prev->right)
+                {
+                    prev->right=curr;
+                    curr=curr->left;
+                }
+                else
+                {
+                    k++;
+                    
+                    prev->right=NULL;
+                    curr=curr->right;
+                    
+                }
+                
+                
+            }
+        }
+        
+        return k;
+}
+
+float findMedian(struct Node *root)
+{
+      //Code here
+      
+      if(!root)
+      {
+          return 0;
+      }
+      
+      int total=count(root);
+      
+      float sum=0;
+      bool even=0;
+      int limit=0;
+      int k=0;
+      
+      if(total%2==0)
+      {
+          even=1;
+          limit=(total/2)+1;
+      }
+      else
+      {
+          limit=(total+1)/2;
+      }
+      
+      Node* curr=root;
+      while(curr && k<limit)
+        {
+            if(!curr->left)
+            {
+                k++;
+                if(k==limit && even==0)
+                {
+                    sum=curr->data;
+                    
+                }
+                else if(even==1 && (k==limit-1 || k==limit))
+                {
+                    sum=(sum+curr->data);
+                }
+                curr=curr->right;
+            }
+            
+            else
+            {
+                Node* prev=curr->left;
+                
+                while(prev->right!=NULL && prev->right!=curr)
+                {
+                    prev=prev->right;
+                }
+                
+                if(!prev->right)
+                {
+                    prev->right=curr;
+                    curr=curr->left;
+                }
+                else
+                {
+                    k++;
+                    if(k==limit && even==0)
+                    {
+                        sum=curr->data;
+                        
+                    }
+                    else if(even==1 && (k==limit-1 || k==limit))
+                    {
+                        sum=(sum+curr->data);
+                    }
+                    prev->right=NULL;
+                    curr=curr->right;
+                    
+                }
+                
+                
+            }
+        }
+        
+        if(even==1)
+        {
+            return sum/2;
+        }
+        
+        return sum;
+}
