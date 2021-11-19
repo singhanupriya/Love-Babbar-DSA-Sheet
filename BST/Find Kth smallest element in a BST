@@ -1,5 +1,6 @@
 https://practice.geeksforgeeks.org/problems/find-k-th-smallest-element-in-bst/1#
 
+M1-
 Time:O(N), Space:O(1)
 
 use inorder and keep a counter of nodes visisted
@@ -38,3 +39,77 @@ void inorder(Node* root, int& k,int limit,int& ans)
         
         return ans;
     }
+    
+    
+    M2-
+    
+    1. Morris inorder traversal
+    
+    Time:O(N), Space:O(1)
+    
+    class Solution {
+  public:
+  
+     void morris(Node* root,int& ans,int& k, int limit)
+    {
+        Node* curr=root;
+        
+        while(curr && k<limit)
+        {
+            if(!curr->left)
+            {
+                k++;
+                if(k==limit)
+                {
+                    ans=curr->data;
+                    
+                }
+                curr=curr->right;
+            }
+            
+            else
+            {
+                Node* prev=curr->left;
+                
+                while(prev->right!=NULL && prev->right!=curr)
+                {
+                    prev=prev->right;
+                }
+                
+                if(!prev->right)
+                {
+                    prev->right=curr;
+                    curr=curr->left;
+                }
+                else
+                {
+                    k++;
+                    if(k==limit)
+                    {
+                        ans=curr->data;
+                    
+                    }
+                    prev->right=NULL;
+                    curr=curr->right;
+                    
+                }
+                
+                
+            }
+        }
+    }
+    // Return the Kth smallest element in the given BST
+    int KthSmallestElement(Node *root, int K) {
+        // add code here.
+        if(!root)
+        {
+            return -1;
+        }
+        
+        int ans=-1;
+        int k=0;
+        morris(root,ans,k,K);
+        return ans;
+    }
+};
+
