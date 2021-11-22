@@ -1,0 +1,34 @@
+https://practice.geeksforgeeks.org/problems/populate-inorder-successor-for-all-nodes/1#
+
+1. Create a prev=NULL
+2. Inorder, if prev then prev->next=root
+3. Prev=root
+
+Time:O(N), Space:O(H)
+
+class Solution
+{
+public:
+
+    void pop(Node* root, Node*& prev)
+    {
+        if(root)
+        {
+            pop(root->left,prev);
+            if(prev!=NULL)
+            {
+                prev->next=root;
+            }
+            prev=root;
+            pop(root->right,prev);
+            
+        }
+    }
+
+    void populateNext(Node *root)
+    {
+        //code here
+        Node* prev=NULL;
+        pop(root,prev);
+    }
+};
