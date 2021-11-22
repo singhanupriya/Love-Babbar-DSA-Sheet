@@ -1,0 +1,111 @@
+https://www.geeksforgeeks.org/convert-normal-bst-balanced-bst/
+
+
+1. Balanced BST, absolute differnce b/n height of left and right subtree <=1.
+2. the idea is to put almost equal no of nodes on both left and right side of the root.
+3. Inorder, middle element is root, left subtree is left part of root, right is right side of root.
+4. Mid of left will be root of left and same for right.
+
+Time:O(N), Space:O(H)
+
+// C++ program to convert a left unbalanced BST to
+// a balanced BST
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+	int data;
+	Node* left, *right;
+};
+
+Node* newNode(int data)
+{
+	Node* node = new Node;
+	node->data = data;
+	node->left = node->right = NULL;
+	return (node);
+}
+
+void inorder(Node* root,vector<Node*> &res)
+{
+    if(root)
+    {
+        inorder(root->left,res);
+        res.push_back(root);
+        inorder(root->right,res);
+    }
+    
+}
+
+Node* bst(vector<Node*>& res,int start,int end)
+{
+    if(start>end)
+    {
+        return NULL;
+    }
+    
+    int mid=(start+end)/2;
+    Node* root=res[mid];
+    root->left=bst(res,start,mid-1);
+    root->right=bst(res,mid+1,end);
+    
+    return root;
+}
+
+
+Node* buildTree(Node* root)
+{
+    vector<Node*> res;
+    inorder(root,res);
+    int end=res.size()-1;
+    //cout<<end;
+    
+    //return NULL;
+    return bst(res,0,end);
+}
+
+
+
+// Utility function to create a new node
+
+
+/* Function to do preorder traversal of tree */
+void preOrder(Node* node)
+{
+	if (node == NULL)
+		return;
+	cout<<node->data<<" ";
+	preOrder(node->left);
+	preOrder(node->right);
+}
+
+// Driver program
+int main()
+{
+	/* Constructed skewed binary tree is
+				10
+			/
+			8
+			/
+			7
+		/
+		6
+		/
+		5 */
+
+	Node* root = newNode(10);
+	root->left = newNode(8);
+	root->left->left = newNode(7);
+	root->left->left->left = newNode(6);
+	root->left->left->left->left = newNode(5);
+
+	root = buildTree(root);
+	//cout<<root->data;
+
+	printf("Preorder traversal of balanced "
+			"BST is : \n");
+	preOrder(root);
+
+	return 0;
+}
