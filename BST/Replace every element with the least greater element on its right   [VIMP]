@@ -1,0 +1,87 @@
+https://www.geeksforgeeks.org/replace-every-element-with-the-least-greater-element-on-its-right/
+https://www.youtube.com/watch?v=Mo6OOe9KZM0
+
+1. Insert element in BST from right and keep finding succ, bcoz if we need elements from right side so for any node, create BST from elements on its right only and find inorder succ
+2. To find succ, insert elements one by one, for every node set succ=null, insert this node in tree, if root>ele, succ=root
+
+
+Time: o(nlogn)--> for every node insert into BST (n times),
+Space:O(H)
+
+
+// C++ program to replace every element with the
+// least greater element on its right
+#include <bits/stdc++.h>
+using namespace std;
+
+// A binary Tree node
+struct Node {
+	int data;
+	Node *left, *right;
+};
+
+// A utility function to create a new BST node
+Node* newNode(int item)
+{
+	Node* temp = new Node;
+	temp->data = item;
+	temp->left = temp->right = NULL;
+
+	return temp;
+}
+
+/* A utility function to insert a new node with
+given data in BST and find its successor */
+
+Node* insert(Node* root, int ele, Node*& succ)
+{
+    if(!root)
+    {
+        return root=newNode(ele);
+    }
+    
+    if(root->data > ele)
+    {
+        succ=root;
+        root->left=insert(root->left,ele,succ);
+    }
+    else if(root->data < ele)
+    {
+        root->right=insert(root->right,ele,succ);
+    }
+    return root;
+}
+
+void check(int arr[],int n)
+{
+    Node* root=NULL;
+    
+    for(int i=n-1;i>=0;i--)
+    {
+        Node* succ=NULL;
+        root=insert(root,arr[i],succ);
+        if(succ)
+        {
+            arr[i]=succ->data;
+        }
+        else
+        {
+            arr[i]=-1;
+        }
+    }
+}
+
+// Driver Program to test above functions
+int main()
+{
+	int arr[] = { 8, 58, 71, 18, 31, 32, 63, 92,
+				43, 3, 91, 93, 25, 80, 28 };
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	check(arr, n);
+
+	for (int i = 0; i < n; i++)
+		cout << arr[i] << " ";
+
+	return 0;
+}
