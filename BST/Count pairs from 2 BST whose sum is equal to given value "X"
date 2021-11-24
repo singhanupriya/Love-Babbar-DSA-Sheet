@@ -1,0 +1,103 @@
+https://practice.geeksforgeeks.org/problems/brothers-from-different-root/1#
+
+M1-
+
+1. Store one BST in map.
+2. Inorder other bst and see if its sum-node is present in map
+
+Time:O(N+M), Space:O(M)
+
+
+class Solution
+{
+public:
+    
+    void inorder(Node* root1,unordered_map<int,int>& m )
+    {
+        if(root1)
+        {
+            inorder(root1->left,m);
+            m[root1->data]++;
+            inorder(root1->right,m);
+        }
+    }
+    
+    void inorder_count(Node* root2,unordered_map<int,int>& m, int x,int& count)
+    {
+        if(root2)
+        {
+            inorder_count(root2->left,m,x,count);
+            count=count+m[x-(root2->data)];
+            
+            inorder_count(root2->right,m,x,count);
+            
+        }
+    }
+    
+    int countPairs(Node* root1, Node* root2, int x)
+    {
+        unordered_map<int,int> m; 
+        inorder(root1,m);
+        int count=0;
+        inorder_count(root2,m,x,count);
+        
+        return count;
+        
+        
+    }
+};
+
+
+M2-
+
+1. Do inorder of root1.
+2. Search for sum-root1 in tree 2
+
+Time:O(N*H), Space:O(1)
+
+bool search(Node* root2, int key)
+    {
+        if(!root2)
+        {
+            return false;
+        }
+        if(root2->data==key)
+        {
+            return true;
+        }
+        else if(root2->data > key)
+        {
+            return search(root2->left,key);
+        }
+        else
+        {
+            return search(root2->right,key);
+        }
+        
+    }
+    
+    void inorder(Node* root1,Node* root2,int& count, int x)
+    {
+        if(root1)
+        {
+            inorder(root1->left,root2,count,x);
+            
+            if(search(root2,x - (root1->data)))
+            {
+                
+                count++;
+            }
+            inorder(root1->right,root2,count,x);
+        }
+    }
+    
+    
+    int countPairs(Node* root1, Node* root2, int x)
+    {
+
+        int count=0;
+        inorder(root1,root2,count,x);
+        return count;
+        
+    }
+
