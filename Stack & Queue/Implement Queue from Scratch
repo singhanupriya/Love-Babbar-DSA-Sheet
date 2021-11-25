@@ -1,0 +1,118 @@
+https://www.geeksforgeeks.org/queue-set-1introduction-and-array-implementation/
+
+
+#include<iostream>
+
+using namespace std;
+
+class Queue{
+	int size;
+	int* arr;
+	int f=-1;
+	int r=-1;
+	
+	public:
+		
+	
+		Queue(int s)
+		{
+			size=s;
+			arr=new int[s];
+		}
+		
+		bool isempty()
+		{
+			if(r==-1 || f>r)
+			{
+				return true;
+			}
+			return false;
+		}
+		
+		void enqueue(int x)
+		{
+			if(r==-1 && f==-1)
+			{
+				f++;
+				r++;
+				arr[r]=x;
+			}
+			else if(r==size-1)
+			{
+				cout<<"Overflow\n";
+			}
+			else
+			{
+				r++;
+				arr[r]=x;
+			}
+		}
+		
+		void dequeue()
+		{
+			if(r==-1 || f>r)
+			{
+				cout<<"Underflow\n";
+			}
+			else
+			{
+				f++;
+			}
+		}
+		
+		int front()
+		{
+			if(r==-1 || f>r)
+			{
+				cout<<"Empty\n";
+				return -1;
+			}
+			return arr[f];
+		}
+		
+		int rear()
+		{
+			if(r==-1)
+			{
+				cout<<"Empty\n";
+				return -1;
+			}
+			return arr[r];
+		}
+};
+
+int main()
+{
+	Queue q(5);
+	q.enqueue(1);
+	cout<<q.isempty()<<"\n";
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.enqueue(2);
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.enqueue(3);
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.enqueue(4);
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.enqueue(5);
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.enqueue(6);
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.dequeue();
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.dequeue();
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.dequeue();
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.dequeue();
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.dequeue();
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.dequeue();
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	q.dequeue();
+	cout<<q.front()<<" "<<q.rear()<<"\n";
+	cout<<q.isempty()<<"\n";
+	
+	
+	return 0;
+}
