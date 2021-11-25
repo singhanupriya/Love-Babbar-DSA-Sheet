@@ -1,0 +1,147 @@
+https://www.youtube.com/watch?v=ua1bPxSV_H0
+https://www.geeksforgeeks.org/design-a-stack-with-find-middle-operation/
+
+1. We want all operatins in O(1) so use DLL, here we can move next and prev in O(1)
+2. Create a dummy node head=mid=dummy.
+3. when adding first element head++, dummy++ and keep count else head++, if count is even mid++. if 1,2,3,4 mid=3.
+4. When pop, head--, count--, if now count is even after deleting mid--.
+5. middle return mid->data
+6. delete middle, mid->next->prev=mid->prev and mid->prev->next=mid->next, count--, if count is even mid++ else mid --.
+
+
+#include<iostream>
+
+using namespace std;
+
+class Node{
+	
+	
+	public:
+	    int data;
+    	Node* next;
+    	Node* prev;
+		Node(int x)
+		{
+			data=x;
+			next=NULL;
+			prev=NULL;
+		}
+};
+
+class Stack{
+	Node* dummy;
+	Node* head;
+	Node* mid;
+	int count;
+	
+	public:
+		
+	
+		Stack()
+		{
+			dummy=new Node(-1);
+			head=dummy;
+			mid=dummy;
+			count=0;
+		}
+		
+		void push(int x)
+		{
+			Node* temp=new Node(x);
+			head->next=temp;
+			temp->prev=head;
+			count++;
+			head=temp;
+			if(count==1)
+			{
+				mid=head;
+			}
+			else if(count%2==0)
+			{
+				mid=mid->next;
+			}
+			cout<<"Element at "<<count<<" is "<<head->data<<"\n";
+		}
+		
+		int pop()
+		{
+			if(head==dummy)
+			{
+				return -1;
+			}
+			else
+			{
+				int a=head->data;
+				head=head->prev;
+				if(count%2==0)
+				{
+					mid=mid->prev;
+				}
+				count--;
+				cout<<"Element popped is "<<a<<"\n";
+				return a;
+			}
+		}
+		
+		int middle()
+		{
+			if(mid!=dummy)
+			{
+				cout<<"Middle element is ";
+				return mid->data;
+			}
+			cout<<"Underflow\n";
+			return -1;
+		}
+		
+		void delete_middle()
+		{
+			if(mid==dummy)
+			{
+				cout<<"Underflow\n";
+			}
+			
+			cout<<"Deleted middle element is "<<mid->data<<"\n";
+			mid->prev->next=mid->next;
+			mid->next->prev=mid->prev;
+			count--;
+			if(count%2==0)
+			{
+			    mid=mid->next;
+			}
+			else
+			{
+			    mid=mid->prev;
+			}
+			
+			//delete(mid);
+		}
+};
+
+int main()
+{
+	Stack s;
+	s.push(11);
+    s.push(22);
+    s.push(33);
+    s.push(44);
+    s.push(55);
+    s.push(66);
+    s.push(77);
+    s.push(88);
+    s.push(99);
+    s.push(100);
+    s.pop();
+    s.pop();
+    s.pop();
+    cout<<s.middle()<<endl;
+    s.delete_middle();
+    cout<<s.middle()<<endl;
+	s.pop();
+    cout<<s.middle()<<endl;
+    s.delete_middle();
+    cout<<s.middle()<<endl;
+	
+	
+	return 0;
+}
