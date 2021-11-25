@@ -1,0 +1,59 @@
+https://www.geeksforgeeks.org/implement-two-stacks-in-an-array/
+
+M1- Divide arrays in 2 equal halves s1-0 to size/2-1 and s2->size/2 to size-1, inefficient use of space we maynot be able to push into onr stack as it is full while other might have space
+
+M2- 
+1. Put tops of the 2 stacks in extreme ends of the arrays  arr->0 to size-1; top1=-1 and top2=size
+2. If top1<top2-1, u can push in any stack, if space to insert atleast 1 element
+2. If top1<0, empty and top2>=size, empty else pop in s1 top1++ and pop in s2 is top2--
+
+
+void twoStacks :: push1(int x)
+{
+    if(top1<top2-1)
+    {
+        top1++;
+        
+        arr[top1]=x;
+    }
+    
+    
+
+}
+   
+//Function to push an integer into the stack2.
+void twoStacks ::push2(int x)
+{
+    if(top1<top2-1)
+    {
+        top2--;
+        arr[top2]=x;
+    }
+    
+
+}
+   
+//Function to remove an element from top of the stack1.
+int twoStacks ::pop1()
+{
+    if(top1<0)
+    {
+        return -1;
+    }
+    int a=arr[top1];
+    top1--;
+    return a;
+
+}
+
+//Function to remove an element from top of the stack2.
+int twoStacks :: pop2()
+{
+    if(top2>=size)
+    {
+        return -1;
+    }
+    int a=arr[top2];
+    top2++;
+    return a;
+}
