@@ -1,0 +1,101 @@
+https://www.tutorialspoint.com/javaexamples/data_stack.htm
+
+
+#include<iostream>
+
+using namespace std;
+
+class Stack{
+	int size;
+	int* arr;
+	int r=-1;
+	
+	public:
+		Stack(int s)
+		{
+			size=s;
+			arr=new int[s];
+		}
+		
+		bool isempty()
+		{
+			if(r==-1)
+			{
+				return true;
+			}
+			return false;
+		}
+		
+		void push(int x)
+		{
+			if(r==size-1)
+			{
+				cout<<"Overflow\n";
+			}
+			else
+			{
+				r++;
+				arr[r]=x;
+			}
+		
+		}
+		
+		void pop()
+		{
+			if(r==-1)
+			{
+				cout<<"Underflow\n";
+			}
+			else
+			{
+				r--;
+			}
+		}
+		
+		int top()
+		{
+			if(r==-1)
+			{
+				cout<<"Underflow ";
+				return -1;
+			}
+			else
+			{
+				return arr[r];
+			}
+		}
+		
+		
+};
+
+int main()
+{
+	Stack s(5);
+	s.push(1);
+	cout<<s.top()<<" ";
+	s.push(2);
+	cout<<s.top()<<" ";
+	s.push(3);
+	cout<<s.top()<<" ";
+	s.push(4);
+	cout<<s.top()<<" ";
+	s.push(5);
+	cout<<s.top()<<" ";
+	s.push(6);
+	cout<<s.isempty()<<"\n";
+	cout<<s.top()<<" ";
+	s.pop();
+	cout<<s.top()<<" ";
+	s.pop();
+	cout<<s.top()<<" ";
+	s.pop();
+	cout<<s.top()<<" ";
+	s.pop();
+	cout<<s.top()<<" ";
+	s.pop();
+	cout<<s.top()<<" ";
+	s.pop();
+	cout<<s.top()<<" ";
+	cout<<s.isempty();
+	
+}
