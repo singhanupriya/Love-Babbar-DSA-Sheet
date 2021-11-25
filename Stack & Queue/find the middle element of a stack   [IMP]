@@ -4,10 +4,9 @@ https://www.geeksforgeeks.org/design-a-stack-with-find-middle-operation/
 1. We want all operatins in O(1) so use DLL, here we can move next and prev in O(1)
 2. Create a dummy node head=mid=dummy.
 3. when adding first element head++, dummy++ and keep count else head++, if count is even mid++. if 1,2,3,4 mid=3.
-4. When pop, head--, count--, if now count is even after deleting mid--.
+4. When pop, head--, if now count is even mid--, count--,.
 5. middle return mid->data
 6. delete middle, mid->next->prev=mid->prev and mid->prev->next=mid->next, count--, if count is even mid++ else mid --.
-
 
 #include<iostream>
 
