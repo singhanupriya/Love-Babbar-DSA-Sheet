@@ -1,0 +1,85 @@
+https://www.geeksforgeeks.org/implement-stack-queue-using-deque/
+
+Time:O(1), Space:O(1)
+
+#include<iostream>
+#include<deque>
+
+using namespace std;
+
+class Stack{
+    deque<int> d1;
+    
+    public:
+        void push(int x)
+        {
+            d1.push_back(x);
+        }
+        int pop()
+        {
+            if(d1.empty())
+            {
+                return -1;
+            }
+            else
+            {
+                int a=d1.back();
+                d1.pop_back();
+                return a;
+            }
+        }
+};
+
+class Queue{
+    deque<int> d2;
+    
+    public:
+        void push(int x)
+        {
+            d2.push_back(x);
+        }
+        int pop()
+        {
+            if(d2.empty())
+            {
+                return -1;
+            }
+            else
+            {
+                int a=d2.front();
+                d2.pop_front();
+                return a;
+            }
+        }
+    
+};
+
+int main()
+{
+    Stack s;
+    s.push(1);
+    s.push(2);
+    s.push(3);
+    s.push(4);
+    cout<<"Popped "<<s.pop()<<"\n";
+    cout<<"Popped "<<s.pop()<<"\n";
+    cout<<"Popped "<<s.pop()<<"\n";
+    cout<<"Popped "<<s.pop()<<"\n";
+    cout<<"Popped "<<s.pop()<<"\n-------------\n";
+    
+    Queue q;
+    q.push(11);
+    q.push(12);
+    q.push(13);
+    q.push(14);
+    cout<<"Popped "<<q.pop()<<"\n";
+    cout<<"Popped "<<q.pop()<<"\n";
+    cout<<"Popped "<<q.pop()<<"\n";
+    cout<<"Popped "<<q.pop()<<"\n";
+    cout<<"Popped "<<q.pop()<<"\n";
+    
+    
+    
+    
+    return 0;
+}
