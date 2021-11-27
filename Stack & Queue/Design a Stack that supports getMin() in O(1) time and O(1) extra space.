@@ -1,0 +1,109 @@
+https://practice.geeksforgeeks.org/problems/special-stack/1#
+
+1. Use a global variable min that will store the min value.
+2. If stack is empty, push(a) and min=a.
+3. If element(x) to be pushed>min, push normally else min=x, pushed ele=2*x-me --> this value will be less that the new min which is used a flag, means the min element resides here
+4. If popping, if top>=min pop, else means u have hit a flag means min element is being popped, new min=2*old min-top
+
+Time:O(1), Space:O(1)
+
+#include<iostream>
+#include<stack>
+
+using namespace std;
+
+class SpecialStack{
+    int min;
+    stack<int> s;
+    
+    public:
+        void push(int a){
+    	// Your code goes here
+        	if(s.empty())
+        	{
+        	    min=a;
+        	    s.push(a);
+        	}
+        	if(a>=min)
+        	{
+        	    s.push(a);
+        	}
+        	else
+        	{
+        	    
+        	    s.push(2*a-min);
+        	    min=a;
+        	    
+        	}
+        }
+
+        bool isFull(int n){
+        	// Your code goes here
+        	if(s.size()==n)
+        	{
+        	    return true;
+        	}
+        	return false;
+        }
+
+        bool isEmpty(){
+        	// Your code goes here
+        	if(s.size()==0)
+        	{
+        	    return true;
+        	}
+        	return true;
+        }
+
+        int pop(){
+        	// Your code goes here
+        	if(s.top()>=min)
+        	{
+        	    int a=s.top();
+        	    s.pop();
+        	    return a;
+        	}
+        	else
+        	{
+        	    int a=min;
+        	    min=2*min-s.top();
+        	    s.pop();
+        	    return a;
+        	    
+        	   
+        	}
+        }
+
+        int getMin(){
+        	// Your code goes here
+        	
+        	if(s.empty())
+        	{
+        	    return -1;
+        	}
+        	return min;
+        }
+};
+
+int main()
+{
+    SpecialStack st;
+    st.push(18);
+    cout<<"min "<<st.getMin()<<"\n";
+    st.push(19);
+    cout<<"min "<<st.getMin()<<"\n";
+    st.push(2);
+    cout<<"min "<<st.getMin()<<"\n";
+    st.push(15);
+    cout<<"min "<<st.getMin()<<"\n";
+    st.push(16);
+    cout<<"min "<<st.getMin()<<"\n";
+    cout<<"Popped "<<st.pop()<<"\n";
+    cout<<"min "<<st.getMin()<<"\n";
+    cout<<"Popped "<<st.pop()<<"\n";
+    cout<<"min "<<st.getMin()<<"\n";
+    cout<<"Popped "<<st.pop()<<"\n";
+    cout<<"min "<<st.getMin()<<"\n";
+    cout<<"Popped "<<st.pop()<<"\n";
+    cout<<"min "<<st.getMin()<<"\n";
+}
