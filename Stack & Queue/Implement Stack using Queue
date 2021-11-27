@@ -1,0 +1,40 @@
+https://practice.geeksforgeeks.org/problems/stack-using-two-queues/1#
+
+1. Use q1 and q2, push in q1.
+2. For pop, if q1->empty return -1 else push q1 elements in q2 until only 1 element left in q1, pop that and return as popped element, swap q1 and q2
+
+Time:O(1) for push and O(N) for pop
+Space:O(1)
+
+
+
+void QueueStack :: push(int x)
+{
+        // Your Code
+        q1.push(x);
+}
+
+//Function to pop an element from stack using two queues. 
+int QueueStack :: pop()
+{
+        // Your Code
+        if(q1.empty())
+        {
+            return -1;
+        }
+        else
+        {
+            while(q1.size()!=1)
+            {
+                q2.push(q1.front());
+                q1.pop();
+            }
+            int a=q1.front();
+            q1.pop();
+            queue<int> temp;
+            temp=q1;
+            q1=q2;
+            q2=temp;
+            return a;
+        }
+}
