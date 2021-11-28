@@ -1,0 +1,83 @@
+
+https://practice.geeksforgeeks.org/problems/the-celebrity-problem/1#
+
+M1-
+1. Create 2 arrays- in and out. in-> no of ppl know u, out->no of ppl u know
+2. Traverse the matrix, if m[i][j]==1 then in[j]++ and out[i]++.
+3. Traverse in and out, if for any i, in[i]==n-1 and out[i]==0 , it is celebrity.
+
+Time:O(N^2), Space:O(N)
+
+
+class Solution 
+{
+    public:
+    //Function to find if there is a celebrity in the party or not.
+    int celebrity(vector<vector<int> >& m, int n) 
+    {
+        // code here 
+        vector<int> in(n,0);
+        vector<int> out(n,0);
+        
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(m[i][j]==1)
+                {
+                    in[j]++;
+                    out[i]++;
+                }
+            }
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            if(in[i]==n-1 && out[i]==0)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+};
+
+
+M2-
+1. Lets assume c=0 means 0 is celebrity.
+2. Now frm i=1 to n-1, check if 0 knows anyone, if it doesn know i, then 0 can't be celeb, i will be new celeb, eg-if c=2, if will check for i=3,4,etc
+3. We need to confirm if c is celeb or not. loop from 0 to n-1, if i!=c and m[c][i]==1 or m[i][c]==0, return -1 else return c
+
+Time:O(N), Space:O(1)
+
+
+class Solution 
+{
+    public:
+    //Function to find if there is a celebrity in the party or not.
+    int celebrity(vector<vector<int> >& m, int n) 
+    {
+        // code here 
+        
+        int c=0; //assume 0 is celebrity
+        
+        for(int i=1;i<n;i++)
+        {
+            if(m[c][i]==1)  //assumed celeb knows someone means it cant be celeb so update
+            {
+                c=i; //eg if c=2m check for i=3,4,5,etc
+            }
+        }
+        
+        //once we have assumed our celebrity, we need to confirm if it actually is a celebrity or not
+        for(int i=0;i<n;i++)
+        {
+            if((i!=c) && (m[c][i]==1 || m[i][c]==0)) //either c knows someone or someone desnt now c
+            {
+                return -1; //it is not a celeb
+            }
+        }
+        
+        return c;
+    }
+};
