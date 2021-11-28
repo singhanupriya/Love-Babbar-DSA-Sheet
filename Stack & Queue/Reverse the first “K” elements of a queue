@@ -1,0 +1,38 @@
+https://practice.geeksforgeeks.org/problems/reverse-first-k-elements-of-queue/1#
+
+1. Push the k elements of q to stack s, while !s.empty, push elements to stack to end of q.
+2. Pop rem s-k elements from q, and push them to the back
+
+Time:O(N), Space:O(N)
+
+queue<int> modifyQueue(queue<int> q, int k) {
+    // add code here.
+    
+    int n=q.size();
+    //k=k%n;
+    
+    stack<int> s;
+    int i=0;
+    while(i<k)
+    {
+        s.push(q.front());
+        q.pop();
+        i++;
+    }
+    
+    while(!s.empty())
+    {
+        q.push(s.top());
+        s.pop();
+    }
+    
+    i=0;
+    while(i<n-k)
+    {
+        q.push(q.front());
+        q.pop();
+        i++;
+    }
+    return q;
+    
+}
