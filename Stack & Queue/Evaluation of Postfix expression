@@ -1,0 +1,56 @@
+https://practice.geeksforgeeks.org/problems/evaluation-of-postfix-expression1735/1#
+
+1. If any no push it to stack, if any operator a=s.top(), s.pop(), b=s.top(). s.pop(), s.push(b/a)
+To convert char to int s[i]-'0'
+
+Time:O(N), Space:O(N)
+
+
+int evaluatePostfix(string s)
+    {
+        // Your code here
+        stack<int> st;
+        int n=s.length();
+        
+        for(int i=0;i<n;i++)
+        {
+            if(s[i]=='*')
+            {
+                int a=st.top();
+                st.pop();
+                int b=st.top();
+                st.pop();
+                st.push(b*a);
+            }
+            else if(s[i]=='/')
+            {
+                int a=st.top();
+                st.pop();
+                int b=st.top();
+                st.pop();
+                st.push(b/a);
+            }
+            else if(s[i]=='+')
+            {
+                int a=st.top();
+                st.pop();
+                int b=st.top();
+                st.pop();
+                st.push(b+a);
+            }
+            else if(s[i]=='-')
+            {
+                int a=st.top();
+                st.pop();
+                int b=st.top();
+                st.pop();
+                st.push(b-a);
+            }
+            else
+            {
+                st.push((s[i])-'0');
+            }
+        }
+        return st.top();
+    }
+};
