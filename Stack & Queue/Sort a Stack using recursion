@@ -1,0 +1,47 @@
+https://practice.geeksforgeeks.org/problems/sort-a-stack/1
+
+1. Pop all elements of stack using rec, this will form a fn call stack.
+2. From fn call stack, pick one by one element and insert it in the orignal stack at correct position
+    - if stack is empty or top<elem, push
+    -else rec pop till u reach smaller element or empty stack and then push
+    
+    Time:O(N^2), Space:O(N)
+
+
+void insert(stack<int>& s,int a)
+{
+    if(s.empty())
+    {
+        s.push(a);
+    }
+    else
+    {
+        if(s.top()<=a)
+        {
+            s.push(a);
+        }
+        else
+        {
+            int c=s.top();
+            s.pop();
+            insert(s,a);
+            s.push(c);
+        }
+    }
+}
+
+void SortedStack :: sort()
+{
+   //Your code here
+   if(s.empty())
+   {
+       return;
+   }
+   else
+   {
+       int a=s.top();
+       s.pop();
+       sort();
+       insert(s,a);
+   }
+}
