@@ -1,0 +1,51 @@
+https://practice.geeksforgeeks.org/problems/queue-reversal/1#
+
+1. Rec pop elements from q, this will form a rec fn stack.
+2. Push elements from fn stack to q
+
+Time:O(N^2), space:O(N)
+
+queue<int> rev(queue<int> q)
+{
+    // add code here.
+    if(q.empty())
+    {
+        return q;
+    }
+    else
+    {
+        int a=q.front();
+        q.pop();
+        q=rev(q);
+        q.push(a);
+        return q;
+        
+    }
+    //return q;
+    
+}
+
+M2- Iterative
+
+Time:O(N), Space:O(N)
+
+queue<int> rev(queue<int> q)
+{
+    // add code here.
+    
+    stack<int> s;
+    
+    while(!q.empty())
+    {
+        s.push(q.front());
+        q.pop();
+    }
+    
+    while(!s.empty())
+    {
+        q.push(s.top());
+        s.pop();
+    }
+    
+    return q;
+}
