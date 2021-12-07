@@ -1,0 +1,129 @@
+https://www.geeksforgeeks.org/building-heap-from-array/
+
+
+Heapify
+
+Max heap from array
+
+Time:O(N)
+
+#include<iostream>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+	int temp=a;
+	a=b;
+	b=temp;
+}
+
+
+void heap(int arr[], int n,int i)
+{
+	int largest=i;   //assume the root is max
+	int left=2*i+1;
+	int right=2*i+2;
+	
+	if(left<n && arr[left]>arr[largest])
+	{
+		largest=left;   //if left child is greater make that index largest
+	}
+	
+	if(right<n && arr[right]>arr[largest])
+	{
+		largest=right;   //if right child is greater current largest make that index largest
+	}
+	
+	if(largest!=i)
+	{
+		swap(arr[i],arr[largest]); //if root is not the largest, swap
+		heap(arr,n,largest);  //check are swapping it remains heap
+	}
+	
+	
+}
+
+int main()
+{
+	int arr[]={ 1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17 };
+	int n=sizeof(arr)/sizeof(arr[0]);
+	
+	int start=(n/2)-1;
+	
+	for(int i=start;i>=0;i--)
+	{
+		heap(arr,n,i);
+	}
+	
+	for(int i=0;i<n;i++)
+	{
+		cout<<arr[i]<<" ";
+	}
+	
+	return 0;
+}
+
+
+Min heap
+
+Time:O(N)
+
+#include<iostream>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+	int temp=a;
+	a=b;
+	b=temp;
+}
+
+
+void heap(int arr[], int n,int i)
+{
+	int smallest=i;   //assume the root is max
+	int left=2*i+1;
+	int right=2*i+2;
+	
+	if(left<n && arr[left]<arr[smallest])
+	{
+		smallest=left;   //if left child is greater make that index largest
+	}
+	
+	if(right<n && arr[right]<arr[smallest])
+	{
+		smallest=right;   //if right child is greater current largest make that index largest
+	}
+	
+	if(smallest!=i)
+	{
+		swap(arr[i],arr[smallest]); //if root is not the largest, swap
+		heap(arr,n,smallest);  //check are swapping it remains heap
+	}
+	
+	
+}
+
+int main()
+{
+	int arr[]={ 1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17 };
+	int n=sizeof(arr)/sizeof(arr[0]);
+	
+	int start=(n/2)-1;
+	
+	for(int i=start;i>=0;i--)
+	{
+		heap(arr,n,i);
+	}
+	
+	for(int i=0;i<n;i++)
+	{
+		cout<<arr[i]<<" ";
+	}
+	
+	return 0;
+}
+
+
