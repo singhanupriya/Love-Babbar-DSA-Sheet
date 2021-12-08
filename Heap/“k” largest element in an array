@@ -1,0 +1,179 @@
+https://practice.geeksforgeeks.org/problems/k-largest-elements4206/1
+
+Method 1- using max heap
+
+1. Create a max heap
+2. K times delete room  
+Time:O(n + klogn)
+
+
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+	int temp=a;
+	a=b;
+	b=temp;
+}
+
+void heap(int arr[],int n, int i)
+{
+	int largest=i;
+	int left=2*i+1;
+	int right=2*i+2;
+	
+	if(left<n && arr[left]>arr[largest])
+	{
+		largest=left;
+	}
+	
+	if(right<n && arr[right]>arr[largest])
+	{
+		largest=right;
+	}
+	
+	if(largest!=i)
+	{
+		swap(arr[i],arr[largest]);
+		heap(arr,n,largest);
+	}
+}
+
+vector<int> largestkelements(int arr[], int n, int k)
+{
+	
+	vector<int> ans;
+	int start=(n/2)-1;
+	
+	for(int i=start;i>=0;i--)
+	{
+		heap(arr,n,i);
+	}
+	//cout<<arr[0]<<"\n";
+	
+	for(int i=0;i<k;i++)
+	{
+		//cout<<arr[0]<<"\n";
+		ans.push_back(arr[0]);
+		swap(arr[0],arr[n-1-i]);
+		heap(arr,n-1-i,0);
+	}
+	
+	return ans;
+}
+
+int main()
+{
+	int arr[] = { 1, 23, 12, 9, 30, 2, 50 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int k = 4;
+    vector<int> ans=largestkelements(arr,n,k);
+    
+    for(int i=0;i<ans.size();i++)
+    {
+    	cout<<ans[i]<<" ";
+	}
+	
+	
+	return 0;
+}
+
+
+Method 2- Min heap
+
+1. Create a min heap of first k elements
+2. for rem n-k elements, compare each of them with root, if they are greater than root, swap and heapfiy again
+3. This was at the end the heap will contain all k largest elements
+4. Sort this sgain to get in desc order
+
+Time:O( k + (n-k)logk + klogk)
+
+
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+	int temp=a;
+	a=b;
+	b=temp;
+}
+
+void heap(int arr[],int n, int i)
+{
+	int smallest=i;
+	int left=2*i+1;
+	int right=2*i+2;
+	
+	if(left<n && arr[left]<arr[smallest])
+	{
+		smallest=left;
+	}
+	
+	if(right<n && arr[right]<arr[smallest])
+	{
+		smallest=right;
+	}
+	
+	if(smallest!=i)
+	{
+		swap(arr[i],arr[smallest]);
+		heap(arr,n,smallest);
+	}
+}
+
+vector<int> largestkelements(int arr[], int n, int k)
+{
+	
+	vector<int> ans(k,0);
+	int start=k/2-1;
+	
+	for(int i=start;i>=0;i--)  //Create a min heap of first k elements
+	{
+		heap(arr,k,i);
+	}
+	
+	for(int i=k;i<n;i++)  //now compare the remaining elements with the root of min heap
+	{
+		if(arr[0]<arr[i])   //if they are greater then min heap, swap and heapify
+		{
+			swap(arr[i],arr[0]);
+			heap(arr,k,0);
+		} 
+	}//at the end u will have all k largest elements in the heap but not necesarily in desc order, no we need to sort this
+	
+	for(int i=0;i<k;i++)
+	{
+		ans[i]=arr[i];
+	}
+	
+	sort(ans.begin(),ans.end());
+	reverse(ans.begin(),ans.end());
+	
+	
+	
+	return ans;
+}
+
+int main()
+{
+	int arr[] = { 1, 23, 12, 9, 30, 2, 50 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int k = 4;
+    vector<int> ans=largestkelements(arr,n,k);
+    
+    for(int i=0;i<ans.size();i++)
+    {
+    	cout<<ans[i]<<" ";
+	}
+	
+	
+	return 0;
+}
