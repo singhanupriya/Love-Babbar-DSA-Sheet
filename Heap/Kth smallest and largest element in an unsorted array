@@ -1,0 +1,164 @@
+https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array/
+
+Method 1 - Sorting Time:O(nlog n)
+
+Method 2- Min heap
+
+1. Create a min heap using heapify -> O(n)
+2. Delete (k-1) times, root will be the ans ->O(k log n)
+
+Total:O(N+klogn)
+
+
+#include<iostream>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+	int temp=a;
+	a=b;
+	b=temp;
+}
+
+void heap(int arr[], int n, int i)
+{
+	int smallest=i;
+	int left=2*i+1;
+	int right=2*i+2;
+	
+	if(left<n && arr[left]<arr[smallest])
+	{
+		smallest=left;
+	}
+	
+	if(right<n && arr[right]<arr[smallest])
+	{
+		smallest=right;
+	}
+	
+	if(smallest!=i)
+	{
+		swap(arr[i],arr[smallest]);
+		heap(arr,n,smallest);
+	}
+}
+
+int smallk(int arr[],int n, int k)
+{
+	int start=(n/2)-1;
+	
+	for(int i=start;i>=0;i--)
+	{
+		heap(arr,n,i);
+	}
+	//cout<<arr[0]<<" ";
+	
+	
+	
+	for(int i=0;i<k-1;i++)
+	{
+		swap(arr[0],arr[n-1-i]);
+		heap(arr,n-1-i,0);
+		
+		
+	}
+	
+	
+	return arr[0];
+}
+
+
+int main()
+{
+	
+	int arr[] = { 12, 3, 5, 7, 19 };
+    int n = sizeof(arr) / sizeof(arr[0]), k = 4;
+    
+    cout<<smallk(arr,n,k);
+	
+	return 0;
+}
+
+
+Method 3- Using max heap
+
+1. If u make a max heap, u will have to do (n-k+1) deletions to get k smallest element.
+2. Insteade create a max heap of 0 to (k-1) elements, for the remaining elements, compare it with root, if it is smaller than root, swap it with root and heapify
+3. At the end the heap will contain k smallest elements of the array with kth element being the root of the max heap
+
+Time:O(K) + O(n-k)logk-->heapify of k + compare with (n-k)elements and heapify , the size of the heap remains k.
+
+#include<iostream>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+	int temp=a;
+	a=b;
+	b=temp;
+}
+
+void heap(int arr[], int n, int i)
+{
+	int largest=i;
+	int left=2*i+1;
+	int right=2*i+2;
+	
+	if(left<n && arr[left]>arr[largest])
+	{
+		largest=left;
+	}
+	
+	if(right<n && arr[right]>arr[largest])
+	{
+		largest=right;
+	}
+	
+	if(largest!=i)
+	{
+		swap(arr[i],arr[largest]);
+		heap(arr,n,largest);
+	}
+}
+
+int smallk(int arr[],int n, int k)
+{
+	int start=(k/2)-1;  //create max heap of k elements
+	
+	for(int i=start;i>=0;i--)
+	{
+		heap(arr,k,i);
+	}
+	//cout<<arr[0]<<" ";
+	
+	
+	
+	for(int i=k;i<n;i++)   //compare remainings elements with the root of the max heap
+	{
+		if(arr[0]>arr[i])
+		{
+			swap(arr[0],arr[i]);
+			heap(arr,k,0);    //only k smallest elements will be in the max heap, and the kth smallest will be the root
+		}
+	}
+	
+	
+	return arr[0];
+}
+
+
+int main()
+{
+	
+	int arr[] = { 12, 3, 5, 7, 19 };
+    int n = sizeof(arr) / sizeof(arr[0]), k = 2;
+    
+    cout<<smallk(arr,n,k);
+	
+	return 0;
+}
+
+Which one to use -> min or max heap.
+If suppose n=100 and k=97, if u use min heap, u will have to make 97 deletions instead use max heap and make 3 comparisons only--> Depends on the value of k.
