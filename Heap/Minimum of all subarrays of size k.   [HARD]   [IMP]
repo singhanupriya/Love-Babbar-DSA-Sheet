@@ -1,0 +1,64 @@
+https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/
+https://www.youtube.com/watch?v=xFJXtB5vSmM
+
+#include<iostream>
+#include<deque>
+#include<vector>
+
+using namespace std;
+
+
+void maxsub(int arr[],int n, int k)
+{
+	deque<int> q;
+	
+	int i=0,j=0;
+	vector<int> ans;  //front of deque will have the min of evry sub
+	
+	while(j<n)
+	{
+		if(q.empty() || q.back()<=arr[j])    // if back < arr[j], puhs arr[j] as it can be a possible ans
+		{
+			q.push_back(arr[j]);
+		}
+		else
+		{
+			while(!q.empty() && q.back()>arr[j])   // if the back has an element > than arr[j], it will neever be the ans so pop
+			{
+				q.pop_back();
+			}
+			q.push_back(arr[j]);
+		}
+		if(j-i+1 ==k )
+		{
+			ans.push_back(q.front());
+			
+			if(arr[i]==q.front())
+			{
+				q.pop_front();
+			}
+			i++;
+		}
+		j++;
+	}
+	
+	for(int i=0;i<ans.size();i++)
+	{
+		cout<<ans[i]<<" ";
+	}
+	
+	
+	
+}
+
+
+int main()
+{
+	//int arr[] = { 12, 1, 78, 90, 57, 89, 56 };
+	int  arr[] = {8, 5, 10, 7, 9, 4, 15, 12, 90, 13}, k = 4;
+    int n = sizeof(arr) / sizeof(arr[0]);
+    //int k = 3;
+    maxsub(arr,n,k);
+	
+	return 0;
+}
