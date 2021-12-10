@@ -1,0 +1,50 @@
+https://practice.geeksforgeeks.org/problems/merge-k-sorted-linked-lists/1#
+
+1. PQ will sort based on the data, if u just put Node* in PQ, it will sort based on address, we need to sort on the basic of node->value.
+2. push a pair <int,Node*> into PQ, use merge k sorted array logic
+
+Time:O(N*K LOG K)
+Space:O(K), N-< size of largest LL
+
+
+class Solution{
+  public:
+    //Function to merge K sorted linked list.
+    Node * mergeKLists(Node *arr[], int K)
+    {
+           // Your code here
+           
+           Node* dummy=new Node(0);
+           Node* p=dummy;
+           
+           priority_queue<pair<int,Node*>,vector<pair<int,Node*>>,greater<pair<int,Node*>>> q;
+           
+           for(int i=0;i<K;i++)
+           {
+               if(arr[i])
+               {
+                   q.push(make_pair(arr[i]->data,arr[i]));
+               }
+               
+           }
+           
+           while(dummy && !q.empty())
+           {
+               pair<int,Node*> p=q.top();
+               
+               
+               Node* temp=p.second;
+               q.pop();
+               
+               dummy->next=temp;
+               dummy=temp;
+               
+               if(temp->next)
+               {
+                   q.push(make_pair(temp->next->data,temp->next));
+               }
+           }
+           
+           return p->next;
+    }
+};
