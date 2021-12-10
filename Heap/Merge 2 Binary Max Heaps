@@ -1,0 +1,81 @@
+https://www.geeksforgeeks.org/merge-two-binary-max-heaps/
+
+1. Create a new vector, copy elements of the two vectors and heapify.
+
+Time:O(m+n)
+
+
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+
+
+int swap(int& a, int& b)
+    {
+        int temp=a;
+        a=b;
+        b=temp;
+    }
+    
+    void heap(vector<int>& ans, int x, int i)
+    {
+        int largest=i;
+        int left=2*i+1;
+        int right=2*i+2;
+        
+        if(left<x && ans[left]>ans[largest])
+        {
+            largest=left;
+        }
+        if(right<x && ans[right]>ans[largest])
+        {
+            largest=right;
+        }
+        
+        if(largest!=i)
+        {
+            swap(ans[largest],ans[i]);
+            heap(ans,x,largest);
+        }
+        
+    }
+    
+    void mergeHeaps(vector<int> &a, vector<int> &b, int n, int m) {
+        // your code here
+        
+        vector<int> ans;
+        for(int i=0;i<n;i++)
+        {
+            ans.push_back(a[i]);
+        }
+        for(int i=0;i<m;i++)
+        {
+            ans.push_back(b[i]);
+        }
+        //cout<<ans[0];
+        
+        int start=(n+m)/2-1;
+        for(int i=start;i>=0;i--)
+        {
+            heap(ans,n+m,i);
+        }
+        for(int i=0;i<ans.size();i++)
+        {
+        	cout<<ans[i]<<" ";
+		}
+        
+        
+    }
+    
+int main()
+{
+	vector<int> a{10, 5, 6, 2};
+	vector<int> b{12, 7, 9};
+	mergeHeaps(a,b,4,3);
+	
+	
+	
+	return 0;
+}
