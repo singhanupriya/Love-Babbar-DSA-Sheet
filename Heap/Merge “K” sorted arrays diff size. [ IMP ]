@@ -1,0 +1,69 @@
+https://www.geeksforgeeks.org/merge-k-sorted-arrays-set-2-different-sized-arrays/
+
+1. When we merge two sorted arrays, we keep pointers i and j to 0, push smaller of it to ans array and increament that array's counter
+2. Same we do here, push the first elements of all arrays in min_heap, pop the top, push the element of the next index of the popped array.   Push a pair of pair in heap <<val,arr_size>,<arr_no,arr_index>>
+
+Time:O(N log (k))  --> size of heap <=k, N-> count of total elements
+Space:O(K)  --> heap
+
+
+#include<iostream>
+#include<vector>
+#include<queue>
+
+using namespace std;
+
+void merge(vector<vector<int>> arr, int k)
+{
+	vector<int> ans;
+	
+	priority_queue<pair<pair<int,int>,pair<int,int>>, vector<pair<pair<int,int>,pair<int,int>>>, greater<pair<pair<int,int>,pair<int,int>>>> q;
+	
+	int n=0;
+	
+	for(int i=0;i<k;i++)
+	{
+		n=n+ arr[i].size();
+		q.push(make_pair(make_pair(arr[i][0],arr[i].size()),make_pair(i,0)));
+	}
+	
+	for(int i=0;i<n;i++)
+	{
+		pair<pair<int,int>,pair<int,int>> p=q.top();
+		q.pop();
+		
+		pair<int,int> start=p.first;
+		int val=start.first;
+		int arr_size=start.second;
+		
+		ans.push_back(val);
+		
+		pair<int,int> end=p.second;
+		int arr_no=end.first;
+		int arr_index=end.second;
+		
+		int next_index=arr_index+1;
+		
+		if(next_index < arr_size)
+		{
+			q.push(make_pair(make_pair(arr[arr_no][next_index],arr_size),make_pair(arr_no,next_index)));
+		}
+	}
+	
+	for(int i=0;i<n;i++)
+	{
+		cout<<ans[i]<<" ";
+	}
+		
+}
+
+int main()
+{
+	vector<vector<int> > arr{ { 2, 6, 12 },
+                              { 1, 9 },
+                              { 23, 34, 90, 2000 } };
+    merge(arr,3);
+	
+	
+	return 0;
+}
