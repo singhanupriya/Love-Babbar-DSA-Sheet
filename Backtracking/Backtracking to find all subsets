@@ -1,0 +1,60 @@
+https://www.geeksforgeeks.org/backtracking-to-find-all-subsets/
+https://www.youtube.com/watch?v=U_Pe95r41Rs&list=PLNxqWc8Uj2LTaaxs-8vzK0Ft47rMggFnN&index=3
+
+
+1. i->index of which u are making a choice, whether to include or not.
+2. Base case, when i==n push ur current vector to and return
+3. Left child-> don't include that index and move to i+1
+4. Add that index and move to right child and move to i+1.
+5. Remove the change made before right child to restore parent state
+IMP-- if there are duplicate numbers in the question set push only once to the ans set, u can set a set to present final ans, it will handle duplicates
+
+Time Complexity: O(n(2 ^ n)). 
+For every index i two recursive cases originate, So Time Complexity is O(2^n). 
+If we include the time taken to copy the subset vector into the res vector the time taken will be equal to the size of the subset vector.
+
+Space:O(n)
+
+
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+
+void subset(int i, int arr[], int n, vector<vector<int>>& ans, vector<int>& current)
+{ 
+	if(i==n)
+	{
+		ans.push_back(current);   //base condition, if all indexes have been checked add ur ans to the final set and end
+		return;
+	}
+	
+	subset(i+1,arr,n,ans,current);   //in left child u do not include that index
+	current.push_back(arr[i]);   //before moving to the right child include that index and move ahead
+	subset(i+1,arr,n,ans,current);
+	current.pop_back();  // to go back to the parent state u have to remove the change made to its child
+}
+
+int main()
+{
+	
+	int arr[]={1,2,3};
+	int n=sizeof(arr)/sizeof(arr[0]);
+	
+	vector<vector<int>> ans;
+	vector<int> current;
+	
+	subset(0,arr,n,ans,current);
+	
+	for(int i=0;i<ans.size();i++)
+	{
+		for(int j=0;j<ans[i].size();j++)
+		{
+			cout<<ans[i][j]<<" ";
+		}
+		cout<<"\n";
+	}
+	
+	return 0;
+}
