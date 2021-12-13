@@ -1,0 +1,41 @@
+https://www.youtube.com/watch?v=ZeZU85fZzE0&list=PLNxqWc8Uj2LTaaxs-8vzK0Ft47rMggFnN&index=4
+https://www.geeksforgeeks.org/write-a-c-program-to-print-all-permutations-of-a-given-string/
+
+Logic-1.  Is u have ABC, u have 3 places to fill. Define a variable pos which defines the index u have to fill.
+2. _ _ _, initially pos=0, it can be filled with a,b,c or i=0,1,2. swap (arr[pos],arr[i]) --> i from pos to len-1.
+3. Now u have set the pos=0 with all possible perms, pos++, work for 1st index, remember to backtrack.
+
+Time Complexity: O(n*n!) The time complexity is the same as the above approach, i.e. there are n! permutations and it requires O(n) time to print/copy a permutation.
+  
+
+
+public:
+	
+	
+	    void per(int pos, int len, vector<string>& ans,string S)
+	    {
+	        if(pos==len-1)
+	        {
+	            ans.push_back(S);
+	            return;
+	        }
+	        
+	        for(int i=pos;i<len;i++)
+	        {
+	            swap(S[pos],S[i]);
+	            per(pos+1,len,ans,S);
+	            swap(S[pos],S[i]);
+	        }
+	        
+	    }
+	    
+		vector<string>find_permutation(string S)
+		{
+		    // Code here there
+		    vector<string> ans;
+		    per(0,S.length(),ans,S);
+		    sort(ans.begin(),ans.end());
+		    return ans;
+		    
+		}
+};
