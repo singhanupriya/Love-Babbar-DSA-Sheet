@@ -1,0 +1,61 @@
+https://www.geeksforgeeks.org/longest-possible-route-in-a-matrix-with-hurdles/
+
+Time:O(4^(m*n)), total block m*n, 4 choices at each block
+Space:O(M*n), max rec space-> all blocks covered
+
+
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+int max(int a, int b)
+{
+	if(a>=b)
+	{
+		return a;
+	}
+	return b;
+}
+
+void path(vector<vector<int>> mat, int i, int j, int srci, int destj, int m, int n, int diri[], int dirj[],int& ans,int temp, vector<vector<int>>& vis )
+{
+	if(i==srci && j==destj)
+	{
+		ans=max(ans,temp);
+		return;
+	}
+	
+	for(int x=0;x<4;x++)
+	{
+		if(i+diri[x]>=0 && i+diri[x]<m && j+dirj[x]>=0 && j+dirj[x]<n && vis[i+diri[x]][j+dirj[x]]==0 && mat[i+diri[x]][j+dirj[x]]==1)
+		{
+			vis[i][j]=1;
+			path(mat,i+diri[x],j+dirj[x],srci,destj,m,n,diri,dirj,ans,temp+1,vis);
+			vis[i][j]=0;
+		}
+	}
+}
+
+
+int main()
+{
+    // input matrix with hurdles shown with number 0
+    vector<vector<int>> mat{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                      { 1, 1, 0, 1, 1, 0, 1, 1, 0, 1 },
+                      { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
+ 
+    // find longest path with source (0, 0) and
+    // destination (1, 7)
+    int m=3;
+    int n=10;
+    int diri[]={1,0,0,-1};
+    int dirj[]={0,-1,1,0};
+    vector<vector<int>> vis (m,vector<int>(n,0));
+    int ans=0;
+    
+    path(mat, 0, 0, 1, 7,m,n,diri,dirj,ans,0,vis);
+    cout<<ans;
+ 
+    return 0;
+}
