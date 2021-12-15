@@ -1,0 +1,199 @@
+https://www.youtube.com/watch?v=1OkZKjxRokU&t=902s
+https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/
+https://www.youtube.com/watch?v=i05Ju7AftcM
+
+U can do col wise or row wise, below- row wise
+
+1. Take a row and find a possible col in that row.
+2. Once found, place queen there and move to next row.
+3. If u fnd an ans, return true else the rec will keep running
+
+Time complexity: O(N^3), for every every row(O(N)) check every col(O(N)) and check safe(O(n)). 
+
+Optimised --> safe can be checked in O(1) using map.
+
+
+
+#include<iostream>
+#include<vector>
+
+
+using namespace std;
+
+bool isSafe(int row,int col,int n, vector<vector<int>> mat)
+{
+	int i=row;
+	int j=col;
+	
+	while(row>=0)//upward direction
+	{
+		if(mat[row][col]==1)
+		{
+			return false;
+		}
+		row--;
+	}
+	
+	row=i;
+	
+	while(row>=0 && col>=0) //left diagonal
+	{
+		if(mat[row][col]==1)
+		{
+			return false;
+		}
+		row--;
+		col--;
+	}
+	
+	row=i;
+	col=j;
+	
+	while(row>=0 && col<n)  //right diagonal
+	{
+		if(mat[row][col]==1)
+		{
+			return false;
+		}
+		row--;
+		col++;
+	}
+	
+	return true;
+}
+
+
+bool queen(int n, vector<vector<int>>& mat, int row)
+{
+	if(row>=n)
+	{
+		
+		return true;
+	}
+	
+	//check rowise= which col is a row is safe, once u find it, place the queen there and mve to next, in next u come back to that row means make that position 0
+	
+	for(int col=0;col<n;col++)
+	{
+		if(isSafe(row,col,n, mat))
+		{
+			//cout<<"on\n";
+			mat[row][col]=1;
+			if(queen(n,mat,row+1))
+			{
+				return true;   //u need to return true when u get an answer, else it will keep running for all blocks and ans matrix will become 0
+			}
+			mat[row][col]=0;
+		}
+	}
+	return false;
+	
+}
+
+int main()
+{
+	
+	int n=5;
+	vector<vector<int>> mat(n,vector<int>(n,0));
+	cout<<queen(n,mat,0)<<"\n";
+	
+	for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<n;j++)
+			{
+				cout<<mat[i][j]<<" ";
+			}
+			cout<<"\n";
+		}
+	
+	
+	
+	
+	return 0;
+}
+
+
+Optimised:
+
+
+1. isSafe in O(1), Time:O(N^2)
+// in a row if a col is safe or not is checked by seeing if there is any other queen in that col-> make a map of size n , denoting col as index, queen placed at col i, map[i]=1
+
+//for right diagonal, all box on the same right diagonal with have sum of (i+j) as same. map[row+col]-> max size (n-1 + n-1)
+//for left diagonal use (n-1)+(col-row)--> all elements on left diagonal will have same value
+
+
+#include<iostream>
+#include<vector>
+
+
+
+using namespace std;
+
+
+
+// in a row if a col is safe or not is checked by seeing if there is any other queen in that col-> make a map of size n , denoting col as index, queen placed at col i, map[i]=1
+
+//for right diagonal, all box on the same right diagonal with have sum of (i+j) as same. map[row+col]-> max size (n-1 + n-1)
+//for left diagonal use (n-1)+(col-row)--> all elements on left diagonal will have same value
+
+bool queen(int n, vector<vector<int>>& mat, int row, vector<int> col_check,vector<int> right_diagonal,vector<int> left_diagonal)
+{
+	if(row>=n)
+	{
+		
+		return true;
+	}
+	
+	//check rowise= which col is a row is safe, once u find it, place the queen there and mve to next, in next u come back to that row means make that position 0
+	
+	for(int col=0;col<n;col++)
+	{
+		if(col_check[col]==0 && right_diagonal[row+col]==0 && left_diagonal[(n-1)+(col-row)]==0 )
+		{
+			//cout<<"on\n";
+			mat[row][col]=1;
+			col_check[col]=1;
+			right_diagonal[row+col]=1;
+			left_diagonal[(n-1)+(col-row)]=1;
+			
+			if(queen(n,mat,row+1,col_check,right_diagonal,left_diagonal ))
+			{
+				return true;   //u need to return true when u get an answer, else it will keep running for all blocks and ans matrix will become 0
+			}
+			mat[row][col]=0;
+			col_check[col]=0;
+			right_diagonal[row+col]=0;
+			left_diagonal[(n-1)+(col-row)]=0;
+		}
+	}
+	return false;
+	
+}
+
+int main()
+{
+	
+	int n=4;
+	vector<vector<int>> mat(n,vector<int>(n,0));
+	
+	vector<int> col_check(n,0);
+	vector<int> right_diagonal(2*n-1,0);
+	vector<int> left_diagonal(2*n-1,0);
+	
+	cout<<queen(n,mat,0,col_check,right_diagonal,left_diagonal)<<"\n";
+	
+	for(int i=0;i<n;i++)
+		{
+			for(int j=0;j<n;j++)
+			{
+				cout<<mat[i][j]<<" ";
+			}
+			cout<<"\n";
+		}
+	
+	
+	
+	
+	return 0;
+}
