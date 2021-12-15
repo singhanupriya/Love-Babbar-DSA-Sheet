@@ -1,0 +1,73 @@
+https://www.youtube.com/watch?v=pwlxQeHchFQ
+https://www.geeksforgeeks.org/the-knights-tour-problem-backtracking-1/
+
+Time:O(8^n*2)->8 choices for n^2 bpxes
+Space:O(n^2)
+
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+//instead of a separed visisted matrix, initially set all value in matrix as -1, if it is viisted, it will be replaced by the count
+
+bool move(vector<vector<int>>& ans,vector<vector<int>>& vis, int i, int j,int& count, int n, int diri[], int dirj[])
+{
+	if(count==n*n)
+	{
+		//cout<<"trye";
+		return true;
+	}
+	
+	for(int x=0;x<8;x++)
+	{
+		if(i+diri[x]>=0 && i+diri[x]<n && j+dirj[x]>=0 && j+dirj[x]<n && vis[i+diri[x]][j+dirj[x]]==0)
+		{
+			
+			
+			count++;
+			ans[i+diri[x]][j+dirj[x]]=count;
+			//cout<<ans[i][j]<<"\n";
+			vis[i+diri[x]][j+dirj[x]]=1;
+			
+			if(move(ans,vis,i+diri[x],j+dirj[x],count,n,diri,dirj))
+			{
+				return true;
+			}
+			vis[i+diri[x]][j+dirj[x]]=0;
+			
+			
+		}
+	}
+	return false;
+	
+	
+}
+
+int main()
+{
+	int n=8;
+	vector<vector<int>> ans(n, vector<int>(n,0));
+	vector<vector<int>> vis(n, vector<int>(n,0));
+	ans[0][0]=0;
+	
+	int diri[]={ 2, 1, -1, -2, -2, -1, 1, 2 };
+	int dirj[]={ 1, 2, 2, 1, -1, -2, -2, -1 };
+	int count=0;
+	
+	move(ans,vis,0,0,count,n,diri,dirj);
+	
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<n;j++)
+		{
+			cout<<ans[i][j]<<" ";
+		}
+		cout<<"\n";
+	}
+	
+	
+	
+	
+	return 0;
+}
