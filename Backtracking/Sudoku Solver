@@ -1,0 +1,83 @@
+https://www.youtube.com/watch?v=FWAIf_EVUKE
+https://www.geeksforgeeks.org/sudoku-backtracking-7/
+https://practice.geeksforgeeks.org/problems/solve-the-sudoku-1587115621/1#
+
+1. Travserse the matrix and find an empty position.
+2. Once found, find which no will be safe there, if u found a safe no->put it there and recurse to find next empty block. Since we want a valid soln so stop once u fins one by returning true, else it will run for all recurs
+3. If in the next recur, u get false, backtrack and remove that no
+4. If for an empty place, u do not find a char at all, return false
+5. If u do not find any empty place at all, retrun true, u have filled all.
+
+Time:O(9^(N^2)), total boxes N^2, 9 possibilities
+Space:O(N^2)-> return a matrix
+
+
+public:
+    
+    bool isSafe( int grid[N][N], int row, int col, int c){
+        for(int i = 0; i < 9; i++) {
+            if(grid[i][col] == c) 
+                return false; 
+            
+            if(grid[row][i] == c) 
+                return false; 
+            
+            if(grid[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) 
+                return false; 
+        }
+        return true;
+    }
+    //Function to find a solved Sudoku. 
+    bool SolveSudoku(int grid[N][N])  
+    { 
+        // Your code here
+        for(int i=0;i<N;i++)
+        {
+            for(int j=0;j<N;j++)
+            {
+                if(grid[i][j]==0)   //find an empty position to fill
+                {
+                    //check a safe digi that can be put
+                    for(int c=1;c<=9;c++)
+                    {
+                        if(isSafe(grid,i,j,c))
+                        {
+                            grid[i][j]=c; //if save place the digit there and move ahead to find next empty
+                            
+                            if(SolveSudoku(grid))
+                            {
+                                return true;
+                                // to want to find a valid soln so stop once u found a soln by returning true else all rec stack will run
+    
+                            }
+                            else
+                            {
+                                grid[i][j]=0;
+                                //backtrack only when u can't solve further
+                            }
+                        }
+                    }
+                    return false;
+                    //if u can't so inside the for loop at all, no possible soln return false;
+                    // if false is return then backtrack and make it 0
+                }
+            }
+        }
+        
+        return true;
+        //if all boxes are filled
+    }
+    
+    //Function to print grids of the Sudoku.
+    void printGrid (int grid[N][N]) 
+    {
+        // Your code here 
+        for(int i=0;i<N;i++)
+        {
+            for(int j=0;j<N;j++)
+            {
+                cout<<grid[i][j]<<" ";
+            }
+            //cout<<"\n";
+        }
+    }
