@@ -1,0 +1,40 @@
+https://practice.geeksforgeeks.org/problems/coin-change2448/1
+
+Unbounded knapsack--> u can inlcude the same element again
+1. For total count, take sum of all possibilities
+
+Time:O(n*m), Space:O(n*m)
+
+class Solution {
+  public:
+    long long int count(int S[], int m, int n) {
+
+        // code here.
+        
+        vector<vector<long long>> dp(m+1,vector<long long>(n+1,0));
+        
+        for(int i=0;i<=m;i++)
+        {
+            dp[i][0]=1;
+        }
+        
+        for(int i=1;i<=m;i++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                if(S[i-1]<=j)
+                {
+                    dp[i][j]=dp[i][j-S[i-1]] + dp[i-1][j];
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        
+        return dp[m][n];
+        
+        
+    }
+};
