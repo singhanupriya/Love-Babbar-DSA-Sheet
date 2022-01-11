@@ -1,0 +1,127 @@
+https://www.youtube.com/watch?v=9uUVFNOT3_Y&list=PL_z_8CaSLPWekqhdCPmFohncHwz8TY2Go&index=34
+
+{10, 30, 5, 60}
+
+A1=10 x 20, A2= 30 x 5, A3= 5 x 60
+For any matrix Ai=arr[i]*arr[i+1], will be its dimensions, we need to find all possible ways to multiple and return min.
+
+Brute-
+Time complexity - exponential as every fn is calling 2 child fns
+
+a(bc), ab(c), here i=0;j=n-2; k->i+1 to j, means u can put parenthesis at k places, MCM identification.
+
+i=0,j=n-2=2
+if k=i+1=1--> 10 and 30,5,60 a(bc)
+k=2  10,30 and 5,60 (ab)c.
+u need to stop at j, bcoz matrix dimension is i x(i+1).
+
+i=0, j=n-2; k=i+1 to j
+division ->(i,k-1) and (k to j)
+if(i>=j) return 0, if we have a single index, we can't use it as we need to find the cost of multiplication, there is 0 cost with 1 matrix, we need min 2 matrices to find cose.
+
+Create a loop for k and the division and the product= arr[i]*arr[k]*arr[j+1]
+once a loop is done whatever is the min for multiplying that return the ans.
+
+
+
+
+
+
+class Solution{
+public:
+    int min(int a,int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int arr[], int i, int j)
+    {
+        if(i>=j)
+        {
+            return 0;
+        }
+        
+        int ans=INT_MAX;
+        
+        for(int k=i+1;k<=j;k++)
+        {
+            int temp=solve(arr,i,k-1)+solve(arr,k,j)+arr[i]*arr[k]*arr[j+1];
+            
+            ans=min(ans,temp);
+            
+        }
+        return ans;
+    }
+
+    int matrixMultiplication(int n, int arr[])
+    {
+        // code here
+        
+        
+        return solve(arr,0,n-2);
+        //return ans;
+    }
+};
+
+
+Memoisation-
+
+Some of the overlapping cases
+
+
+class Solution{
+public:
+    int min(int a,int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int arr[], int i, int j, vector<vector<int>>& dp)
+    {
+        if(i>=j)
+        {
+            return 0;
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int ans=INT_MAX;
+        
+        for(int k=i+1;k<=j;k++)
+        {
+            int temp=solve(arr,i,k-1,dp)+solve(arr,k,j,dp)+arr[i]*arr[k]*arr[j+1];
+            
+            ans=min(ans,temp);
+            
+        }
+        return dp[i][j]=ans;
+    }
+
+    int matrixMultiplication(int n, int arr[])
+    {
+        // code here
+        
+        //i goes from 0 to n-2 means n-1 elements to be n safe side we take n size dp
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        return solve(arr,0,n-2,dp);
+        
+    }
+};
+
+
+
+
+
+
+
