@@ -1,0 +1,194 @@
+Aditya verma
+https://www.geeksforgeeks.org/egg-dropping-puzzle-dp-11/
+
+
+
+1. If an egg breaks at a floor f, it will break at all floors above.
+2. If the egg doesn't break a at floor f, it will not break at all floors below.
+3. We need to find the last floor f on which the egg doesn't break.
+MCM pattern i=1, j=f, k->1 to f.
+Base case- if(floor=1 or 0) return floor, if (egg=1) return f //if we have only one egg and f floor, we will need f trails.
+
+If u have e eggs and f floor, u have 2 options- break or not
+
+e,f and u are dropping on floor k if break e-1, (k-1)floors to test if not break e,(f-k) floors to test. One move will be counted here and only one is possible either break or not.
+
+We need min no of moves to find worst case
+
+so temp=1+max(fn(e-1,k-1),fn(e,f-k)) //one move counted and break or not
+ans=min(ans,temp)
+
+Overlapping- memoisation
+
+
+
+public:
+    //Function to find minimum number of attempts needed in 
+    //order to find the critical floor.
+    
+    int max(int a,int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int min(int a,int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int eggDrop(int n, int f) 
+    {
+        // your code here
+        
+        if(n==1)
+        {
+            return f;
+        }
+        
+        if(f==0 || f==1)
+        {
+            return f;
+        }
+        
+        int ans=INT_MAX;
+        
+        for(int k=1;k<=f;k++)
+        {
+            int temp=1 + max(eggDrop(n-1,k-1),eggDrop(n,f-k));
+            ans=min(ans,temp);
+        }
+        return ans;
+        
+    }
+    
+    Memoisation-
+    
+    int max(int a,int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int min(int a,int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int n, int f, vector<vector<int>>& dp)
+    {
+        
+        if(dp[n][f]!=-1)
+        {
+            return dp[n][f];
+        }
+        
+        if(n==1)
+        {
+            return f;
+        }
+        
+        if(f==0 || f==1)
+        {
+            return f;
+        }
+        
+        int ans=INT_MAX;
+        
+        for(int k=1;k<=f;k++)
+        {
+            int temp=1 + max(eggDrop(n-1,k-1),eggDrop(n,f-k));
+            ans=min(ans,temp);
+        }
+        return dp[n][f]=ans;
+        
+        
+    }
+    
+    
+    int eggDrop(int n, int f) 
+    {
+        // your code here
+        
+        vector<vector<int>> dp(n+1,vector<int>(f+1,-1));
+        return solve(n,f,dp);
+        
+        
+        
+    }
+    
+    
+    Top dow- O(n^3), Space:O(n*f)
+    
+    public:
+    //Function to find minimum number of attempts needed in 
+    //order to find the critical floor.
+    
+    int max(int a,int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int min(int a,int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    int eggDrop(int n, int f) 
+    {
+        // your code here
+        
+        vector<vector<int>> dp(n+1,vector<int>(f+1,0));
+        
+        for(int i=1;i<=f;i++)
+        {
+            dp[1][i]=i;
+        }
+        
+        for(int i=1;i<=n;i++)
+        {
+            dp[i][1]=1;
+        }
+        
+        for(int i=2;i<=n;i++)
+        {
+            for(int j=2;j<=f;j++)
+            {
+                dp[i][j]=INT_MAX;
+                
+                for(int k=1;k<=j;k++)
+                {
+                    int temp=1 + max(dp[i-1][k-1],dp[i][j-k]);
+                    dp[i][j]=min(dp[i][j],temp);
+                }
+            }
+        }
+        return dp[n][f];
+        
+        
+        
+    }
+};
