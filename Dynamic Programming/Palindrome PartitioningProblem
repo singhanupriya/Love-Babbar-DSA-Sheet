@@ -1,0 +1,211 @@
+https://practice.geeksforgeeks.org/problems/palindromic-patitioning4845/1/#
+
+MCM pattern i=0,j=n-1, k=i+1 to j , i to k-1 and k to j
+Base case if i>=j || ispal(str,i,j) return 0; //no need to partition
+
+temp= 1 + f(s,i,k-1) + f(s,k,j) // we did one partition
+
+Time complexity- exponential something as each fn divides into two
+
+Overlapping
+
+public:
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    bool pal(string s, int i, int j)
+    {
+        int start=i;
+        int end=j;
+        
+        while(start<end)
+        {
+            if(s[start]!=s[end])
+            {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+    
+    
+    int solve(string str, int i, int j)
+    {
+        if(i>j || i==j || pal(str,i,j))
+        {
+            return 0;
+        }
+        
+        int ans=INT_MAX;
+        for(int k=i+1;k<=j;k++)
+        {
+            int temp= 1 + solve(str,i,k-1) + solve(str,k,j);
+            ans=min(ans,temp);
+        }
+        return ans;
+    }
+    
+    int palindromicPartition(string str)
+    {
+        // code here
+        int n=str.length();
+        
+        return solve(str,0,n-1);
+    }
+};
+
+Memoisation-
+
+public:
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    bool pal(string s, int i, int j)
+    {
+        int start=i;
+        int end=j;
+        
+        while(start<end)
+        {
+            if(s[start]!=s[end])
+            {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+    
+    
+    int solve(string str, int i, int j, vector<vector<int>>& dp)
+    {
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        
+        if(i>j || i==j || pal(str,i,j))
+        {
+            return 0;
+        }
+        
+        int ans=INT_MAX;
+        for(int k=i+1;k<=j;k++)
+        {
+            int temp= 1 + solve(str,i,k-1,dp) + solve(str,k,j,dp);
+            ans=min(ans,temp);
+        }
+        return dp[i][j]=ans;
+    }
+    
+    int palindromicPartition(string str)
+    {
+        // code here
+        int n=str.length();
+        vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        
+        return solve(str,0,n-1,dp);
+    }
+};
+
+
+Further optimisation-
+
+class Solution{
+public:
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    bool pal(string s, int i, int j)
+    {
+        int start=i;
+        int end=j;
+        
+        while(start<end)
+        {
+            if(s[start]!=s[end])
+            {
+                return false;
+            }
+            start++;
+            end--;
+        }
+        return true;
+    }
+    
+    
+    int solve(string str, int i, int j, vector<vector<int>>& dp)
+    {
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        
+        if(i>j || i==j || pal(str,i,j))
+        {
+            return 0;
+        }
+        
+        int ans=INT_MAX;
+        for(int k=i+1;k<=j;k++)
+        {
+            int left;
+            
+            if(dp[i][k-1]==-1)
+            {
+                left=solve(str,i,k-1,dp);
+            }
+            else
+            {
+                left=dp[i][k-1];
+            }
+            
+            int right;
+            
+            if(dp[k][j]==-1)
+            {
+                right=solve(str,k,j,dp);
+            }
+            else
+            {
+                right=dp[k][j];
+            }
+            
+            int temp= 1 + left + right;
+            ans=min(ans,temp);
+        }
+        return dp[i][j]=ans;
+    }
+    
+    int palindromicPartition(string str)
+    {
+        // code here
+        int n=str.length();
+        vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        
+        return solve(str,0,n-1,dp);
+    }
+};
