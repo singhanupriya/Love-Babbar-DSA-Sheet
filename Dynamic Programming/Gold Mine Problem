@@ -1,0 +1,81 @@
+
+
+
+Backtracking:
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+#include<climits>
+
+using namespace std;
+
+
+
+    void solve(vector<vector<int>> M, int i, int j, int m, int n, int dirx[], int diry[], int temp, int& ans)
+    {
+        
+        if(j==n-1)
+        {
+            ans=max(ans,temp+M[i][j]);
+            cout<<i<<" "<<j<<" "<<temp<<"temp  ans "<<ans<<"\n";
+            
+        }
+        
+        for(int x=0;x<3;x++)
+        {
+            if(i+dirx[x]>=0 && i+dirx[x]<m && j+diry[x]>=0 && j+diry[x]<n)
+            {
+                temp=temp+M[i][j];
+                cout<<i<<" "<<j<<" "<<temp<<"temp  "<<i+dirx[x]<<"new  "<<j+diry[x]<<"\n";
+                solve(M, i+dirx[x], j+diry[x],m,n,dirx,diry,temp,ans);
+                temp=temp-M[i][j];
+            }
+        }
+        
+        
+    }
+    
+    int maxGold(int n, int m, vector<vector<int>> M)
+    {
+        // code here
+        
+        int dirx[]={-1,0,1};
+        int diry[]={1,1,1};
+        
+        
+        int ans=INT_MIN;
+        int startx;
+        
+        
+        for(startx=0;startx<m;startx++)
+        {
+            solve(M,startx,0,m,n,dirx,diry,0,ans);
+        }
+        
+        return ans;
+        
+        
+        
+        
+    }
+
+int main()
+{
+    
+    vector<vector<int>> M={{10, 33, 13, 15},
+                  {22, 21, 04, 1},
+                  {5, 0, 2, 3},
+                  {0, 6, 14, 2}};
+    
+    cout<<maxGold(4,4,M);
+
+    return 0;
+}
