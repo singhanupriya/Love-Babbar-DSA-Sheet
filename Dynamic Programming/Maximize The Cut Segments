@@ -1,0 +1,179 @@
+https://practice.geeksforgeeks.org/problems/cutted-segments1642/1
+
+
+1. Cuts possible p,q,r.
+2. If l>=p count+1.  (Overlapping--DP)
+Set a,b,c=INT_min initially so that if it is not possible to cut it will return this else this will also be considered in later ans even if it is not possible to cut that way
+a=cut(l-p), b=cut(l-q), c=cut(l-r) if l>=x
+return 1+max(a,b,c)
+
+
+void cut(int n, int p, int q, int r, int count, int& ans)
+    {
+        if(n==0)
+        {
+            ans=max(ans,count);
+            return;
+        }
+        
+        if(n>=p)
+        {
+            cut(n-p,p,q,r,count+1,ans);
+            
+        }
+        if(n>=q)
+        {
+            cut(n-q,p,q,r,count+1,ans);
+            
+        }
+        if(n>=r)
+        {
+            cut(n-r,p,q,r,count+1,ans);
+            
+        }
+    }
+    
+    int maximizeTheCuts(int n, int x, int y, int z)
+    {
+        //Your code here
+        
+        int ans=INT_MIN;
+        cut(n,x,y,z,0,ans);
+        if(ans==INT_MIN)
+        {
+            return 0;
+        }
+        return ans;
+    }
+    
+    
+    
+    memoisation 
+    
+    int max(int a, int b,int c)
+    {
+        if(a>=b && a>=c)
+        {
+            return a;
+        }
+        else if(b>=c && b>=a)
+        {
+            return b;
+        }
+        return c;
+    }
+    
+    int cut(int n, int p, int q, int r, vector<int>& dp)
+    {
+        if(dp[n]!=-1)
+        {
+            return dp[n];
+        }
+        
+        if(n==0)
+        {
+            
+            return 0;
+        }
+        
+        int a=INT_MIN,b=INT_MIN,c=INT_MIN; //IF ITS NOT possible return INT_MIN, if we retrun 0 means possible
+        
+        if(n>=p)
+        {
+            a=cut(n-p,p,q,r,dp);
+            
+        }
+        if(n>=q)
+        {
+            b=cut(n-q,p,q,r,dp);
+            
+        }
+        if(n>=r)
+        {
+            c=cut(n-r,p,q,r,dp);
+            
+        }
+        
+        return dp[n]=1+max(a,b,c);
+    }
+    
+    int maximizeTheCuts(int n, int x, int y, int z)
+    {
+        //Your code here
+        
+        vector<int> dp(n+1,-1); //storing max cuts possible at a particular length
+        //ans is dp[n];
+        //dp[0]=0;
+        
+        //int ans=INT_MIN;
+        cut(n,x,y,z,dp);
+        if(dp[n]<0)
+        {
+            return 0;
+        }
+        return dp[n];
+    }
+};
+
+Top down
+Time:O(N), Space:O(N)
+
+class Solution
+{
+    public:
+    //Function to find the maximum number of cuts.
+    
+    int max(int a, int b,int c)
+    {
+        if(a>=b && a>=c)
+        {
+            return a;
+        }
+        else if(b>=c && b>=a)
+        {
+            return b;
+        }
+        return c;
+    }
+    
+    
+    
+    
+    int maximizeTheCuts(int n, int p, int q, int r)
+    {
+        //Your code here
+        
+        vector<int> dp(n+1,-1); //storing max cuts possible at a particular length
+        //ans is dp[n];
+        dp[0]=0;
+        
+        for(int i=1;i<=n;i++)
+        {
+            int a=INT_MIN,b=INT_MIN,c=INT_MIN; //IF ITS NOT possible return INT_MIN, if we retrun 0 means possible
+        
+            if(i>=p)
+            {
+                a=dp[i-p];
+                
+            }
+            if(i>=q)
+            {
+                b=dp[i-q];
+                
+            }
+            if(i>=r)
+            {
+                c=dp[i-r];
+                
+            }
+            
+            dp[i]=1+max(a,b,c);
+        }
+        
+        if(dp[n]<0)
+        {
+            return 0;
+        }
+        return dp[n];
+    }
+};
