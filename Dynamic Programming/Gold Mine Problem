@@ -79,3 +79,93 @@ int main()
 
     return 0;
 }
+
+For DP- we need smaller sub problems, here small problem is if u are at last col much gold u can collect then if u are at second last col how much max gold u can collect
+this was move from last col to first col, and store the max gold that can be collected from a point moving towards last col in dp. ans-> max of all rows in first col.
+
+Time:O(m*n), Space:O(M*n)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+#include<climits>
+
+using namespace std;
+
+int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int maxGold(int n, int m, vector<vector<int>> M)
+    {
+        // code here n-row, m-col
+        
+        vector<vector<int>> dp(n,vector<int>(m,0));
+        
+        for(int i=0;i<n;i++)
+        {
+            dp[i][m-1]=M[i][m-1];
+        }
+        
+        int diri[]={1,1,1};
+        int dirj[]={-1,0,1};
+        
+        for(int i=m-2;i>=0;i--)  //col
+        {
+            for(int j=0;j<n;j++)   //row
+            {
+                for(int x=0;x<3;x++)
+                {
+                    if(i+diri[x]>=0 && i+diri[x]<m && j+dirj[x]>=0 && j+dirj[x]<n)
+                    {
+                        dp[j][i]=max(dp[j][i],M[j][i]+dp[j+dirj[x]][i+diri[x]]);
+                    }
+                }
+            }
+        }
+        
+        
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                cout<<dp[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+        
+        
+        int ans=INT_MIN;
+        for(int i=0;i<n;i++)
+        {
+            ans=max(ans,dp[i][0]);
+        }
+        
+        return ans;
+        
+    }
+
+
+int main()
+{
+    vector<vector<int>> mat = {{10, 33, 13, 15},
+                  {22, 21, 04, 1},
+                  {5, 0, 2, 3},
+                  {0, 6, 14, 2}};
+                  
+    cout<<maxGold(4,4,mat);
+
+    return 0;
+}
