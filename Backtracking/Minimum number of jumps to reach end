@@ -1,0 +1,112 @@
+
+
+Brute force-for every point, check every reachable parts, then try to reach end. O(n^n)
+
+DP- choice, optimisation
+
+dp[i]->min jumps to reach that point , dp[0]=0, i=1 to n-1.
+j-> no of ways u can reach i, j=0 to i-1.
+if dp[j] has some value or is reachble and j+mat[j]>=i means u can reach i from j, dp[i]=min(dp[i], dp[j]+1)
+return dp[n-1]
+
+Time:O(N^2), Space:O(N)
+
+int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+  
+    int minJumps(int arr[], int n){
+        // Your code here
+        
+        vector<int> dp(n, INT_MAX);
+        dp[0]=0;
+        
+        //Dp[i]-- min jumps to reach that point
+        //j- no of possible ways in which u can reach i, j=0 to i-1
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                if(dp[j]!=INT_MAX && j+arr[j]>=i)
+                {
+                    dp[i]=min(dp[i],dp[j]+1);
+                }
+            }
+        }
+        
+        if(dp[n-1]==INT_MAX)
+        {
+            return -1;
+        }
+        
+        return dp[n-1];
+        
+    }
+};
+
+
+Method 2
+
+- consider like a ladder and step, when a ladder ends, u have to jump t the next ladder and update the rem steps
+- maxReach=arr[o] - max index u can reach
+stepReamining=arr[0], jump=1
+
+i=1 to n-1
+ if(i==n-1) return jump
+ step--, maxReach=max(maxraech, i+arr[i]), keep updating the max index everytime
+ if step==0, jump++ check if i>=maxReach, return -1
+            once u have jumped to the next ladder update the steps=max-i
+
+
+
+class Solution{
+  public:
+    int minJumps(int arr[], int n){
+        // Your code here
+        
+        if(n<=1)  // if u have only 1 or 0 element, u are already at the end
+        {
+            return 0;
+        }
+        
+        if(arr[0]==0)
+        {
+            return -1;
+        }
+        
+        int maxReach=arr[0];  //max index u can reach
+        int jump=1;
+        int stepRemaining=arr[0];
+        
+        for(int i=1;i<n;i++)
+        {
+            if(i==n-1)
+            {
+                return jump;
+            }
+            
+            maxReach=max(maxReach,i+arr[i]);
+            stepRemaining--;
+            
+            if(stepRemaining==0)  //that ladder has finished
+            {
+                jump++;  //jump to the new ladder
+                
+                if(i>=maxReach) //u can't move any further
+                {
+                    return -1;
+                }
+                //once u have jumped to the next ladder, update the steps rem
+                stepRemaining=maxReach-i;
+            }
+        }
+        
+        return jump;
+    }
+};
