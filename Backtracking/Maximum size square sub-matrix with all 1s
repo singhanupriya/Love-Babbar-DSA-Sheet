@@ -1,0 +1,70 @@
+https://www.youtube.com/watch?v=UagRoA3C5VQ
+
+In a square, the numbers of 1s in rows, col and diag are same, so we need to check all 3.
+
+Brute- traverse thru the matrix, if u find check, loop thru its right, down and diag to see if more 1s.
+
+DP- choice, opt
+Start from last row and last col see max sq formed, then move up.
+dp[i][j]- with this point as the left most corner (including it), max length of square formed. hence, wherever the value is 0 in orignal matrx, we can't have sq including that point dp=0
+For last row and col, dp=its value
+for i=m-2 to 0 and j=n-2 ro 0, dp[i][j]=1+ min (dp[i][j+1] max sq to its right, dp[i+1][j+1] max sq to its left, dp[i+1][j] max sq to its bottom)
+
+return the max value of this 2d dp matrix.
+
+Time:O(N*M), Space:O(N*M), space optimised, for any value, we need its prev row, and prev elem.
+
+
+class Solution{
+public:
+    int min(int a, int b, int c)
+    {
+        if(a<=b && a<=c)
+        {
+            return a;
+        }
+        else if(b<=a && b<=c)
+        {
+            return b;
+        }
+        return c;
+    }
+    
+    int maxSquare(int n, int m, vector<vector<int>> mat){
+        // code here
+        
+        vector<vector<int>> dp(n,vector<int>(m,0));
+        int ans=INT_MIN;
+        
+        for(int i=0;i<m;i++)
+        {
+            dp[n-1][i]=mat[n-1][i];
+            ans=max(ans,dp[n-1][i]);
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            dp[i][m-1]=mat[i][m-1];
+            ans=max(ans,dp[i][m-1]);
+        }
+        
+        
+        
+        for(int i=n-2;i>=0;i--)
+        {
+            for(int j=m-2;j>=0;j--)
+            {
+                if(mat[i][j]!=0)
+                {
+                    dp[i][j]=1+min(dp[i+1][j],dp[i+1][j+1],dp[i][j+1]);
+                    ans=max(ans,dp[i][j]);
+                }
+            }
+        }
+        
+        return ans;
+        
+        
+        
+    }
+};
