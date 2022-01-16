@@ -1,0 +1,67 @@
+https://practice.geeksforgeeks.org/problems/maximum-difference-of-zeros-and-ones-in-binary-string4111/1/#
+
+Here we want the max(number of 0's-no of 1's) i.e. no of 0's > no of 1's.
+Using kadane's algo, make all 0's as 1 and all 1s as -1, and find the max sum subarray which will return the max sum between 1s and -1s which is max diff between the no of 0's - 1's.
+If sum==-n, means all 1's return -1.
+
+//if we wanted max(no of 1's - no of 0s'), we make 0 as -1 and find the max sum aubarray.
+
+Time:O(N), Space:O(1)
+
+
+
+class Solution{
+public:	
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+	int maxSubstring(string S)
+	{
+	    // Your code goes here
+	    
+	    int n=S.length();
+	    
+	    int start=-1;
+	    int value=S[0]-'0';
+	    
+	    if(value==0)
+	    {
+	        start=1;
+	    }
+	    
+	    
+	    int prevSum=start;
+	    int currMax=start;
+	    int largest=start;
+	    
+	    for(int i=1;i<n;i++)
+	    {
+	        
+	        int currvalue=S[i]-'0';
+	        int addValue=-1;  //if element is 1
+	        
+	        if(currvalue==0)
+	        {
+	            addValue=1;
+	        }
+	        
+	        currMax=max(prevSum+addValue, addValue);
+	        largest=max(largest,currMax);
+	        prevSum=currMax;
+	        
+	    }
+	    
+	    if(largest==-n)//all elements 1
+	    {
+	        return -1;
+	    }
+	    
+	    return largest;
+	}
+};
