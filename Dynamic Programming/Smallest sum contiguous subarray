@@ -1,0 +1,131 @@
+https://www.geeksforgeeks.org/smallest-sum-contiguous-subarray/
+
+Brute- Find all subarray using 2 loops and find min sum
+Time:O(N^2), Space:O(1)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<climits>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int solve(int arr[], int n)
+{
+    int ans=INT_MAX;
+    
+    for(int i=0;i<n;i++)
+    {
+        int sum=0;
+        for(int j=i;j<n;j++)
+        {
+            sum=sum+arr[j];
+            ans=min(ans,sum);
+            
+        }
+    }
+    
+    return ans;
+}
+
+
+int main()
+{
+    int  arr[] = {2, 6, 8, 1, 4};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    cout<<solve(arr,n);
+
+    return 0;
+}
+
+
+
+
+
+  M2- Using Kadane's, dp[i]=min(dp[i-1]+arr[i],arr[i])
+Time:O(N), Space:O(N)
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<climits>
+#include<vector>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int solve(int arr[], int n)
+{
+    vector<int> dp(n,0);
+    dp[0]=arr[0];
+    int ans=INT_MAX;
+    
+    for(int i=1;i<n;i++)
+    {
+        dp[i]=min(dp[i-1]+arr[i],arr[i]);
+        ans=min(ans,dp[i]);
+    }
+    
+    return ans;
+}
+
+int main()
+{
+    int  arr[] = {3, -4, 2, -3, -1, 7, -5};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    cout<<solve(arr,n);
+
+    return 0;
+}
+
+
+M3- we only need a prev value so store in a variable
+Time:O(N), Space:O(1)
+
+int solve(int arr[], int n)
+{
+    int prev=arr[0];
+    int curr=arr[0];
+    int ans=arr[0];
+    
+    for(int i=1;i<n;i++)
+    {
+        
+        curr=min(prev+arr[i],arr[i]);
+        ans=min(ans,curr);
+        prev=curr;
+        
+    }
+    
+    return ans;
+}
