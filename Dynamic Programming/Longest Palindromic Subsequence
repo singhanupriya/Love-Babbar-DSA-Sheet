@@ -1,0 +1,124 @@
+https://practice.geeksforgeeks.org/problems/longest-palindromic-subsequence-1612327878/1/
+
+Recursion- 
+
+1. Reverse the string and use lcs between orignal and reversed string ---> overlapping 
+
+Time:expo
+
+public:
+  
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int lcs(string s1, string s2, int n, int m)
+    {
+        if(n==0 || m==0)
+        {
+            return 0;
+        }
+        
+        if(s1[n-1]==s2[m-1])
+        {
+            return 1+lcs(s1,s2,n-1,m-1);
+        }
+        else
+        {
+            return max(lcs(s1,s2,n-1,m),lcs(s1,s2,n,m-1));
+        }
+    }
+    
+    int longestPalinSubseq(string A) {
+        //code here
+        
+        string B=A;
+        reverse(B.begin(),B.end());
+        int n=A.length();
+        int m=B.length();
+        
+        return lcs(A,B,n,m);
+    }
+};
+
+M2- memoisation
+
+int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int lcs(string s1, string s2, int n, int m,vector<vector<int>>& dp)
+    {
+        if(dp[n][m]!=-1)
+        {
+            return dp[n][m];
+        }
+        
+        if(n==0 || m==0)
+        {
+            return 0;
+        }
+        
+        if(s1[n-1]==s2[m-1])
+        {
+            return dp[n][m]=1+lcs(s1,s2,n-1,m-1,dp);
+        }
+        else
+        {
+            return dp[n][m]=max(lcs(s1,s2,n-1,m,dp),lcs(s1,s2,n,m-1,dp));
+        }
+    }
+    
+    int longestPalinSubseq(string A) {
+        //code here
+        
+        string B=A;
+        reverse(B.begin(),B.end());
+        int n=A.length();
+        int m=B.length();
+        vector<vector<int>> dp(n+1,vector<int>(m+1,-1));
+        
+        return lcs(A,B,n,m,dp);
+    }
+    
+    Top down
+    
+    Time:O(N^2), Space:O(N^2)
+    
+    int longestPalinSubseq(string A) {
+        //code here
+        
+        string B=A;
+        reverse(B.begin(),B.end());
+        int n=A.length();
+        int m=B.length();
+        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=m;j++)
+            {
+                if(A[i-1]==B[j-1])
+                {
+                    dp[i][j]=1+dp[i-1][j-1];
+                }
+                else
+                {
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        
+        return dp[n][m];
+    }
+};
