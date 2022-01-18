@@ -1,0 +1,169 @@
+https://practice.geeksforgeeks.org/problems/subset-sum-problem2014/1
+
+1. 0-1 knapsack
+2. find sum of array, if sum is odd return false else sum=sum/2 and find a subset with sum=sum/2
+
+M1- Recursion
+
+class Solution{
+public:
+    
+    bool solve(int arr[], int n, int W)
+    {
+        if(W==0)
+        {
+            return true;
+        }
+        
+        if(W<0 || n<=0)
+        {
+            return false;
+        }
+        
+        if(arr[n-1]<=W)
+        {
+            return solve(arr,n-1,W-arr[n-1])||solve(arr,n-1,W);
+        }
+        else 
+        {
+            return solve(arr,n-1,W);
+        }
+    }
+
+    int equalPartition(int N, int arr[])
+    {
+        // code here
+        int sum=0;
+        for(int i=0;i<N;i++)
+        {
+            sum=sum+arr[i];
+        }
+        
+        
+        if(N==0)
+        {
+            return 0;
+        }
+        
+        if(sum%2!=0)
+        {
+            return 0;
+        }
+        
+        sum=sum/2;
+        
+        return solve(arr,N,sum);
+        
+        
+    }
+};
+
+M2- Memoisation
+
+bool solve(int arr[], int n, int W,vector<vector<int>>& dp)
+    {
+        
+        if(dp[n][W]!=-1)
+        {
+            return dp[n][W];
+        }
+        
+        if(W==0)
+        {
+            return true;
+        }
+        
+        if(W<0 || n<=0)
+        {
+            return false;
+        }
+        
+        if(arr[n-1]<=W)
+        {
+            return dp[n][W]=solve(arr,n-1,W-arr[n-1],dp)||solve(arr,n-1,W,dp);
+        }
+        else 
+        {
+            return dp[n][W]=solve(arr,n-1,W,dp);
+        }
+    }
+
+    int equalPartition(int N, int arr[])
+    {
+        // code here
+        int sum=0;
+        for(int i=0;i<N;i++)
+        {
+            sum=sum+arr[i];
+        }
+        
+        
+        if(N==0)
+        {
+            return 0;
+        }
+        
+        if(sum%2!=0)
+        {
+            return 0;
+        }
+        
+        sum=sum/2;
+        vector<vector<int>> dp(N+1,vector<int>(sum+1,-1));
+        
+        return solve(arr,N,sum,dp);
+        
+        
+    }
+};
+
+M3- top down
+
+Time:O(M*N), Space;O(M*n), space optimisation as only prev row needed
+
+ int equalPartition(int N, int arr[])
+    {
+        // code here
+        int sum=0;
+        for(int i=0;i<N;i++)
+        {
+            sum=sum+arr[i];
+        }
+        
+        
+        if(N==0)
+        {
+            return 0;
+        }
+        
+        if(sum%2!=0)
+        {
+            return 0;
+        }
+        
+        sum=sum/2;
+        vector<vector<int>> dp(N+1,vector<int>(sum+1,0));
+        
+        for(int i=0;i<=N;i++)
+        {
+            dp[i][0]=1;
+        }
+        
+        for(int i=1;i<=N;i++)
+        {
+            for(int j=1;j<=sum;j++)
+            {
+                if(arr[i-1]<=j)
+                {
+                    dp[i][j]=dp[i-1][j-arr[i-1]] || dp[i-1][j];
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        return dp[N][sum];
+        
+        
+    }
