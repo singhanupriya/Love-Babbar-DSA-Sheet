@@ -31,3 +31,57 @@ class Solution
         
     }
 };
+
+
+Space optimised--
+
+1. U will need prev row and currrent row's prev value, hence, dp[2][y+1].
+2. U need to mve between dp index 0 and 1, use bool to denote index at it has only 2 values.
+3. To change dp's row as per ith value do bool bi=i & 1; -> this will keep flappng between dp's row 0 and 1 based on row value of m(i) x n table
+4. if i==0 || j==0 dp[bi][j]=0
+5. else
+        if (a[i-1]==b[j-1]) dp[bi][j]=1 + dp[1-bi][j] else dp[bi][j]=max(dp[bi][j-1],dp[1-bi][j]);
+return dp[bi][y] --> last value of bi will be ur final row value
+
+
+int lcs(int x, int y, string s1, string s2)
+    {
+        // your code here
+        
+        vector<vector<int>> dp(2,vector<int>(y+1,0));
+        
+        
+        bool bi;
+        
+        for(int i=0;i<=x;i++)
+        {
+            //row in the dp matrix
+            bi=i & 1; //bool can take only 2 values 0 or 1
+            
+            for(int j=0;j<=y;j++)
+            {
+                if(i==0 || j==0)
+                {
+                    dp[bi][j]=0;
+                }
+                else
+                {
+                    if(s1[i-1]==s2[j-1])
+                    {
+                        dp[bi][j]=1 + dp[1-bi][j-1];
+                    }
+                    else
+                    {
+                        dp[bi][j]=max(dp[bi][j-1],dp[1-bi][j]);
+                    }
+                }
+            }
+            
+            
+        }
+        
+        return dp[bi][y];
+        
+        
+        
+    }
