@@ -1,0 +1,31 @@
+https://www.youtube.com/watch?v=odrfUCS9sQk
+
+dp[i]- length of LIS ending at index i.
+Compare j-0 to i-1, if arr[j]<arr[i] means arr[i] can be added behind arr[j], dp[i]=max(dp[j]+1,dp[i]]
+
+Time:O(N^2), space:O(N)
+
+int longestSubsequence(int n, int arr[])
+    {
+       // your code here
+       vector<int> dp(n,1);
+       
+       int ans=INT_MIN;
+       
+       for(int i=1;i<n;i++)
+       {
+           for(int j=0;j<i;j++)
+           {
+               if(arr[j]<arr[i])
+               {
+                   dp[i]=max(dp[i],dp[j]+1);
+               }
+           }
+           
+         
+           ans=max(ans,dp[i]);
+       }
+       
+       return ans;
+    }
+};
