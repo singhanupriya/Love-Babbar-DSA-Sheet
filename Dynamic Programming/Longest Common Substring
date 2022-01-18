@@ -1,0 +1,111 @@
+https://www.youtube.com/watch?v=NvmJBCn4eQI&t=626s
+
+Recusrsion
+
+We find all prefixes(starting from index 0) of s1 and s2 and find the longest suffix(start checkig from last char). if suffix doesn't match we give 0.
+Note- in LCS if last char doesn't match u check for 2nd last, here if last char doesnt match u strictly put 0.
+
+1. Same as LCS. Base- if n==0 || m==0 return count
+2. if s1[n-1]==s2[m-1], count++;
+else include last char of s1 or s2 and set count=0 as suffix doesnt match and check for smaller inputs
+
+int max(int a,int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+   
+    
+    int lcs(string X, string Y,int i, int j, int count)
+        {
+        
+            if(i==0 || j==0)
+            {
+                return count;
+            }
+            
+            if(X[i-1]==Y[j-1])
+            {
+                count=lcs(X,Y,i-1,j-1,count+1);//increment the count
+            }
+            else
+            {
+                count=max(count,max(lcs(X,Y,i-1,j,0),lcs(X,Y,i,j-1,0)));//if not same, u are setting the count as 0
+            }
+            return count;
+        }
+
+
+    
+    int longestCommonSubstr (string S1, string S2, int n, int m)
+    {
+        
+        return lcs(S1,S2,n,m,0);
+       // return ans;
+    }
+    
+    M2- Top down
+    
+    if s[i-1]==s1[j-1], dp[i][j]=1+dp[i-1][j-1] else 0
+    Time:O(N*M), Space:O(M*N)
+    
+    int longestCommonSubstr (string S1, string S2, int n, int m)
+    {
+        
+       vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+       int ans=INT_MIN;
+       
+       for(int i=1;i<=n;i++)
+       {
+           for(int j=1;j<=m;j++)
+           {
+               if(S1[i-1]==S2[j-1])
+               {
+                   dp[i][j]=1+dp[i-1][j-1];
+                   
+               }
+               else
+               {
+                   dp[i][j]=0;
+               }
+               ans=max(ans,dp[i][j]);
+           }
+       }
+       
+       return ans;
+       
+       
+    }
+};
+
+M3- Space optimised top down
+
+We only need prev row
+Time:o(N*M) , Space:O(max(M,N))
+
+int longestCommonSubstr (string S1, string S2, int n, int m)
+    {
+        
+       vector<int> dp(m+1,0);
+       int ans=INT_MIN;
+       
+       for(int i=1;i<=n;i++)
+       {
+           for(int j=m;j>0;j--)
+           {
+               if(S1[i-1]==S2[j-1])
+               {
+                   dp[j]=1+dp[j-1];
+                   
+               }
+               else
+               {
+                   dp[j]=0;
+               }
+               ans=max(ans,dp[j]);
+           }
+       }
