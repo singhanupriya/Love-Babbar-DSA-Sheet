@@ -1,0 +1,101 @@
+https://www.youtube.com/watch?v=34WE6kwq49U
+
+1. Only one transaction allowed, buy first and then sell
+
+Brute- Buy on all days and sell on all possible days after bought, find max profit.
+Time:O(N^2)
+
+
+
+#include <iostream>
+#include<climits>
+
+using namespace std;
+
+int solve(int arr[], int n)
+{
+    int profit=INT_MIN;
+    for(int i=0;i<n;i++) //buy
+    {
+        for(int j=i+1;j<n;j++) //sell 
+        {
+            int diff=arr[j]-arr[i];
+            profit=max(profit,diff);
+        }
+    }
+    
+    if(profit<0)
+    {
+        return -1;
+    }
+    return profit;
+}
+
+int main()
+{
+    int arr[] = {7, 1, 5, 3, 6, 4};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    cout<<solve(arr,n);
+
+    return 0;
+}
+
+
+Method 2
+
+1. U know the price of stocks in each day so if u buy a stock on a day u know all future prices. Try buying on each day and see max profit u can have
+2. Create a array which stores the max value after that day means dp[i]- max stock price after day i, from i+1 day to (n-1)th day.
+3. Now for each day, u have the max Selling price u can have, return max of dp[i]-arr[i]
+Time:O(N), Space:O(N)
+
+int solve(int arr[], int n)
+{
+    
+    //TRy buying on each day and see the max profit u can have, use array to store the max selling price u can have if u buy on a day
+    //dp[i]- u buy on ith day, dp[i]= max value after this day, from index i+1 to n-1 (max selling price u can get after u buy today)
+    
+    vector<int> dp(n);
+    dp[n-1]=arr[n-1];
+    for(int i=n-2;i>=0;i--)
+    {
+        dp[i]=max(arr[i],dp[i+1]);
+    }
+    
+    //now find the diff between buy and sell price and print max.
+    
+    int profit=INT_MIN;
+    for(int i=0;i<n;i++)
+    {
+        int diff=dp[i]-arr[i];
+        profit=max(profit,diff);
+    }
+    
+    return profit;
+    
+}
+
+Method 3
+
+-Try selling on each day now and see the proft earned, use currValue, minsofar and profit
+Initially, u buy on day1 and see on that day, profit 0
+Move ahead, update minsofar and see the profit on that day curr-minsofar, keep traversing and return max profit
+Time:O(N), Space;O(1)
+
+int solve(int arr[], int n)
+{
+    
+    int minSoFar=arr[0];
+    int curr=arr[0];
+    int profit=0;
+    
+    for(int i=1;i<n;i++)
+    {
+        minSoFar=min(minSoFar,arr[i]);
+        curr=arr[i];
+        profit=max(profit,curr-minSoFar);
+    }
+    
+    
+    return profit;
+    
+}
