@@ -1,0 +1,99 @@
+
+https://www.geeksforgeeks.org/count-number-ways-reach-given-score-game/
+
+Unounded knapsack- here order doesn't matter like 3,3,5 or 3,5,3 or 5,3,3 count as 1 ans.Since we have to find total no of ways, sum of all possibilites
+
+
+#include <iostream>
+
+int solve(int W, int arr[], int n)
+{
+    if(W==0) //if u reach the end means n==0 only then the path is counted so return 1 
+    {
+        return 1;
+    }
+    
+    if(W<0 || n<=0)
+    {
+        return 0;
+    }
+    
+    
+    if(arr[n-1]<=W)
+    {
+        return solve(W-arr[n-1],arr,n) + solve(W,arr,n-1);
+    }
+    else
+    {
+        return solve(W,arr,n-1);
+    }
+    
+}
+
+using namespace std;
+
+int main()
+{
+    int arr[]={3,5,10};
+    int n=3;
+    cout<<solve(13,arr,n);
+
+    return 0;
+}
+
+Top down
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int solve(int W, int arr[], int n)
+{
+    vector<vector<int>> dp(n+1, vector<int>(W+1,0));
+    
+    for(int i=0;i<=n;i++)
+    {
+        dp[i][0]=1;
+    }
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=W;j++)
+        {
+            if(arr[i-1]<=j)
+            {
+                dp[i][j]=dp[i][j-arr[i-1]]+dp[i-1][j];
+            }
+            else
+            {
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+    }
+    
+    
+    
+    return dp[n][W];
+    
+}
+
+using namespace std;
+
+int main()
+{
+    int arr[]={3,5,10};
+    int n=3;
+    cout<<solve(20,arr,n);
+
+    return 0;
+}
