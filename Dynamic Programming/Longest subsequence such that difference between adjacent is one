@@ -1,0 +1,34 @@
+https://practice.geeksforgeeks.org/problems/longest-subsequence-such-that-difference-between-adjacents-is-one4724/1#
+
+longest subsequence such that difference between adjacents is one. 
+Same as LIS, if A[i]=A[j]+1 or A[i]=A[j]-1, dp[i]=max(dp[i],1+dp[j])
+
+Time:O(n^2), Space:O(N)
+
+int longestSubsequence(int n, int A[])
+    {
+        // code here
+        
+        vector<int> dp(n,1);
+        
+        int ans=1;
+        
+        //for inc sub
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                if(A[i]==A[j]-1 || A[i]==A[j]+1)
+                {
+                    dp[i]=max(dp[i],1+dp[j]);
+                    ans=max(ans,dp[i]);
+                }
+            }
+        }
+        
+        //for dec sub
+        
+        
+        return ans;
+    }
