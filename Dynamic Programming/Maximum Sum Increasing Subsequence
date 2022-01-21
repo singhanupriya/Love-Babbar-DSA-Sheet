@@ -1,0 +1,49 @@
+https://practice.geeksforgeeks.org/problems/maximum-sum-increasing-subsequence4749/1#
+
+Same as LIS, here just initaially dp[i]=arr[i] as we have to find sum
+
+i->1 to n-1
+j-> 0 to i-1, if (arr[j]<arr[i]) dp[i]=max(dp[i],arr[i]+dp[j])
+
+traverse the array again to get the max sum
+
+Time:O(n^2), Space:O(n)
+
+
+int maxSumIS(int arr[], int n)  
+	{  
+	    // Your code goes here
+	    
+	    vector<int> dp(n,0);  //storing the max sum till index i including i
+	    //dp[0]=arr[0];
+	    
+	    for(int i=0;i<n;i++)
+	    {
+	        dp[i]=arr[i];
+	    }
+	    
+	    int ans=arr[0];
+	    
+	    for(int i=1;i<n;i++)
+	    {
+	        for(int j=0;j<i;j++)
+	        {
+	            if(arr[j]<arr[i])
+	            {
+	                dp[i]=max(dp[i],arr[i]+dp[j]);
+	                
+	            }
+	            
+	            //ans=max(ans,dp[i]);
+	        }
+	        
+	    }
+	    
+	    for(int i=0;i<n;i++)
+	    {
+	        ans=max(ans,dp[i]);
+	    }
+	    
+	    return ans;
+	}  
+};
