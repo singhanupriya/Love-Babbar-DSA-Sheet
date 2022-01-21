@@ -1,0 +1,139 @@
+https://practice.geeksforgeeks.org/problems/longest-repeating-subsequence2004/1
+
+
+any i’th character in the two subsequences shouldn’t have the same index in the original string.
+1. if char 'i' is a part of the ans if has to be present in both the subseq nut at diff indexes
+2. same as LCS, if s1[i-1]==s2[j-1] && i!=j return 1+dp[i-1][j-1].
+
+
+Recursion
+
+public:
+	    
+	    int max(int a, int b)
+	    {
+	        if(a>=b)
+	        {
+	            return a;
+	        }
+	        return b;
+	    }
+	    
+	    int lcs(string s1, string s2, int n, int m)
+	    {
+	        if(m==0 || n==0)
+	        {
+	            return 0;
+	        }
+	        
+	        if(s1[n-1]==s2[m-1] && n!=m)
+	        {
+	            return 1+lcs(s1,s2,n-1,m-1);
+	        }
+	        else
+	        {
+	            return max(lcs(s1,s2,n-1,m),lcs(s1,s2,n,m-1));
+	        }
+	    }
+	    
+		int LongestRepeatingSubsequence(string str){
+		    // Code here
+		    
+		    int n=str.length();
+		    return lcs(str,str,n,n);
+		    
+		}
+
+};
+
+Memoisation
+
+ int max(int a, int b)
+	    {
+	        if(a>=b)
+	        {
+	            return a;
+	        }
+	        return b;
+	    }
+	    
+	    int lcs(string s1, string s2, int n, int m,vector<vector<int>>& dp)
+	    {
+	        if(dp[n][m]!=-1)
+	        {
+	            return dp[n][m];
+	        }
+	        
+	        if(m==0 || n==0)
+	        {
+	            return 0;
+	        }
+	        
+	        if(s1[n-1]==s2[m-1] && n!=m)
+	        {
+	            return dp[n][m]=1+lcs(s1,s2,n-1,m-1,dp);
+	        }
+	        else
+	        {
+	            return dp[n][m]=max(lcs(s1,s2,n-1,m,dp),lcs(s1,s2,n,m-1,dp));
+	        }
+	    }
+	    
+		int LongestRepeatingSubsequence(string str){
+		    // Code here
+		    
+		    int n=str.length();
+		    vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+		    
+		    return lcs(str,str,n,n,dp);
+		    
+		}
+
+
+TOP DOWN
+
+Time:O(N^2), Space:O(N^2)
+
+ int max(int a, int b)
+	    {
+	        if(a>=b)
+	        {
+	            return a;
+	        }
+	        return b;
+	    }
+	    
+	    
+	    
+		int LongestRepeatingSubsequence(string str){
+		    // Code here
+		    
+		    int n=str.length();
+		    string s2=str;
+		    vector<vector<int>> dp(n+1,vector<int>(n+1,0));
+		    
+		    for(int i=0;i<=n;i++)
+		    {
+		        for(int j=0;j<=n;j++)
+		        {
+		            if(i==0 || j==0)
+		            {
+		                dp[i][j]=0;
+		            }
+		            else 
+		            {
+		                if(str[i-1]==s2[j-1] && i!=j)
+		                {
+		                    dp[i][j]=1+dp[i-1][j-1];
+		                }
+		                else
+		                {
+		                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+		                }
+		            }
+		        }
+		    }
+		    
+		    return dp[n][n];
+		    
+		}
