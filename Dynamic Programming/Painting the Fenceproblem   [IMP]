@@ -1,0 +1,91 @@
+https://www.youtube.com/watch?v=7_C9kpXEgdQ
+
+n fences and k colors
+
+Logic- 
+1. If u have 1 fence, it can be collected in k ways.
+2. If u have 2 fences, u can either color them same way or diff
+  n=2, same=k ways (if prev fence is red print this as red(total k colors)) , diff= k*(k-1), if prev was in red color u can choose remininag colors
+3. If n=3, case a- the prev 2 are of same colors, max 2 consecutive same color allowed so u have to paint this in diff color 
+                    diff= (no of ways to paint the prev one such that last 2 are in same colors)* (k-1)
+           case b- if last 2 are in diff colors, u can paint 3rd in a diff color or same color as 2nd one.
+                    same= (no of ways to paint n=2 in diff colors)*1 [ if 2nd one is red, u print 3rd also red]
+                    diff= (no of ways to paint n=2 such that the last 2 have diff colors)*(k-1)
+         Total same for n=3 = (no of ways to paint n=2 in diff colors)
+         Total diff for n=3 =(no of ways to paint the prev one such that last 2 are in same colors)* (k-1) + (no of ways to paint n=2 such that the last 2 have diff colors)*(k-1)
+         
+         Total= same + diff
+         
+         
+         U can use dp[2][n] or just use two variables to store prev same and diff
+
+
+long long countWays(int n, int k){
+        
+        long long mod= 1000000007;
+        
+        if(n==0)
+        {
+            return 0;
+        }
+        
+        if(n==1)
+        {
+            return k;
+        }
+        //col 0- same, col 1-diff
+        
+        vector<vector<long>> dp(2,vector<long>(n+1,0));
+        dp[0][1]=k % mod;
+        dp[1][1]=0;
+        
+        dp[0][2]=k % mod;
+        dp[1][2]=(k*(k-1))% mod;
+        
+        for(int i=3;i<=n;i++)
+        {
+            dp[0][i]=dp[1][i-1]%mod;
+            dp[1][i]=(dp[0][i-1]*(k-1) + dp[1][i-1]*(k-1))% mod;
+        }
+        
+        return (dp[0][n]+dp[1][n])%mod;
+        
+    }
+};
+
+M2- u only need the prev values so store in variable
+
+
+ public:
+    long long countWays(int n, int k){
+        
+        long long mod= 1000000007;
+        
+        if(n==0)
+        {
+            return 0;
+        }
+        
+        if(n==1)
+        {
+            return k;
+        }
+        //col 0- same, col 1-diff
+        
+        
+        
+        long same=k % mod;
+        long diff=(k*(k-1))% mod;
+        
+        for(int i=3;i<=n;i++)
+        {
+            long prev=diff % mod;
+            
+            diff=(same*(k-1) + prev*(k-1))% mod;
+            same=prev%mod;
+        }
+        
+        return (same + diff)%mod;
+        
+    }
+};
