@@ -1,0 +1,39 @@
+https://practice.geeksforgeeks.org/problems/bfs-traversal-of-graph/1#
+
+1. Create a visited array to keep track of visited vertices and use queue
+
+Time:O(V+E), Space:O(V)
+
+vector<int> bfsOfGraph(int V, vector<int> adj[]) {
+        // Code here
+        
+        queue<int> q;
+        vector<int> ans;
+        vector<int> vis(V,0);
+        
+        q.push(0);
+        vis[0]=1;
+        
+        
+        while(!q.empty())
+        {
+            int curr=q.front();
+            q.pop();
+            ans.push_back(curr);
+            
+            for(int i=0;i<adj[curr].size();i++)
+            {
+                if(vis[adj[curr][i]]==0)
+                {
+                    q.push(adj[curr][i]);
+                    vis[adj[curr][i]]=1;
+                }
+                
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
