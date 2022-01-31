@@ -1,0 +1,113 @@
+https://www.youtube.com/watch?v=GLGsIZGLvA0&t=115s
+https://practice.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1#
+
+Logic:
+
+1. keep track of parent of every node.
+2. When u visit a node, its neigh can be visited or not vsisted
+  - if negh is not visited, cal dfs 
+  - if neigh is visisted and neigh!=parent, loop return true
+3. Implement this using BFS and DFS
+
+Time:O(V+E), Space:O(V)
+
+
+using DFS
+
+
+
+bool cycleDFS(int node, int par, vector<int> adj[], vector<int>& vis){
+        
+        vis[node]=1;
+        
+        for(int j=0;j<adj[node].size();j++)
+        {
+            if(vis[adj[node][j]]!=1)
+            {
+                if(cycleDFS(adj[node][j],node,adj,vis))  //if from any of the child node u get true, end there don't run for any more childs and return true
+                {
+                    return true;
+                }
+            }
+            else if(adj[node][j]!=par)
+            {
+                return true;
+                
+            }
+            
+        }
+        
+        return false;
+        
+        
+    }
+  public:
+    // Function to detect cycle in an undirected graph.
+    bool isCycle(int V, vector<int> adj[]) {
+        // Code here
+        vector<int> vis(V,0);
+        for(int i =0;i<V;i++){
+            if(!vis[i]){
+                if(cycleDFS(i,-1,adj,vis)) return true; 
+            }
+        }
+        return false;
+    }
+
+};
+
+
+BFS:
+
+bool bfsCycle(int node,vector<int> adj[], vector<int>& vis,vector<int>& parent)
+    {
+        
+        queue<int> q;
+        
+        q.push(node);
+        vis[node]=1;
+        
+        while(!q.empty())
+        {
+            int curr=q.front();
+            q.pop();
+            
+            for(int i=0;i<adj[curr].size();i++)
+            {
+                if(vis[adj[curr][i]]==0)
+                {
+                    q.push(adj[curr][i]);
+                    vis[adj[curr][i]]=1;
+                    parent[adj[curr][i]]=curr;
+                }
+                else if(adj[curr][i]!=parent[curr])
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+  
+    // Function to detect cycle in an undirected graph.
+    bool isCycle(int V, vector<int> adj[]) {
+        // Code here
+        
+        vector<int> vis(V,0);
+        vector<int> parent(V,-1);
+        
+        for(int i=0;i<V;i++)
+        {
+            if(vis[i]==0)
+            {
+                if(bfsCycle(i,adj,vis,parent))
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+};
