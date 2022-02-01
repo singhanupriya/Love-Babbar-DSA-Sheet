@@ -1,0 +1,53 @@
+https://practice.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1/
+
+Logic-
+1. U keep track of ancestors of all node, if the neigh of the node is not visisted, u check for that else if it is visisted and it is an ancestor, there is a loop.
+2. If u want to track self loop as well, a node is anc of itself.
+3. Do using DFS and BFS
+
+Time:O(V+E), Space:O(V)
+
+
+DFS
+
+bool dfs(vector<int> adj[], int node, vector<bool>& vis,vector<bool>& ans)
+    {
+        vis[node]=1;
+        ans[node]=1;  // a node is anc of its own to track self loop
+        
+        for(int i=0;i<adj[node].size();i++)
+        {
+            if(vis[adj[node][i]]==0)
+            {
+                if(dfs(adj,adj[node][i],vis,ans))   //if any of its child has loop and return true, dont compute for remaining childs and return trye for parent fn
+                {
+                    return true;
+                }
+            }
+            else if(ans[adj[node][i]]==1)
+            {
+                return true;
+            }
+        }
+        
+        ans[node]=0;   //vacktrack when u return this fn
+        return false;
+    }
+    
+    bool isCyclic(int V, vector<int> adj[]) {
+        // code here
+        
+        vector<bool> vis(V,0);
+        vector<bool> ans(V,0);
+        
+        for(int i=0;i<V;i++)
+        {
+            if(dfs(adj,i,vis,ans))
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+};
