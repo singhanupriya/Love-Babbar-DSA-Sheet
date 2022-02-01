@@ -1,0 +1,153 @@
+https://practice.geeksforgeeks.org/problems/steps-by-knight5927/1#
+
+
+
+Brute force- use backtracking to find all posible paths and find the min path in that. visisted matrix used here else infinite paths
+Time:O(8^(N^2)), Space:O(N^2)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+#include<climits>
+
+using namespace std;
+
+
+int min(int a, int b)
+	{
+	    if(a<=b)
+	    {
+	        return a;
+	    }
+	    return b;
+	}
+	
+	void solve(int i, int j, int N, int& ans,int temp, int dirx[],int diry[],int targetX, int targetY,vector<vector<int>>& vis)
+	{
+	    if(i==targetX && j==targetY)
+	    {
+	        ans=min(ans,temp);
+	        return;
+	    }
+	    
+	    for(int x=0;x<8;x++)
+	    {
+	        if(i+dirx[x]>=0 && i+dirx[x]<N && j+diry[x]>=0 && j+diry[x]<N && vis[i+dirx[x]][j+diry[x]]==0)
+	        {
+	            vis[i][j]=1;
+	            solve(i+dirx[x],j+diry[x],N,ans,temp+1,dirx,diry,targetX,targetY,vis);
+	            vis[i][j]=0;
+	        }
+	    }
+	}
+	
+	
+	int minStepToReachTarget(vector<int>&KnightPos,vector<int>&TargetPos,int N)
+	{
+	    // Code here
+	    
+	    int targetX=TargetPos[1]-1;
+	    int targetY=TargetPos[0]-1;
+	    int srcX=KnightPos[1]-1;
+	    int srcY=KnightPos[0]-1;
+	    
+	    vector<vector<int>> vis(N,vector<int>(N,0));
+	    int dirx[]={-1,-1,1,1,-2,-2,2,2};
+	    int diry[]={2,-2,2,-2,1,-1,1,-1};
+	    int ans=INT_MAX;
+	    
+	    solve(srcX,srcY,N,ans,0,dirx,diry,targetX,targetY,vis);
+	    return ans;
+	}
+
+int main()
+{
+    vector<int> KnightPos={1,5};
+    vector<int> TargetPos={4,2};
+    int N=5;
+    cout<<minStepToReachTarget(KnightPos,TargetPos,N);
+
+    return 0;
+}
+
+Using BFS
+
+BFS can only be used to find shortest path in a graph if:
+1. There are no loops
+2. All edges have same weight or no weight.
+https://stackoverflow.com/questions/8379785/how-does-a-breadth-first-search-work-when-looking-for-shortest-path
+
+1. Here, we use a visisted array to make sure no loop and else infinite solns.
+2. Push the starting pos and the step=0 in the queue to store {{x,y},steps taken to reach x,y}
+3. From start, u can go to 8 possible postions, push them to the queue if they are valid and not viisted and increament the step count.
+4. Keep checking if q.front() == dest return step
+
+Time:O(N^2) - worst case u will have to visit all the cells
+Space:O(N^2)
+
+
+
+	int minStepToReachTarget(vector<int>&KnightPos,vector<int>&TargetPos,int N)
+	{
+	    // Code here
+	    
+	    
+	    //make it 0 indexing
+	    int targetX=TargetPos[1]-1;
+	    int targetY=TargetPos[0]-1;
+	    int srcX=KnightPos[1]-1;
+	    int srcY=KnightPos[0]-1;
+	    
+	    vector<vector<int>> vis(N,vector<int>(N,0));
+	    int dirx[]={-1,-1,1,1,-2,-2,2,2};
+	    int diry[]={2,-2,2,-2,1,-1,1,-1};
+	    
+	    queue<pair<pair<int,int>,int>> q;
+	    //to store {{x,y},steps}
+	    
+	    //push the starting position in the queueu
+	    q.push(make_pair(make_pair(srcX,srcY),0));
+	    vis[srcX][srcY]=1;
+	    
+	    //from there u can go to 8 possible psotions, keep pushing them in the queue and check if they are the destination
+	    
+	    
+	    while(!q.empty())
+	    {
+	        pair<pair<int,int>,int> curr=q.front();
+	        q.pop();
+	        
+	        pair<int,int> start=curr.first;
+	        int step=curr.second;
+	        
+	        int startX=start.first;
+	        int startY=start.second;
+	        
+	        if(startX==targetX && startY==targetY)
+	        {
+	            return step;
+	        }
+	        
+	        for(int x=0;x<8;x++)
+	        {
+	            if(startX+dirx[x]>=0 && startX+dirx[x]<N && startY+diry[x]>=0 && startY+diry[x]<N && vis[startX+dirx[x]][startY+diry[x]]==0)
+	            {
+	                q.push(make_pair(make_pair(startX+dirx[x],startY+diry[x]),step+1));
+	                vis[startX+dirx[x]][startY+diry[x]]=1;
+	                
+	            }
+	        }
+	    }
+	    
+	    return -1;
+	    
+	    
+	    
+	}
