@@ -1,0 +1,52 @@
+https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1
+
+Use DFS or BFS
+
+Time:O(N*M) -> worst case visit all cells
+Space:O(N*M)
+
+
+ void dfs(int i, int j, vector<vector<char>>& grid, vector<vector<bool>>& vis, int dirx[], int diry[], int rows, int cols)
+    {
+        vis[i][j]=true;
+        
+        for(int x=0;x<8; x++)
+        {
+            if(i+dirx[x]>=0 && i+dirx[x]<rows && j+diry[x]>=0 && j+diry[x]<cols && vis[i+dirx[x]][j+diry[x]]==0 && grid[i+dirx[x]][j+diry[x]]=='1')
+            {
+                dfs(i+dirx[x],j+diry[x],grid,vis,dirx,diry,rows,cols);
+            }
+        }
+    }
+    
+    // Function to find the number of islands.
+    int numIslands(vector<vector<char>>& grid) {
+        // Code here
+        
+        int rows=grid.size();
+        int cols=grid[0].size();
+        
+        vector<vector<bool>> vis(rows, vector<bool>(cols,false));
+        
+        int dirx[]={-1,-1,0,1,1,1,0,-1};
+        int diry[]={0,1,1,1,0,-1,-1,-1};
+        
+        int components=0;
+        
+        for(int i=0;i<rows;i++)
+        {
+            for(int j=0;j<cols;j++)
+            {
+                if(!vis[i][j] && grid[i][j]=='1')
+                {
+                    dfs(i,j,grid,vis,dirx,diry,rows,cols);
+                    components++;
+                }
+            }
+        }
+        
+        return components;
+        
+        
+    }
+};
