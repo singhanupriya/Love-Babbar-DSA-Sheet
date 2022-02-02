@@ -1,0 +1,79 @@
+https://leetcode.com/problems/number-of-operations-to-make-network-connected/submissions/
+
+Logic- 
+1. to connect n nodes, we need (n-1) edges so if noEdges<n-1 return -1.
+2. Second first no of components in the graph using DFS, if there are n components we will need (n-1) edges to connect them since we have veirified we have sufficients edges in step 1, we return components-1.
+
+Time:O(V+E)  -> DFS, Space:O(V)
+
+From pass-by-reference to pass-by-value
+
+In this direction, the answer is yes. e.g.
+
+bool binary_search(std::vector<int> &arr, int key)
+{
+    return std::binary_search(arr.begin(),arr.end(),key);
+}
+
+This is a binary search function in a vector, and the complexity is O(log n) where n is arr.size().
+
+But if we modify it to pass-by-value like:
+
+bool binary_search(std::vector<int> arr, int key)
+{
+    return std::binary_search(arr.begin(),arr.end(),key);
+}
+
+The complexity become O(n) since the function should copy the arr.
+
+
+void dfs(vector<vector<int>>& adj, int node, vector<int>& vis)   --> pass by ref do decrease the time complexity
+    {
+        vis[node]=1;
+        
+        for(int i=0;i<adj[node].size();i++)
+        {
+            if(vis[adj[node][i]]==0)
+            {
+                dfs(adj,adj[node][i],vis);
+            }
+        }
+    }
+    
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        
+        int edges=connections.size();
+        
+        if(edges<n-1)
+        {
+            return -1;
+        }
+        
+        vector<vector<int>> adj(n);
+        
+        for(int i=0;i<edges;i++)
+        {
+            int first=connections[i][0];
+            int second=connections[i][1];
+            adj[first].push_back(second);
+            adj[second].push_back(first);
+        }
+        
+        vector<int> vis(n,0);
+        
+        int components=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(vis[i]==0)
+            {
+                dfs(adj,i,vis);
+                components++;
+            }
+        }
+        
+        return components-1;
+        
+        
+        
+    }
