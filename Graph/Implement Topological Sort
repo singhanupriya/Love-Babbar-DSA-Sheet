@@ -1,0 +1,72 @@
+https://www.youtube.com/watch?v=cIBFEhD77b4&t=728s
+
+1. TS is used only in directed acyclic graph, cyclic graph main all nodes depend on each other so no TS.
+2. Find incoming off all node, wherever incoming is 0, push that node in queue and mark it as visisted.
+3. Pop curr from of queue push in ans vector, remove all outgoing nodes of curr, check again if any incoming not visited becomes 0 push till queue, keep doing till queue in not empty.
+4. If all nodes pushed in queue = no of vertices, print TS else cycle exists.
+5. U can use BFS(queue) or DFS(stack)
+
+Time:O(V+E), Space:O(V)
+
+
+public:
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    // code here
+	    
+	    vector<int> ans;
+	    vector<bool> vis(V,false);
+	    vector<int> in(V,0);
+	    
+	    for(int i=0;i<V;i++)
+	    {
+	        for(int j=0;j<adj[i].size();j++)
+	        {
+	            in[adj[i][j]]++;
+	        }
+	    }
+	    
+	    queue<int> q;
+	    int count=0;
+	    
+	    for(int i=0;i<V;i++)
+	    {
+	        if(in[i]==0 && vis[i]==false)
+	        {
+	            q.push(i);
+	            count++;
+	            vis[i]=true;
+	        }
+	    }
+	    
+	    while(!q.empty())
+	    {
+	        int curr=q.front();
+	        q.pop();
+	        ans.push_back(curr);
+	        
+	        for(int i=0;i<adj[curr].size();i++)
+	        {
+	            in[adj[curr][i]]--;
+	            if(in[adj[curr][i]]==0 && vis[adj[curr][i]]==false)
+	            {
+	                q.push(adj[curr][i]);
+	                vis[adj[curr][i]]=true;
+	                count++;
+	                
+	            }
+	        }
+	        
+	        
+	    }
+	    
+	    if(count==V)
+	    {
+	        return ans;
+	    }
+	    
+	    vector<int> res;
+	    return res;
+	}
+};
