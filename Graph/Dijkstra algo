@@ -1,0 +1,196 @@
+https://www.youtube.com/watch?v=F3PNsWE6_hM
+
+
+1. Dij is used to find smallest dist of all points from a node with no neg weights and cycle.
+2. The idea is find the dist of all node from the start node, craete a viisted array and dist vector which will store dist of all node from start, dist[start node from itself]=0.
+3. Update the dist of all neigh of start in the dist vector. Find the closest node makr it as visisted for every non-visisted node, check if min(curr node dist, node dist from src via the closest node)
+4. We run this (V-1) times bcoz at last only one node is left and it has no neighbours.
+5. To find the closest node, we can either travserse everytime or use priorty queue.
+
+
+Method 1- traversing to min closest node everytime 
+Time:O(V^2), Space:O(V^2)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include <vector>
+#include<climits>
+
+using namespace std;
+
+
+int solve(vector<bool>& vis, vector<int>& dist, int V)
+    {
+        int u=0, ans=INT_MAX;
+        
+        for(int i=0;i<V;i++)
+        {
+            if(!vis[i])
+            {
+                if(ans>dist[i])
+                {
+                    ans=dist[i];
+                    u=i;
+                }
+                
+            }
+        }
+        
+        return u;
+    }
+    
+    void  dijkstra(int V, vector<vector<int>> graph, int src)
+    {
+        // Code here
+        
+        
+        
+        
+        vector<bool> vis(V,false);
+        vector<int> dist(V,INT_MAX);
+        
+        dist[src]=0;
+        //vis[src]=1;
+        
+        for(int i=0;i<V-1;i++)
+        {
+            int currMin=solve(vis,dist,V);
+            vis[currMin]=true;
+            
+            for(int i=0;i<V;i++)
+            {
+                if(!vis[i] && graph[currMin][i]!=0 && graph[currMin][i]!=INT_MAX && dist[i]>dist[currMin]+graph[currMin][i])
+                {
+                    dist[i]=dist[currMin]+graph[currMin][i];
+                }
+            }
+            
+            
+            
+        }
+        
+        //return dist;
+        
+        for(int i=0;i<V;i++)
+        {
+            cout<<dist[i]<<" ";
+        }
+        
+    }
+
+int main()
+{
+    vector<vector<int>> graph = { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
+                        { 4, 0, 8, 0, 0, 0, 0, 11, 0 },
+                        { 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+                        { 0, 0, 7, 0, 9, 14, 0, 0, 0 },
+                        { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+                        { 0, 0, 4, 14, 10, 0, 2, 0, 0 },
+                        { 0, 0, 0, 0, 0, 2, 0, 1, 6 },
+                        { 8, 11, 0, 0, 0, 0, 1, 0, 7 },
+                        { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+ 
+    dijkstra(9,graph, 0);
+
+    return 0;
+}
+
+
+Using set
+Time:ElogV, Space:O(V)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include <vector>
+#include<climits>
+#include<set>
+
+using namespace std;
+
+
+
+    void  dijkstra(int V, vector<vector<int>> graph, int src)
+    {
+        // Code here
+        
+        
+        
+        
+        vector<bool> vis(V,false);
+        vector<int> dist(V,INT_MAX);
+        
+        dist[src]=0;
+        //vis[src]=1;
+        
+        set<pair<int,int>> s;  //{dist,node}
+        s.insert(make_pair(src,0));
+        
+        while(!s.empty())
+        {
+            auto itr=*(s.begin());
+            s.erase(itr);
+            int node=itr.second;
+            
+            vis[node]=1;
+            
+            for(int i=0;i<V;i++)
+            {
+                if(!vis[i] && graph[node][i]!=0 && graph[node][i]!=INT_MAX && dist[i]>dist[node]+graph[node][i])
+                {
+                    auto it=s.find(make_pair(dist[i],i));
+                    if(it!=s.end())
+                    {
+                        s.erase(it);
+                    }
+                    dist[i]=dist[node]+graph[node][i];
+                    s.insert(make_pair(dist[i],i));
+                }
+            }
+            
+            
+        }
+        
+        
+        
+            
+        
+        
+        //return dist;
+        
+        for(int i=0;i<V;i++)
+        {
+            cout<<dist[i]<<" ";
+        }
+        
+    }
+
+int main()
+{
+    vector<vector<int>> graph = { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
+                        { 4, 0, 8, 0, 0, 0, 0, 11, 0 },
+                        { 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+                        { 0, 0, 7, 0, 9, 14, 0, 0, 0 },
+                        { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+                        { 0, 0, 4, 14, 10, 0, 2, 0, 0 },
+                        { 0, 0, 0, 0, 0, 2, 0, 1, 6 },
+                        { 8, 11, 0, 0, 0, 0, 1, 0, 7 },
+                        { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+ 
+    dijkstra(9,graph, 0);
+
+    return 0;
+}
