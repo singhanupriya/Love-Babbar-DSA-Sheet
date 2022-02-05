@@ -1,0 +1,69 @@
+https://www.youtube.com/watch?v=FrLWd1tJ_Wc
+
+1. Dijikstra can't be used if there is a neg edge in the cycle
+
+Applications of bellman ford
+1. Find shortest distance of all node from src in a directed graph with neg edge
+2. Find a negative weight cycle(a cycle where sum of cycle is a neg no, the more times u travel the cycle, the more negative sum u keep getting)
+3. Bellman dosnt work in undirected grp with neg edge bcoz in undirected graph u--(-2)--v means u-->v(-2) and v->u(-2) means cycle with 2 edges of wt -2, sum of cycle =-4, the more no of times u travel this cycle the lower value u will keep getting, this can go upto infinite times
+
+Logic-
+1. Create a dist vactor denoting the dist of node 'i' from src node. d[src]=0
+2. for v nodes, we can have min (v-1)edges, so we run it v-1 times, traverse thru all egdes (u,v) if d[u]+graph[u][v]<d[v], d[u]+graph[u][v]=d[v]
+3. if within these v-1 times, if u do not see any value getting updated u can come out of this V-1 loop. it wont be updated any further
+4. To detect neg cycle, we run it one more time and if we see any dist getting updated means a neg cycle
+Time:O(VE), Space:O(V)
+Dijs: time:O(ElogV), Space:O(V)
+
+int isNegativeWeightCycle(int n, vector<vector<int>>edges){
+	    // Code here
+	    
+	    vector<int> dist(n,INT_MAX);
+	    dist[0]=0; //src
+	    
+	    int updated;
+	    
+	    for(int i=0;i<n-1;i++)
+	    {
+	        updated=0;
+	        for(int j=0;j<edges.size();j++)
+	        {
+	            int u=edges[j][0];
+	            int v=edges[j][1];
+	            int wt=edges[j][2];
+	            
+	            if(dist[u]!=INT_MAX && dist[u]+wt<dist[v])   //if d[u]=int_max, anything added to it will give a neg value due to overflow
+	            {
+	                dist[v]=dist[u]+wt;
+	                updated++;
+	            }
+	            if(updated==0) //if no updates in any loop, u can come out
+	            {
+	                break;
+	            }
+	        }
+	    }
+	    
+      //check neg cycle
+	    updated=0;
+	    for(int j=0;j<edges.size();j++)
+	        {
+	            int u=edges[j][0];
+	            int v=edges[j][1];
+	            int wt=edges[j][2];
+	            
+	            if(dist[u]!=INT_MAX && dist[u]+wt<dist[v])
+	            {
+	                dist[v]=dist[u]+wt;
+	                updated++;
+	            }
+	        }
+	   if(updated>0)
+	   {
+	       return 1;
+	   }
+	   return 0;
+	    
+	    
+	}
+};
