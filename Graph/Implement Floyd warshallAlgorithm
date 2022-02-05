@@ -1,0 +1,50 @@
+https://www.youtube.com/watch?v=-dlGfzdfHvM&t=605s
+https://practice.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1#
+
+1. Floyd marshall is used to find min dist between every pair of vertices in a weighted directed graph.
+2. U can also use dijikstra(Time:O(V*ELOG(V)) or bellam ford(Time:O(V*V*E)) by using it for every vertex.
+3. Here u take every vertex as intermediate between every pair of vertex in the graph.
+ i.e. take k as intermediate, conside every pair of vertex u->v,   u->k->v, if d[u][k]!=inf & d[k][v]!=inf and d[u][v]>d[u][k]+d[k][v], d[u][v]=d[u][k]+d[k][v]
+ 
+ Time:O(V^3), Space:O(1)
+
+class Solution {
+  public:
+  
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+  
+	void shortest_distance(vector<vector<int>>&dp){
+	    // Code here
+	    
+	    int n=dp.size();
+	    
+	    for(int k=0;k<n;k++)
+	    {
+	        for(int i=0;i<n;i++)
+	        {
+	            for(int j=0;j<n;j++)
+	            {
+	                if(dp[i][k]!=-1 && dp[k][j]!=-1)
+	                {
+	                    if(dp[i][j]==-1)
+	                    {
+	                        dp[i][j]=dp[i][k]+dp[k][j];
+	                    }
+	                    else
+	                    {
+	                        dp[i][j]=min(dp[i][j],dp[i][k]+dp[k][j]);
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    
+	}
+};
