@@ -1,0 +1,10 @@
+https://www.youtube.com/watch?v=tBiSx0PrB4g&list=PLu0W_9lII9ahIappRPN0MCAgtOu3lQjQi&index=49
+Criteria for analysis for sorting algorithms:
+
+1. Time Complexity
+2. Space Complexity -> Inplace sorting algo (if constant space)
+3. Stability -> If the order of elements which occur more than once remains same in the sorted array.
+4. Internal Sorting algo -> All data is loaded into the memory
+5. External Sorting algo -> All data is not loaded into the memory
+6. Adaptive -> Already sorted data takes less time.
+7. Recursive/Non-recursive
