@@ -1,0 +1,52 @@
+https://www.youtube.com/watch?v=Jb8AYaYMxq4&list=PLu0W_9lII9ahIappRPN0MCAgtOu3lQjQi&index=54
+
+1. In each pass, u bring the smallest element to the front.
+2 U will need (n-1) passes in an array of size n
+
+-Time:O(N^2), Space:O(1) - in place, not stable (can be made stable if instead of swapping we use insertion sort)
+-Not adaptive, if array if already sorted doesnt stop bcoz here we are only looking for smallest element at the start in each pass, we do not compare the rem array in the pass, it is checked in the next passes
+- sorting in min number of swaps
+
+
+
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+    int temp=a;
+    a=b;
+    b=temp;
+}
+
+void sort(vector<int>& arr, int n)
+{
+    for(int i=0;i<n-1;i++)
+    {
+        int arr_min=arr[i];
+        for(int j=i+1;j<n;j++)
+        {
+            if(arr[i]>arr[j])
+            {
+                swap(arr[i],arr[j]);
+            }
+        }
+    }
+}
+
+int main()
+{
+    vector<int> arr{8,0,7,1,3};
+    int n=arr.size();
+    sort(arr,n);
+    for(int i=0;i<n;i++)
+    {
+        cout<<arr[i]<<" ";
+    }
+    
+
+    return 0;
+}
