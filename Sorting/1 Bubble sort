@@ -1,0 +1,60 @@
+https://www.youtube.com/watch?v=BJkpnxf5cfY&list=PLu0W_9lII9ahIappRPN0MCAgtOu3lQjQi&index=50
+
+1. u compare adj elements and push the max element at the end in each pass.
+2. If there are n elements, u will need (n-1) passes to push (n-1) largest elements to the end.
+
+Time:O(N^2), Space:O(1), stable
+Bubble sort is not adapative (doesnt sort already sorted array, Time reduced) but can be made adaptive
+Bubble sort name bcoz bubble (largest element) at end
+
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+    int temp=a;
+    a=b;
+    b=temp;
+}
+
+void sort(vector<int>& arr, int n)
+{
+    int passes=0;   //Making it adaptive so that it stops if the array is already sorted
+    for(int i=0;i<n-1;i++)
+    {
+        bool flag=0; //to check if array is already sorted
+        for(int j=0;j<n-1-i;j++)
+        {
+            if(arr[j]>arr[j+1])
+            {
+                swap(arr[j],arr[j+1]);
+                flag=true;
+            }
+        }
+        passes++;
+        
+        if(flag==0)  //if at the end of the pass, there is no swap means already sorted so no need to check further
+        {
+            break;
+        }
+    }
+    
+    cout<<"No of passes "<<passes<<"\n";
+}
+
+int main()
+{
+    vector<int> arr{7,11,9,2,17,4};
+    int n=arr.size();
+    sort(arr,n);
+    for(int i=0;i<n;i++)
+    {
+        cout<<arr[i]<<" ";
+    }
+
+    return 0;
+}
