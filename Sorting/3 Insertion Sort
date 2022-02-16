@@ -1,0 +1,55 @@
+https://www.youtube.com/watch?v=wWhAhp6PIuQ
+
+1. U divide the array in sorted and unsorted, pick element one by one from unsorted array and put it in sorted array such that the array remains sorted.
+2. Initially, i=0 is sorted, single element is always sorted, u start picking elements from i=1 and store it in a temp, compare it with elements of sorted array j=i-1 till j>=0 && arr[j]>temp, move the element to the right arr[j+1]=arr[j], and wherever u stop arr[j+1]=temp
+
+Time:O(N^2), Space:O(1) inplace, stable
+Boundary Cases: Insertion sort takes maximum time to sort if elements are sorted in reverse order. And it takes minimum time (O( n)) when elements are already sorted.
+
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+
+void insertionSort(int arr[], int n)
+{
+    
+    for(int i=1;i<n;i++)
+    {
+        int temp=arr[i];
+        int j=i-1;
+        
+        while(j>=0 && arr[j]>temp)
+        {
+            arr[j+1]=arr[j];
+            j--;
+        }
+        arr[j+1]=temp;
+    }
+    
+}
+
+int main()
+{
+    int arr[]= {10, 7, 1, 9, 100, 5};
+    
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    insertionSort(arr, n );
+    for(int i=0;i<n;i++)
+    {
+        cout<<arr[i]<<" ";
+    }
+
+    return 0;
+}
