@@ -1,0 +1,80 @@
+
+
+
+https://www.youtube.com/watch?v=SN4x87ZdhGg&list=PLu0W_9lII9ahIappRPN0MCAgtOu3lQjQi&index=56
+
+1. U select a pivot element and return the corrct index of pivot element in the sorted array and then sort the subarrays (low, pivotindex-1) and (pivotindex+1,high)
+2. If first element as pivot=low-> i=low+1, j=high, i++ till u find an element greater than pivot and j-- till u find element smaller than pivot, swap arr[i],arr[j] if i<j  --> swap final post of arr[j],pivot and return index of j.
+
+-Time complexity
+Best- middle element as pivot  -> here by partitioning u will have O(logn) sub-arrays and partition index will take O(N) -> Total:O(NlogN)
+Worst- if already sorted and greater/smallest element as pivot here u will have n sub-arrays and O(n) for partition index of each sub-array -> Total:O(N^2)
+-Inplace
+-Not stable by default but can be made stable by considering indexes as comparison parameter. [READ MORE]
+-Quicksort is preffered over mergesort as it is in place O(1) space.
+
+#include <iostream>
+
+using namespace std;
+
+void swap(int& a, int& b)
+{
+    int temp=a;
+    a=b;
+    b=temp;
+}
+
+int partition(int arr[], int low, int high)
+{
+    int pivot=low;   
+    int i=low+1;
+    int j=high;
+    int temp;
+    
+    do{
+        while(arr[i]<=arr[low])
+        {
+            i++;
+        }
+        while(arr[j]>arr[low])
+        {
+            j--;
+        }
+        if(i<j)
+        {
+            swap(arr[i],arr[j]);
+        }
+    }
+    while(i<j);
+    
+    swap(arr[low],arr[j]);  //if u are using pivot=arr[low] and swapping(pivot, arr[j])--> this will only change the value stored in pivot elemtn not the actual array
+    
+    return j;
+}
+
+void quicksort(int arr[], int low, int high)
+{
+    
+    if(low<high)
+    {
+        int partIndex=partition(arr,low,high);
+        quicksort(arr,low,partIndex-1);
+        quicksort(arr,partIndex+1,high);
+        
+    }
+}
+
+int main()
+{
+    int arr[]= {10, 7, 8, 9, 1, 5};
+    
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    quicksort(arr, 0, n - 1);
+    for(int i=0;i<n;i++)
+    {
+        cout<<arr[i]<<" ";
+    }
+
+    return 0;
+}
