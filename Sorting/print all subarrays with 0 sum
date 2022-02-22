@@ -1,0 +1,31 @@
+https://www.youtube.com/watch?v=C9-n_H7dsvU
+
+1. Maintain a prefix sum containing sum of array traversed till now, store sum in map with its freq, if that sum has already occured before, add its freq to the ans.
+2. if the sum has already occured means, sub-array from its prev occur till now has sum 0
+Time:O(N), Space:O(N)
+
+
+ll findSubarray(vector<ll> arr, int n ) {
+        //code here
+        
+        unordered_map<ll, ll> m;
+        
+        ll sum=0,ans=0;
+        //m[sum]=1;
+        
+        for(int i=0;i<n;i++)
+        {
+            sum=sum+arr[i];
+            if(sum==0)
+            {
+                ans++;
+            }
+            if(m.find(sum)!=m.end())
+            {
+                ans=ans+m[sum];
+            }
+            m[sum]++;
+        }
+        return ans;
+    }
+};
