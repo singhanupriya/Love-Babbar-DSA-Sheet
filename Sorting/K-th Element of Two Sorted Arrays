@@ -2,6 +2,7 @@ https://www.youtube.com/watch?v=nv7F4PiLUzo
 
 Method 1-
 1. Merge two sorted arrays using O(1) space and find kth element.
+Time:O(nlogn+mlogm)
 
 int kthElement(int arr1[], int arr2[], int n, int m, int k)
     {
@@ -35,3 +36,84 @@ int kthElement(int arr1[], int arr2[], int n, int m, int k)
         }
         
     }
+    
+    
+    Method 2
+    - Use mergesort merge logic, keep a counter of total elements sorted till now Time:O(M+n)
+    
+    if(x==k)
+                {
+                    return arr2[j];
+                }
+                j++;
+                x++;
+
+method 3
+
+- using binary search on smaller array Time:O(min(logn, logm)), n-len of smaller array
+
+- Create an array of size k using some elements of arr1 and arr2, the max of it will be my ans.
+- l1 left boundary of arr1, l2- left boundary of arr2,r1 right boundary of arr1, r2- right boundary of arr2, valid --> l1<=r2 and l2<=r1
+- make cuts in smaller array, low=max(0,k-m), high=min(n,k)
+- while (low<=high), find cut1=low+high/2, 
+        int l1=cut1==0?INT_MIN : arr1[cut1-1];
+            int l2=cut2==0 ? INT_MIN :arr2[cut2-1];
+            int r1= cut1==n ? INT_MAX : arr1[cut1];
+            int r2=cut2==m ? INT_MAX :arr2[cut2];
+            if(l2<=r1 && l1<=r2)
+            {
+                return max(l1,l2);
+            }
+            else if(l2>r1)
+            {
+                low=cut1+1;
+            }
+            else
+            {
+                high=cut1-1;
+            }
+
+nt kthElement(int arr1[], int arr2[], int n, int m, int k)
+    {
+        //assuming n is smaller here, as we are running binary search on smaller array
+        if(n>m)
+        {
+            return kthElement(arr2,arr1,m,n,k);
+        }
+        
+        int low=max(0,k-m);  //if m>=k then we can select min 0 elemnst from arr1
+        //if m <k, then we will have to select some elements from arr1
+        
+        int high=min(n,k);
+        //if k<n then high will be k else we can select entire arr1;
+        
+        while(low<=high)
+        {
+            int cut1=low+(high-low)/2;
+            int cut2=k-cut1;
+            
+            int l1=cut1==0?INT_MIN : arr1[cut1-1];
+            int l2=cut2==0 ? INT_MIN :arr2[cut2-1];
+            int r1= cut1==n ? INT_MAX : arr1[cut1];
+            int r2=cut2==m ? INT_MAX :arr2[cut2];
+            
+            if(l2<=r1 && l1<=r2)
+            {
+                return max(l1,l2);
+            }
+            else if(l2>r1)
+            {
+                low=cut1+1;
+            }
+            else
+            {
+                high=cut1-1;
+            }
+            
+            
+        }
+        
+        return 1;
+        
+    }
+};
