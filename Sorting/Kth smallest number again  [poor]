@@ -1,0 +1,36 @@
+https://www.hackerearth.com/practice/algorithms/searching/binary-search/practice-problems/algorithm/kth-smallest-number-again-2/
+
+Time;O(1), Space:O(1)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
+C#, VB, Perl, Swift, Prolog, Javascript, Pascal, HTML, CSS, JS
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+using namespace std;
+
+int ksmallest(int start, int end, int k)
+{
+    int size=end-start+1;
+    if(k>size)
+    {
+        return -1;
+    }
+    
+    return start+(k-1);
+}
+
+int main()
+{
+    int start=1;
+    int end=5;
+    cout<<ksmallest(start,end,1)<<"\n";
+    cout<<ksmallest(start,end,3)<<"\n";
+    cout<<ksmallest(start,end,6)<<"\n";
+
+    return 0;
+}
