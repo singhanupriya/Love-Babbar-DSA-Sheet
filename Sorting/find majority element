@@ -1,0 +1,86 @@
+https://www.youtube.com/watch?v=AoX3BPWNnoE&t=594s
+
+Method 1- Store freq in map
+Time:O(N), Space:O(N)
+
+int majorityElement(int a[], int size)
+    {
+        
+        // your code here
+        unordered_map<int,int> m;
+        for(int i=0;i<size;i++)
+        {
+            m[a[i]]++;
+            if(m[a[i]]>(size/2))
+            {
+                return a[i];
+            }
+        }
+        
+        return -1;
+    }
+};
+
+Mthod 2- Moore's voting algo
+
+1. Assume that first index is maj_index and count=1.
+2. Traverse from i=1, if a[maj_index]==a[i] count++, esle count--.
+3. If count==0, maj_index=i,count=1 // means count(maj_element)=count(sm of all minority elements)
+4. This will give a possible ans,
+5. again traverse thru the array and check if count(ans)>size/2.
+
+Time:O(N), Space:O(1)
+
+int find(int a[], int size)
+    {
+        int count=1,maj_index=0;
+        for(int i=1;i<size;i++)
+        {
+            if(a[maj_index]==a[i])
+            {
+                count++;
+            }
+            else
+            {
+                count--;
+            }
+            
+            if(count==0)
+            {
+                maj_index=i;
+                count=1;
+            }
+        }
+        
+        return a[maj_index]; //possible candidate
+    }
+    
+    
+    
+    int majorityElement(int a[], int size)
+    {
+        
+        int candidate=find(a,size);
+        
+        int count=0;
+        
+        for(int i=0;i<size;i++)
+        {
+            if(a[i]==candidate)
+            {
+                count++;
+            }
+        }
+        
+        if(count>(size/2))
+        {
+            return candidate;
+        }
+        
+        return -1;
+        
+    }
+    
+    
+    
+};
