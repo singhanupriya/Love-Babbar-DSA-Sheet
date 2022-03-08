@@ -1,0 +1,133 @@
+
+https://www.geeksforgeeks.org/find-four-numbers-with-sum-equal-to-given-sum/
+
+Method 1-
+
+1. We need to find every unique quadruple with sum=target, using 2 pointer logic here
+2. Sort the array, set i=0 to n-3, j=i+1 to n-2, now in the remaining array find a pair using 2 pointer l=j+1, h=n-1 with sum=target-(arr[i]+arr[j]), there might be multiple pairs for same i,j so if u find one pair, l++, h--.
+3. Means iterate for every i,j to find a pair with target sum
+
+Time:O(nlogn+ O(n^3))=O(N^3), Space:O(1)
+
+class Solution{
+    public:
+    // arr[] : int input array of integers
+    // k : the quadruple sum required
+    vector<vector<int> > fourSum(vector<int> &arr, int k) {
+        // Your code goes here
+        
+        
+        
+        int n=arr.size();
+        sort(arr.begin(),arr.end());
+        vector<vector<int>> res;
+        set<vector<int>> s;
+        
+        for(int i=0;i<n-3;i++)
+        {
+            for(int j=i+1;j<n-2;j++)
+            {
+                int l=j+1;
+                int h=n-1;
+                
+                //now use 2 pointer approach to find sum of 2 nos equal to a target
+                while(l<h)   //as we need 2 element so strictly less
+                {
+                    if(arr[i]+arr[j]+arr[l]+arr[h]==k)
+                    {
+                        vector<int> temp;
+                        temp.push_back(arr[i]);
+                        temp.push_back(arr[j]);
+                        temp.push_back(arr[l]);
+                        temp.push_back(arr[h]);
+                        s.insert(temp);
+                        l++;
+                        h--; //find the next pair
+                    }
+                    else if(arr[i]+arr[j]+arr[l]+arr[h] < k)
+                    {
+                        l++;
+                    }
+                    else 
+                    {
+                        h--;
+                    }
+                }
+            }
+        }
+        
+        for(auto i:s)
+        {
+            res.push_back(i);
+        }
+        return res;
+        
+    }
+};
+
+Mthod 2
+
+1. Store all possible pair sum in a map m-><sum,<i,j>>. Create a visited array to have only unique quads
+2. Now iterate from i=0 to n-2, j=i+1 to n-1, see if target-(arr[i]+arr[j]) exists in map.
+    If yes, check if the indexes are all different and all i,j,k,x have not been visisted
+    
+  Time:O(N^2), Space:O(N^2) -> n^2 pairs from n nums
+
+
+class Solution{
+    public:
+    // arr[] : int input array of integers
+    // k : the quadruple sum required
+    vector<vector<int> > fourSum(vector<int> &arr, int k) {
+        // Your code goes here
+        
+        //map to store sum of all possible pairs (sum,<i,j>);
+        
+        int n=arr.size();
+        vector<vector<int>> res;
+        vector<int> visited(n,0);  //to fnd only unique quads
+        
+        unordered_map<int,pair<int,int>> m;  //to store all possible sums with pair indexes
+        
+        for(int i=0;i<n-1;i++)  //generate all possible pairs
+        {
+            for(int j=i+1;j<n;j++)
+            {
+                m[arr[i]+arr[j]].first=i;
+                m[arr[i]+arr[j]].second=j;
+            }
+        }
+        
+        for(int i=0;i<n-1;i++)  //generate all possible pairs
+        {
+            for(int j=i+1;j<n;j++)
+            {
+                int sum=arr[i]+arr[j];
+                if(m.find(k-sum)!=m.end())
+                {
+                    pair<int,int> p=m[k-sum];
+                    
+                    if(p.first!=i && p.first!=j && p.second!=i && p.second!=j && visited[i]==0 && visited[j]==0 && visited[p.first]==0 && visited[p.second]==0) //all different 4 nos
+                    {
+                        vector<int> temp;
+                        temp.push_back(arr[i]);
+                        temp.push_back(arr[j]);
+                        temp.push_back(arr[p.first]);
+                        temp.push_back(arr[p.second]);
+                        res.push_back(temp);
+                        visited[p.first]=1;
+                        visited[p.second]=1;
+                         // so that in future there are duplicate j's it doesnt take that
+                    }
+                }
+                visited[j]=1;
+                
+            }
+            visited[i]=1;
+        }
+        return res;
+        
+        
+        
+    }
+};
