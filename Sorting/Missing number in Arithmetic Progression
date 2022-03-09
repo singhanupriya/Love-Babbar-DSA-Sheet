@@ -1,0 +1,155 @@
+https://www.geeksforgeeks.org/find-missing-number-arithmetic-progression/
+
+Method 1- Recursive
+
+1. The idea is to find the half in which missing element lies, diff of AP = arr[last]-arr[0]/n;
+2. Find mid element, if arr[mid+1]-arr[mid]!=diff, means element after mid is missing, return arr[mid]+diff.
+3. If mid>0 && arr[mid]-arr[mid-1]!=diff, means element before mid is missing, return arr[mid]-dif.
+4. If mid is the correct element at mid position in AP, arr[mid]=arr[0]+(mid*diff) means search in right part 
+5. else left
+
+Time:O(log n)
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+int missing(int arr[], int l, int h, int diff)
+{
+    if(l<h) // we need min two elements
+    {
+        int mid=l+(h-l)/2;   //middle index
+        
+        //element just after mid is missing
+        if(arr[mid+1]-arr[mid]!=diff)
+        {
+            return (arr[mid]+diff);
+        }
+        
+        //element just before mid is missing
+        if(mid >0 && arr[mid]-arr[mid-1]!=diff)
+        {
+            return (arr[mid]-diff);
+        }
+        
+        //now we need to find in which half does the mising element lie 
+        // if middle element is the correct element supposed to be on index mid, search in right
+        if(arr[mid]=arr[0]+(mid*diff))
+        {
+            return missing(arr,mid+1,h,diff);
+        }
+        
+        return missing(arr,l,mid-1,diff);
+        
+        
+    }
+    
+    return -1;
+}
+
+int solve(int arr[], int n)
+{
+    if(n<=2)
+    {
+        return -1;
+    }
+    
+    int diff=(arr[n-1]-arr[0])/n;
+    
+    if(diff==0)
+    {
+        return arr[0];
+    }
+    
+    return missing(arr,0,n-1,diff);
+}
+
+int main()
+{
+    int arr[]  = {1, 6, 11, 16, 21, 31};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    cout<<solve(arr,n);
+
+    return 0;
+}
+
+Method 2- Iterative
+
+Time:O(log n), Space:O(1)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+int missing(int arr[],int n)
+{
+    if(n<=2)
+    {
+        return -1;
+    }
+    
+    int diff=(arr[n-1]-arr[0])/n;
+    
+    if(diff==0)
+    {
+        return arr[0];
+    }
+    
+    int l=0, h=n-1;
+    
+    while(l<h)
+    {
+        int mid=l+(h-l)/2;
+        
+        //element after mid is missing
+        if(arr[mid+1]-arr[mid]!=diff)
+        {
+            return arr[mid]+diff;
+        }
+        //element before mid is missing
+        else if(mid>0 && arr[mid]-arr[mid-1]!=diff)
+        {
+            return arr[mid]-diff;
+        }
+        //mid element is the correct element, search in right side of array
+        else if(arr[mid]==arr[0]+(mid*diff))
+        {
+            l=mid+1;
+        }
+        //search in left side of array
+        else
+        {
+            h=mid-1;
+        }
+    }
+    
+    return -1;
+}
+
+
+
+int main()
+{
+    int arr[]  = {2, 4, 8, 10, 12, 14};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    cout<<missing(arr,n);
+
+    return 0;
+}
