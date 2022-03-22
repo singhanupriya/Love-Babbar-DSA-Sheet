@@ -1,0 +1,81 @@
+https://leetcode.com/discuss/general-discussion/1302335/aggressive-cows-spoj-fully-explained-c
+https://www.youtube.com/watch?v=wSOfYesTBRk
+
+1. U want to maximise the min distance between the cows.
+2. U will use binary search and check if the setup is possible with mid (min distance between cows), if yes, u want increase the min distance, mid+1
+  else decrease min dist, mid-1
+  
+  
+  /******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+
+bool isValid(int arr[], int n, int k, int mid)
+{
+    int cow=1;
+    int cowPosition=arr[0];  //place 1st cow at start
+    
+    for(int i=1;i<n;i++)
+    {
+        if(arr[i]-cowPosition>=mid)   //cal distance
+        {
+            cow++;  //another cow placed
+            cowPosition=arr[i];  //update position of 2nd cow
+            if(cow>=k)   //if all cows placed
+            {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+int minDist(int arr[], int n, int k)
+{
+    if(k>n)  //more cows than stall, min dist=0
+    {
+        return -1;
+    }
+    
+    int res=-1;
+    
+    int start=0;
+    int end=arr[n-1];    
+    
+    while(start<=end)
+    {
+        int mid=start + (end-start)/2;
+        
+        if(isValid(arr,n,k,mid))   //if with mid as min distance, we can position all the cows
+        {
+            res=mid;
+            start=mid+1;  //increase the min distance, move right
+        }
+        else
+        {
+            end=mid-1;  //decrease the min dist, move left
+        }
+    }
+    return res;
+}
+
+int main()
+{
+    int arr[]={1,2,4,8,9};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    int k=3;
+    cout<<minDist(arr,n,k);
+
+    return 0;
+}
+  
