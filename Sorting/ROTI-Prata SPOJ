@@ -1,0 +1,91 @@
+https://www.youtube.com/watch?v=-Nx1h54KzUQ
+
+
+1. Similar to book allocation problem, we will set a low and high for time, find mid, if we can cook given parathas in mid time, we will dec time further.
+
+Time: O((log 10^8)*n^2)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+bool isPossible(int arr[], int prata, long long mid, int n)
+{
+    int count=0;  // no prata
+    long long timeTaken=0;   //start time
+    
+    for(int i=0;i<n;i++)
+    {
+        timeTaken=arr[i];  // first time a cook cooks time will be its rank
+        int j=2;  //from 2nd prata for the same cook, start multipying by 2,3,4,...
+        
+        while(timeTaken<=mid)   // if this time is less than mid, means one more prata can be cooked by same cook else move to the next cook
+        {
+            count++;  // prata can be cooked, inc count
+            timeTaken=timeTaken+ (j*arr[i]);
+            j++;
+            
+            
+            
+        }
+        
+        if(count>=prata)
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+int findTime(int arr[], int n, int prata)
+{
+    if(n<=0)  //no cooks
+    {
+        return -1;
+    }
+    
+    // upper limit of cooks=8, and parta=1000, so upper limit o time = 8 x 1 + 8x2 +.....+ 8 x1000
+    // =8 x 1000 x 1001/2 = 10^ 8 (approx)
+    
+    long long start=0;
+    long long end=100000000;
+    
+    long long res=-1;
+    
+    while(start<=end)
+    {
+        int mid=start + (end-start)/2;
+        
+        if(isPossible(arr,prata,mid, n))
+        {
+            res=mid;
+            end=mid-1;  //dec time further
+        }
+        else
+        {
+            start=mid+1;
+        }
+    }
+    
+    return res;
+}
+
+int main()
+{
+    int arr[]={1};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    int prata=8;
+    
+    cout<<findTime(arr,n,prata);
+
+    return 0;
+}
