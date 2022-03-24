@@ -1,0 +1,87 @@
+https://www.youtube.com/watch?v=kQ1mJlwW-c0
+
+Inversion count- no of pairs in array where i<j and arr[j]>arr[i]
+1. using mergesort logic, inversion count can be found while merging arrays.
+arr1- 2,4 arr2-1, since 2>1, all elements after 2 in sorted arr1 while be greater than 1, inv=inv+mid-i+1.
+Inv count=sum of left sub-array + right sub-array + merging current left n right arrays
+
+Time:O(nlogn), Space:O(N) -> as we are using a temporary array to copy sorterd data into orignal array.
+
+
+
+    long long int merge(long long arr[], long long temp[],long long low, long long high)
+    {
+        //long long int temp[high-low+1];
+        
+        long long mid=low + (high-low)/2;
+        long long i=low,j=mid+1,k=low;
+        long long inv=0;
+        
+        while(i<=mid && j<=high)
+        {
+            if(arr[i]<=arr[j])
+            {
+                temp[k]=arr[i];
+                i++;
+                k++;
+            }
+            else
+            {
+                temp[k]=arr[j];
+                inv=inv+(mid-i)+1;
+                j++;
+                k++;
+            }
+        }
+        
+        while(i<=mid)
+        {
+            temp[k]=arr[i];
+            i++;
+            k++;
+        }
+        
+        while(j<=high)
+        {
+            temp[k]=arr[j];
+                
+                j++;
+                k++;
+            
+        }
+        
+        
+        for(int x=low;x<=high;x++)
+        {
+            arr[x]=temp[x];
+        }
+        //cout<<inv<<"\n";
+        return inv;
+    }
+    
+    
+    long long int mergesort(long long arr[],long long temp[], long long low, long long high)
+    {
+        long long int inversion=0;
+        
+        if(low<high)
+        {
+            long long mid= low + (high-low)/2;
+            inversion+= mergesort(arr,temp,low,mid);   //from left subarray
+            inversion+= mergesort(arr,temp,mid+1,high);  //from right subarray
+            inversion+= merge(arr,temp,low,high);   //from merging the two
+            //cout<<mergesort(arr,low,mid)<<" "<<mergesort(arr,mid+1,high)<<" "<<merge(arr,low,high)<<"\n";
+        }
+        
+        return inversion;  ///if only one element return count 0
+    }
+    
+    
+    long long int inversionCount(long long arr[], long long N)
+    {
+        // Your Code Here
+        long long temp[N];
+        return mergesort(arr,temp,0,N-1);
+    }
+
+};
