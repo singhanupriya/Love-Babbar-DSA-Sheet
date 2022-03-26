@@ -1,0 +1,44 @@
+https://www.youtube.com/watch?v=DHr-Mn_vzs0
+https://practice.geeksforgeeks.org/problems/activity-selection-1587115620/1/#
+
+1. U need to do maximum acivity within a given duration, hence, u need to select smallest activities.
+2. Sort the activity in inc order of ending time.
+3. Take first activity, count=1, traverse if the start of next activity is after the end of first add it.
+
+Time:O(Nlog n), Space:O(N)
+
+public:
+    //Function to find the maximum number of activities that can
+    //be performed by a single person.
+    int activitySelection(vector<int> start, vector<int> end, int n)
+    {
+        // Your code here
+        vector<vector<int>> duration;
+        for(int i=0;i<n;i++)
+        {
+            vector<int> temp;
+            temp.push_back(start[i]);
+            temp.push_back(end[i]);
+            duration.push_back(temp);
+        }
+        
+        sort(duration.begin(),duration.end(),[&](vector<int>& a, vector<int>& b){
+        
+            return a[1]<b[1];   //sort as per end times
+        });
+        
+        int activity=1;
+        int endTime=duration[0][1]; //take the first activity
+        
+        for(int i=1;i<n;i++)
+        {
+            if(duration[i][0]>endTime)  //if the next activity starts after curret ends
+            {
+                activity++;  
+                endTime=duration[i][1];  //updat end
+            }
+        }
+        
+        return activity;
+    }
+};
