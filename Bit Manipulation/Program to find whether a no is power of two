@@ -1,0 +1,30 @@
+https://practice.geeksforgeeks.org/problems/power-of-2-1587115620/1
+
+1. When 1 is subtracted from a number which is power of 2, all set bits become unset and all unset become set.
+  Eg - 4= 100, 4-1=3=011, 4&3=0, if a number!=0 is a power of 2 , n & (n-1) =0, this fails for n=0
+2. So we write return x && (!(x & (x-1)) [logical and], if both is non-zero it will return true means power of 2.
+
+Time:O(1), Space:O(1)
+
+bool isPowerofTwo(long long x){
+        
+        // Your code here    
+        
+        //return x && (!(x&(x-1)));   //logical and
+        
+        if(x==0)
+        {
+            return false;
+        }
+        
+        if(x & (x-1))
+        {
+            return false;
+        }
+        return true;
+        
+        
+        
+        
+    }
+};
