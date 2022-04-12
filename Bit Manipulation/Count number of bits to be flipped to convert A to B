@@ -1,0 +1,30 @@
+https://practice.geeksforgeeks.org/problems/bit-difference-1587115620/1#
+
+1. The no of bits to be flapped= no of diff bits
+2. The no of 1's in a^b will be the ans
+3. To count no of 1's , diff&1 and diff>>1
+
+Time:O(log2(n)). Space:O(1)
+
+int countBitsFlip(int a, int b){
+        
+        // Your logic here
+        
+        //xor returns 1 if there are diff bits
+        int diff= a ^ b;
+        
+        //now count no of 1's in this
+        
+        int counter=0;
+        while(diff)
+        {
+            if(diff & 1==1)
+            {
+                counter++;
+            }
+            diff=diff>>1;
+        }
+        
+        return counter;
+        
+    }
