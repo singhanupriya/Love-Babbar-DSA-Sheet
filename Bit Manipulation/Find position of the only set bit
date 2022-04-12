@@ -1,0 +1,32 @@
+https://practice.geeksforgeeks.org/problems/find-position-of-set-bit3706/1#
+
+1. While n, n&1 and n=n>>1
+
+Time:O(log2(n)), Space:O(1)
+
+
+int findPosition(int N) {
+        // code here
+        
+        int index=0;
+        int counter=0;
+        
+        while(N)
+        {
+            index++;
+            if(N & 1==1)
+            {
+                counter++;
+            }
+            N=N>>1;
+            //index++;
+        }
+        
+        if(counter==1)
+        {
+            return index;
+        }
+        
+        return -1;
+    }
+};
