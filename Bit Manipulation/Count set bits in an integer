@@ -1,0 +1,23 @@
+
+https://practice.geeksforgeeks.org/problems/set-bits0143/1#
+
+M1- keep doing N & 1 and right shift
+
+Time- O(no of bits=log2(n)), Space:O(1)
+
+int setBits(int N) {
+        // Write Your Code here
+        
+        int counter=0;
+        while(N)
+        {
+            if(N & 1 ==1)
+            {
+                counter++;
+            }
+            N=N>>1;
+        }
+        
+        return counter;
+    }
+};
