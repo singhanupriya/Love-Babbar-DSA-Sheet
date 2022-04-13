@@ -1,0 +1,57 @@
+https://www.youtube.com/watch?v=pnx5JA9LNM4
+https://practice.geeksforgeeks.org/problems/finding-the-numbers0215/1#
+
+1. Take xor of all elements, u will get the two elements which are unique, in this xor, find the LSB.  
+    int counter= res & ~(res-1);   //get the mask directlt with LSB
+2. Separate the array into two grps with matching LSB and with no.
+3. Xor the two grps, u will get 2 nos.
+
+Time:O(N), Space:O(1)
+
+
+
+vector<int> singleNumber(vector<int> nums) 
+    {
+        // Code here.
+        
+        vector<int> ans;
+        
+        int res=nums[0];
+        int n=nums.size();
+        
+        for(int i=1;i<n;i++)
+        {
+            res=res^nums[i];
+        }
+        
+        int counter= res & ~(res-1);   //get the mask directlt with LSB
+        
+        int res2=0,res1=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(nums[i] & counter)
+            {
+                res1=res1^nums[i];
+            }
+            else
+            {
+                res2=res2^nums[i];
+            }
+        }
+        
+        if(res1< res2)
+        {
+            ans.push_back(res1);
+            ans.push_back(res2);
+        }
+        else
+        {
+            ans.push_back(res2);
+            ans.push_back(res1);
+        }
+        
+        
+        
+        return ans;
+    }
