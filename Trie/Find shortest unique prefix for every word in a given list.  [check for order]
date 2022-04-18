@@ -1,0 +1,127 @@
+https://www.youtube.com/watch?v=fpjfjNh658c&t=654s
+
+LEARN- how to maintain the order
+
+1. Modify the trie to store child array and freq, keep incrementing freq, if that letter has occured.
+2. Traverse the trie again, if the freq is 1 stop and add from root till here in the ans.
+3. Keep doing
+
+Time:O(NO OF WORDS* length of each word)
+Space:O(NO OF WORDS* length of each word)
+
+
+
+// C++ program to print all prefixes that
+// uniquely represent words.
+#include<bits/stdc++.h>
+using namespace std;
+
+#define MAX 256
+
+// Maximum length of an input word
+#define MAX_WORD_LEN 500
+
+// Trie Node.
+class TrieNode{
+    
+    public:
+    int freq;
+    TrieNode* children[256];
+    
+    TrieNode()
+    {
+        freq=1;
+        for(int i=0;i<256;i++)
+        {
+            children[i]=NULL;
+        }
+    }
+};
+
+
+// Function to create a new trie node.
+void insert(TrieNode* root, string key)
+{
+    TrieNode* p=root;
+    for(int i=0;i<key.length();i++)
+    {
+        if(p->children[key[i]-'a'])
+        {
+            (p->children[key[i]-'a']->freq)++;
+        }
+        else
+        {
+            p->children[key[i]-'a']=new TrieNode();
+        }
+        p=p->children[key[i]-'a'];
+    }
+}
+
+// This function prints unique prefix for every word stored
+// in Trie. Prefixes one by one are stored in prefix[].
+// 'ind' is current index of prefix[]
+
+
+
+void util(TrieNode* root, vector<string>& ans,string temp)
+{
+    if (root != NULL)
+		{
+			for (int i = 0; i < 256; ++i)
+			{
+				if (root->children[i] != NULL)
+				{
+					if (root->children[i]->freq == 1)
+					{
+						// Display Result
+						ans.push_back(temp + ((char)(i + 97)) );
+						
+					}
+					else
+					{
+						// Find short prefix
+						util(
+                          root->children[i],ans, temp  +  
+                          (((char)(i + 97))));
+					}
+				}
+			}
+		}
+	}
+
+
+
+
+
+    void findPrefixes(string arr[], int n)
+    {
+        //code here
+        vector<string> ans;
+        
+        TrieNode* root=new TrieNode();
+        for(int i=0;i<n;i++)
+        {
+            insert(root,arr[i]);
+        }
+        
+        util(root,ans,"");
+        for(int i=0;i<ans.size();i++)
+        {
+            cout<<ans[i]<<" ";
+        }
+        
+    }
+// Function to print all prefixes that uniquely
+// represent all words in arr[0..n-1]
+
+
+// Driver function.
+int main()
+{
+	string arr[] = {"zebra", "dog", "duck", "dove"};
+	int n = sizeof(arr)/sizeof(arr[0]);
+	findPrefixes(arr, n);
+
+	return 0;
+}
+
