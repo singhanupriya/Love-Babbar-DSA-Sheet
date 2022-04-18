@@ -1,0 +1,129 @@
+
+1. Create a normal trie with child and end of word, insert dict words in trie.
+2. Create search operation.
+3. Search every possible prefix of word in the trie, if any of the comb is possible return true.
+
+Time:O
+
+
+// { Driver Code Starts
+//Initial template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+ // } Driver Code Ends
+//User function template for C++
+
+class TrieNode{
+    public:
+    bool endOfWord;
+    TrieNode* child[256];
+    
+    TrieNode()
+    {
+        endOfWord=false;
+        for(int i=0;i<256;i++)
+        {
+            child[i]=NULL;
+        }
+    }
+};
+
+void insert(TrieNode* root, string key)
+{
+    TrieNode* p=root;
+    for(int i=0;i<key.length();i++)
+    {
+        if(!p->child[key[i]-'a'])
+        {
+            p->child[key[i]-'a']=new TrieNode();
+        }
+        p=p->child[key[i]-'a'];
+    }
+    p->endOfWord=true;
+    
+}
+
+bool search(TrieNode* root, string key)
+{
+    TrieNode* p=root;
+    for(int i=0;i<key.length();i++)
+    {
+        if(!p->child[key[i]-'a'])
+        {
+            return false;
+        }
+        else 
+        {
+            p=p->child[key[i]-'a'];
+        }
+    }
+    
+    return (p->endOfWord);
+}
+
+bool word(TrieNode* root, string key)
+{
+    
+    if(key.length()==0)
+    {
+        return true;
+    }
+    int size=key.length();
+    
+    //try for all possible prefixes
+    for(int i=1;i<=size;i++)
+    {
+        //if that prefix is present do the same for remaining word
+        if(search(root,key.substr(0,i)) && word(root,key.substr(i,size-i)))
+        {
+            return true;
+        }
+    }
+    
+    //if all prefixes have failed return false;
+    return false;
+}
+
+class Solution{
+    public:
+    // A : given string to search
+    // B : vector of available strings
+    
+    int wordBreak(string A, vector<string> &B) {
+        //code here
+        TrieNode* root=new TrieNode();
+        for(int i=0;i<B.size();i++)
+        {
+            insert(root,B[i]);
+        }
+        
+        if(word(root,A))
+        {
+            return 1;
+        }
+        return 0;
+    }
+};
+
+// { Driver Code Starts.
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        vector<string> dict;
+        for(int i=0;i<n;i++){
+            string S;
+            cin>>S;
+            dict.push_back(S);
+        }
+        string line;
+        cin>>line;
+        Solution ob;
+        cout<<ob.wordBreak(line, dict)<<"\n";
+    }
+}
+  // } Driver Code Ends
