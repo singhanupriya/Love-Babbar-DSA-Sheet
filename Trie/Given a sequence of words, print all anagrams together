@@ -1,0 +1,126 @@
+https://www.ideserve.co.in/learn/anagram-grouping-in-a-sequence-using-trie
+
+1. Create a trie with members - child, endofword and vector<string> index to group all same words.
+2. Insert the sorted string in the trie once u reach end of word, add the orignal word to index vector, this was at the end all anagrams will be grouped together in index vectors at leaf nodes
+3. Now traverse the trie again and push all index vectors into final vectors.
+ORDER NOT MAINTAINED
+
+Time:O(N*S*log(S)), S- length of each word, N-> no of words
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+class TrieNode{
+    
+    public:
+        bool EndOfWord;
+        vector<string> index;
+        TrieNode* child[256];
+    
+    TrieNode()
+    {
+        EndOfWord=false;
+        vector<string> index;
+        for(int i=0;i<256;i++)
+        {
+            child[i]=NULL;
+        }
+    }
+    
+};
+
+void insert(TrieNode* root, string key, int idx,vector<string> arr)
+{
+    TrieNode* p=root;
+    for(int i=0;i<key.length();i++)
+    {
+        if(! p->child[key[i]-'a'])
+        {
+            p->child[key[i]-'a']=new TrieNode();
+        }
+        p=p->child[key[i]-'a'];
+    }
+    
+    p->EndOfWord=true;
+    (p->index).push_back(arr[idx]);
+    
+}
+
+void traverse(TrieNode* root, vector<vector<string>>& temp)
+{
+    if(root)
+    {
+        for(int i=0;i<256;i++)
+        {
+            if(root->child[i])
+            {
+                if(root->child[i]->EndOfWord)
+                {
+                    //cout<<"Size "<<(root->child[i]->index).size()<<"\n";
+                    temp.push_back(root->child[i]->index);
+                }
+                else
+                {
+                    traverse(root->child[i],temp);
+                }
+            }
+        }
+    }
+}
+
+bool sortcol(const vector<string>& v1, const vector<string>& v2)
+{
+    return v1[1] < v2[1];
+}
+
+void anagram(vector<string> arr)
+{
+    int n=arr.size();
+    TrieNode* root=new TrieNode();
+    for(int i=0;i<n;i++)
+    {
+        //sort(arr[i].begin(),arr[i].end());
+        //cout<<"Inserted "<<arr[i]<<" ";
+        string buffer=arr[i];  //dont modify the actual word
+        sort(buffer.begin(),buffer.end());
+        insert(root,buffer,i,arr);
+    }
+    vector<vector<string>> temp;
+    traverse(root,temp);
+    sort(temp.begin(), temp.end(), sortcol);
+    
+    vector<vector<string>> ans;
+    
+    for(int i=0;i<temp.size();i++)
+    {
+        for(int j=0;j<temp[i].size();j++)
+        {
+            //temp[i][j];
+            cout<<temp[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+    
+    
+    
+}
+
+int main()
+{
+    vector<string> arr {"act","god","cat","dog","tac"};
+    anagram(arr);
+
+    return 0;
+}
