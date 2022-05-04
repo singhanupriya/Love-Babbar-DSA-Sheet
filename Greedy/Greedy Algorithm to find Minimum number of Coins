@@ -1,0 +1,83 @@
+https://practice.geeksforgeeks.org/problems/choose-and-swap0531/1
+https://www.youtube.com/watch?v=NhnsINajZRA
+
+Here we have to replace and not swap
+
+eg- ccad -> aacd, all occ of 'c' are replaced by 'a' and all occ of 'a' are replaced by c.
+We have to do this atmost once (0 or 1 time) to get lexicographically smallest string.
+
+adbca -> adbca, no smaller char that present at index 0 i.e. 'a' in the string. move ahead, 'a' is smaller than 'd' but if u replace 'd' with 'a' it becomes
+dabcd (wrong ans), when we are on 'd' we will find the next smaller after 'a' as 'a' has already occured before 'd'.
+Ans- abdca
+
+Logic - 
+1. Store first occu of every char in string in an array, first occ only so that we can know if it comes before or after a particular char in the string.
+2. start traversing the string from index 0, if u find any char smaller then the char at index '0' in the check array that occurs after it in the string array, then u replace else that is the smallest.
+3. Once u have found such pair, break as we need to do this at max 1.
+
+Time:O(N^2), Space:O(1) 
+
+
+public:
+    string chooseandswap(string str){
+        // Code Here
+        
+        int check[26];
+        for(int i=0;i<26;i++)
+        {
+            check[i]=-1;
+        }
+        
+        int n=str.length();
+        
+        //store first occ of every char in check arr
+        for(int i=0;i<n;i++)
+        {
+            if(check[str[i]-'a']==-1)
+            {
+                check[str[i]-'a']=i;
+            }
+        }
+        
+        int i=0,j=0;
+        
+        for(i=0;i<n;i++)
+        {
+            bool flag=false;
+            for(j=0;j<str[i]-'a';j++) //check for any chars smaller than the char in string occuring before it in the check array
+            {
+                if(check[j]>check[str[i]-'a']) //if the smaller char occurs after it in the string then only we can replace
+                {
+                    flag=true;
+                    break;
+                }
+            }
+            if(flag) //as we need to do it only once
+            {
+                break;
+            }
+        }
+        
+        if(i<n) //means we can do atleast once, we need to replace the chars
+        {
+            char replaces=char(j+'a');
+            char toBeReplaced= str[i];
+            
+            for(int i=0;i<n;i++)
+            {
+                if(str[i]==toBeReplaced)
+                {
+                    str[i]=replaces;
+                }
+                else if(str[i]==replaces)
+                {
+                    str[i]=toBeReplaced;
+                }
+            }
+        }
+        
+        
+        return str;
+    }
+    
+};
