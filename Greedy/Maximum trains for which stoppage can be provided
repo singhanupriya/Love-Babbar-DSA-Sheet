@@ -1,0 +1,76 @@
+https://www.youtube.com/watch?v=naDecrj9Cyc
+
+1. We will need to use the departure time as it will decide whether a patform is available or not.
+2. Segreate the trains per platform wise first.
+3. For each platform, sort trains in order of inc departure time for trains on that plaform.
+4. Count++ of start of next train > dep of prev train for each platform.
+
+Time:O( total no of trains + nlog n) , n -> max no of trains on any platform,
+Space:O(N)
+
+#include <iostream>
+#include<vector>
+#include<algorithm>
+
+
+using namespace std;
+
+//n -> no of platforms
+//m -> no of trains
+
+int solve(vector<vector<int>> sch, int n, int m)
+{
+    vector<vector<pair<int,int>>> track(n+1);
+    for(int i=0;i<m;i++)  //psuh all trains in the vector per platform wise
+    {
+        track[sch[i][2]].push_back(make_pair(sch[i][1],sch[i][0])); 
+        //put the <end,start> platform wise 
+    }
+    
+    //sort in increasing order of end time per platform wise
+    
+    for(int i=0;i<=n;i++)
+    {
+        sort(track[i].begin(),track[i].end());  
+    }
+    
+    int count=0;
+    for(int i=0;i<=n;i++)  //iterate thru all platforms
+    {
+        if(track[i].size()==0)
+        {
+            continue;  //if no train on a platform move to next platform
+        }
+        
+        count++; 
+        int x=0; //to keep track of prev
+        
+        for(int j=1;j<track[i].size();j++)  //compare the end time of a train on a part platform
+        {
+            if(track[i][j].second>track[i][x].first)
+            {
+                count++;
+                x=j;
+            }
+        }
+    }
+    
+    return count;
+    
+}
+
+int main()
+{
+    vector<vector<int>> sch{ 
+                    {1000, 1030, 1},
+                     { 1010, 1020, 1},
+                      {1025, 1040, 1},
+                      {1130, 1145, 2},
+                      {1130, 1140, 2 }
+        
+    };
+    int n=3;
+    int m=5;
+
+    cout<<solve(sch,n,m);
+}
