@@ -1,0 +1,49 @@
+https://practice.geeksforgeeks.org/problems/buy-maximum-stocks-if-i-stocks-can-be-bought-on-i-th-day/1/
+
+Imp point - the cu can buy atmost 'i' stocks on ith day.
+Fractional knapsack.
+
+Find max no of stocks a person can buy.
+If u want to maximise the no of stocks purchased, buy cheapest stocks first.
+
+
+1. Make a vector<pair<int,int>> of <price,day> and sort in inc order of price.
+2. If price*day<=k count=count+day and k=k-price*day else count+=k/price
+3. Return count
+
+Time:O(nlog n + n)
+Space:O(1)
+
+
+
+int buyMaximumProducts(int n, int k, int price[]){
+        //Write your code here
+        vector<pair<int,int>> stock;
+        
+        for(int i=0;i<n;i++)
+        {
+            stock.push_back(make_pair(price[i],i+1));
+        }
+        
+        sort(stock.begin(),stock.end());
+        
+        int count=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(stock[i].first*stock[i].second <= k)
+            {
+                count+=stock[i].second;
+                k-=stock[i].first*stock[i].second ;
+            }
+            else
+            {
+                count+= k/stock[i].first;
+                break;
+            }
+        }
+        
+        return count;
+    }
+};
+
