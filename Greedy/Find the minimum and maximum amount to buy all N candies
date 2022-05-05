@@ -1,0 +1,48 @@
+https://practice.geeksforgeeks.org/problems/shop-in-candy-store1145/1#
+
+1. Sort the arry in increasing order of price.
+2. For min price- buy the cheapest product and from that buy k most exp products, buy second cheapest prod and buy k next most exp, keep doing until all candies and bought.
+3. For max price- buy the most expensive product and from that buy k cheapest products, buy second most exp prod and buy k next cheapest, keep doing until all candies and bought.
+4. Use 2 pointers for array traversal.
+
+Time:O(n log n + n)
+Space:O(1)
+
+
+vector<int> candyStore(int arr[], int N, int k)
+    {
+        // Write Your Code here
+        
+        vector<int> ans;
+        if(N==0)
+        {
+            return ans;
+        }
+        
+        sort(arr,arr+N);
+        
+        //minimum price
+        int minPrice=0;
+        int i=0,j=N-1;
+        while(i<=j)
+        {
+            minPrice+=arr[i];
+            j=j-k;
+            i++;
+        }
+        
+        
+        //max price
+        int maxPrice=0;
+        i=0,j=N-1;
+        while(i<=j)
+        {
+            maxPrice+=arr[j];
+            i=i+k;
+            j--;
+        }
+        
+        ans.push_back(minPrice);
+        ans.push_back(maxPrice);
+        return ans;
+    }
