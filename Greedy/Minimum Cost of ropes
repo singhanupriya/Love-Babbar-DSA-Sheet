@@ -1,0 +1,40 @@
+https://practice.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1#
+
+1. Use priority queue or min heap, get the 2 top elements add them and push the sum back in pq.
+
+Time:O(nlog n), Space:O(n)
+
+public:
+    //Function to return the minimum cost of connecting the ropes.
+    long long minCost(long long arr[], long long n) {
+        // Your code here
+        
+        
+        
+        
+        
+        if(n<=1)
+        {
+            return 0;
+        }
+        
+        
+        
+        priority_queue <long long, vector<long long>, greater<long long>> p(arr,arr+n);
+        
+        
+        long long sum=0;
+        
+        while(p.size()>1)
+        {
+            long long a=p.top();
+            p.pop();
+            long long b=p.top();
+            p.pop();
+            sum+=a+b;
+            p.push(a+b);
+        }
+        return sum;
+        
+    }
+};
