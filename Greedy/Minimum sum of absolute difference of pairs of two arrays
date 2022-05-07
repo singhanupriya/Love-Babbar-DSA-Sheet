@@ -1,0 +1,22 @@
+https://practice.geeksforgeeks.org/problems/minimum-sum-of-absolute-differences-of-pairs/1/
+
+1. U need to minimise the sum of abs diff of corr elements of arr1 and arr2.
+2. Sort the 2 arrays and find sum of abs(a[i]-b[i])
+
+Time:O(n log n), Space:O(1)
+
+
+long long findMinSum(vector<int> &A,vector<int> &B,int N){
+        
+        sort(A.begin(),A.end());
+        sort(B.begin(),B.end());
+        
+        long long ans=0;
+        
+        for(int i=0;i<N;i++)
+        {
+            ans+=abs(A[i]-B[i]);
+        }
+        return ans;
+        
+    }
