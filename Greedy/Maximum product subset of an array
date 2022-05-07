@@ -1,0 +1,76 @@
+https://practice.geeksforgeeks.org/problems/maximum-product-subset-of-an-array/1/#
+
+There can be four possibilities:
+1. All elements are positive, in that case max product is of all elements.
+1.2 . All elements are positive and some zero, in that case max product is of all elements except 0.
+2. Even no of neg elemennts and no zero, max product is of all elements.
+3. Odd no of neg elements and no zeros, product is of entire array except neg no with least absolute value
+4. Only one neg and rest all 0->ans=0.
+5. If all elements 0, return 0
+
+Logic-
+1. We need to find the prod of all element skipping 0s, count of neg_no, zero and min_neg.
+2. If count_neg is odd, check if count_neg=1 and count_zero>=1 and count_neg+count_zero=size of array, ans =0
+    else prod=prod/min_neg
+3. return prod
+
+Time:O(n), Space:O(1)
+
+ int max(int a,int b)
+    {
+        if(a<=b)
+        {
+            return b;
+        }
+        return a;
+    }
+    
+    long long int findMaxProduct(vector<int>&a, int n){
+        //Write your code here 
+        
+        if(n==1)
+        {
+            return a[0];
+        }
+        
+        int countNeg=0,countZero=0,maxNeg=INT_MIN;
+        long long int prod=1;
+        
+        
+        for(int i=0;i<n;i++)
+        {
+            if(a[i]==0)
+            {
+                countZero++;
+                continue;
+            }
+            
+            if(a[i]<0)
+            {
+                countNeg++;
+                maxNeg=max(maxNeg,a[i]);
+            }
+            
+            prod=(prod*a[i]) % 1000000007;
+        }
+        
+        if(countZero==n) //all zeros
+        {
+            return 0;
+        }
+        
+        if(countNeg & 1) //odd neg nos
+        {
+            if(countNeg==1 && countZero>=1 && countNeg+countZero==n)
+            {
+                return 0;
+            }
+            
+            prod=prod/maxNeg;
+        }
+        
+        return prod;
+        
+        
+    }
+};
