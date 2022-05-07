@@ -1,0 +1,77 @@
+https://www.geeksforgeeks.org/maximize-array-sun-after-k-negation-operations/
+
+Imp thing to ask in this question is:
+1. If u can change a number once or multiple times.
+a. If only once, change all neg nos to pos and all small pos to neg
+b. If multiple times, change all neg to pos, if k still rem, keep changing the greatest smallest no (smallest absolute value)
+
+If u go with b.
+
+Logic:
+1. Sort the array.
+2. Traverse the array and first convert all neg nos to pos, if k>0 && a[i]<0,a[i]=-a[i] and k++.
+3. U will come out of the loop in three cases:
+  a. All neg nos in array and u have reached the end.
+  b. No neg no left
+  c. k=0
+4. If u have reached the end and u still have 'k' left, u have to make changes to the last element 'k' times as it will have the least abs value .
+5. If k=0 or k is even, return sum of the array 
+6. If u have postivite nos now, i-- and convert the neg no u just converted to pos 'k' times
+5. Retrun the sum.
+
+Time:O(nlogn), Space:O(1)
+  
+  
+public:
+    long long int sum(long long int a[], int n)
+    {
+        long long int ans=0;
+        for(int i=0;i<n;i++)
+        {
+            ans+=a[i];
+        }
+        return ans;
+    }
+    
+    long long int maximizeSum(long long int a[], int n, int k)
+    {
+        // Your code goes here
+        
+        sort(a,a+n);
+        int i;
+        
+        for(i=0;i<n;i++)
+        {
+            if(k>0 && a[i]<0) //convert all neg nos to pos
+            {
+                a[i]=a[i]*(-1);
+                k--;
+                continue;
+            }
+            break;
+        }
+        
+        //u come out of this loop if no neg nos remaining, k=0 or array over
+        
+        //if array ended as u have to make exact k changes, u make the rem 'k' changes to the last neg no in the sorted array.
+        if(i==n)
+        {
+            i--;
+        }
+        
+        if(k==0 || k%2==0)
+        {
+            return sum(a,n);
+        } //if k is even, eg u have 2, u make changes 2 times, -2 and then 2, no remains the same
+        
+        if(i!=0 && abs(a[i])>abs(i-1))
+        {
+            i--;
+        }
+        a[i]=a[i]*(-1);
+        
+        return sum(a,n);
+        
+        
+    }
+};
