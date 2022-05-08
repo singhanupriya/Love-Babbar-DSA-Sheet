@@ -1,0 +1,142 @@
+https://www.youtube.com/watch?v=sSDAN_WwNwU&t=323s
+
+
+First u need to check if it is even possible.
+
+1. Count the freq of each char in an unordered map, let the char with max freq has count max_freq.
+2. In order to have no two adj chars same, we should have min (max_freq-1) chars left so that the max occ char dont become adj,
+3. No of chars left in the string -> len_string-max_freq.
+4. If (len_string-max_freq) >= (max_freq-1) only the this arrangement is possible.
+5. Once u have verified it is possible, place the max occ char at all even places, if there are still even places left first fill them with remaining chars,
+once even placed filled, start filling the odd positions with remaining chars. 
+Note-> u dont have to fill the remaining places in order of char freq, as we are filling even places first automatically, 
+until the char freq becomes 0 they will not be adj.
+
+
+1. To check if possible:
+
+Time:O(N), Space:O(N)
+
+#include <iostream>
+#include<unordered_map>
+
+using namespace std;
+
+bool rearrange(string str)
+{
+    unordered_map<char,int> m;
+    int maxFreq=0;
+    
+    int len=str.length();
+    
+    for(int i=0;i<len;i++)
+    {
+        m[str[i]]++;
+        maxFreq=max(maxFreq,m[str[i]]);
+    }
+    
+    if(len-maxFreq >= maxFreq-1)
+    {
+        return true;
+    }
+    return false;
+}
+
+int main()
+{
+    string str="bbbb";
+    
+    cout<<rearrange(str);
+
+    return 0;
+}
+
+
+2. Output the rearranged string:
+
+
+Time:O(N), Space:O(26)
+
+1. Fill the even places first then odd places.
+
+    public:
+    
+    //find max occ char
+    char maxCount(vector<int>& count)
+    {
+        int max=0;
+        char ch;
+        
+        for(int i=0;i<26;i++)
+        {
+            if(max<count[i])
+            {
+                max=count[i];
+                ch='a'+char(i);
+            }
+        }
+        
+        return ch;
+    }
+    
+    string rearrangeString(string str)
+    {
+        //code here
+        int n=str.length();
+        
+        if(n==0)
+        {
+            return "-1";
+        }
+        
+        vector<int> count(26,0);
+        
+        //store freq of each char in a vector
+        for(int i=0;i<n;i++)
+        {
+            count[str[i]-'a']++;
+        }
+        
+        char maxChar=maxCount(count);
+        int maxFreq=count[maxChar-'a'];
+        
+        if(n-maxFreq < maxFreq-1) //not possible
+        {
+            return "-1";
+        }
+        
+        //if possible, fill the even places first and then odd
+        
+        
+        //all even places first filled with max occuring char
+        int start=0;
+        while(maxFreq)
+        {
+            str[start]=maxChar;
+            start+=2;
+            maxFreq--;
+        }
+        
+        count[maxChar-'a']=0;  //very imp step, else it will be counted again
+        
+        //check if any more even places left
+        
+        for(int i=0;i<26;i++)
+        {
+            while(count[i]>0) -> this will run the len of string times.
+            {
+                if(start>=n) //if no more even position left, set it to index=1 first odd position else ind=ind
+                {
+                    start=1;
+                }
+                
+                str[start]='a'+char(i);
+                start+=2;
+                count[i]--;
+            }
+        }
+        
+        return str;
+    }
+    
+    Time:O(
