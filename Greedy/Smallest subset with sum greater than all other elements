@@ -1,0 +1,48 @@
+https://practice.geeksforgeeks.org/problems/smallest-subset-with-greater-sum/1/
+
+1. U want to count the min number of elements to be selected such that their sum is greater than the sum of the remainingh elemnt.
+2. Since, we need to count min, we will pick the greatest nos and check if their sum is > than rest of the array.
+3. Sort the array, start picking the largest nos and test.
+
+Time:O(nlogn), Space:O(1)
+
+int minSubset(vector<int> &Arr,int N){
+        
+        if(N==0)
+        {
+            return 0;
+        }
+        
+        if(N==1)
+        {
+            return 1;
+        }
+        
+        long long int sum=0;
+        for(int i=0;i<N;i++)
+        {
+            sum+=Arr[i];
+        }
+        
+        sort(Arr.begin(),Arr.end());
+        int count=1;
+        long long element=Arr[N-1];
+        sum=sum-element;
+        
+        int i=N-2;
+        
+        while(i>=0)
+        {
+            if(element > sum)
+            {
+                return count;
+            }
+            element+=Arr[i];
+            count++;
+            sum-=Arr[i];
+            i--;
+        }
+        
+        return count;
+        
+    }
