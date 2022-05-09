@@ -1,0 +1,42 @@
+https://www.youtube.com/watch?v=Wq4Sn20dHr8
+
+N – Maximum unit of food you can buy each day.
+S – Number of days you are required to survive.
+M – Unit of food required each day to survive.
+
+1. Total food u require to survive for S days= S*M;
+2. Number of sunday=S/7;
+3. No of days u are allowed to buy=S- no of sundays.
+4. Keep buying the max unit of food each day till u no longer require food, count the no of days needs for this.
+5. If this is greater than the no of days u are allowed to buy, not possible else return no of days.
+
+Time:O(S*M), Space:O(1)
+
+
+int minimumDays(int S, int N, int M){
+        // code here
+        
+        int noOfSundays=S/7;
+        int daysAllowedToBuy=S-noOfSundays;
+        
+        
+        //total food reqd to survive S days when u need M food per day
+        int totalFoodRequired=S*M;
+        
+        int days=0;
+        
+        //keep buying the food per day till u no more require to buy food
+        while(totalFoodRequired > 0)
+        {
+            totalFoodRequired=totalFoodRequired-N;  //buy max allowed on first day
+            days++;
+        }
+        
+        //if no of days u are buying > days allowed not possible
+        if(days > daysAllowedToBuy)
+        {
+            return -1;
+        }
+        return days;
+        
+    }
