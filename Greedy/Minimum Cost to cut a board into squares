@@ -1,0 +1,68 @@
+https://www.youtube.com/watch?v=9DckVBRzuQU
+
+Formula given to find= total cost + edge cost* no of pieces, 
+no of pieces -> that edge is cutting thru, for vertical edge we need to check vertical pieces and for horizontal edge we need to check horizontal pieces
+
+U have to find the min cost, as no of pieces increase ur cost will increase so first pick max edges prices so that the number of pieces are min inititally.
+1. Sort the vertical and horizontal edge cost in desc order.
+2. Pick the largest elements from each use merge sort logic
+3. Initial as we have one box, horizontal piece count =1, vertical piece count =1.
+4. When u make a vertical cut, horizontal piece count +=1, When u make a horizontal cut, vertical piece count +=1,
+
+Time:O(NlogN + MlogM)
+Space:O(1)
+
+int minimumCostOfBreaking(vector<int>& X, vector<int>& Y, int M, int N){
+        //Write your code here
+        
+        
+        
+        //sort in desc order
+        sort(X.begin(),X.end(), greater<int>());
+        sort(Y.begin(),Y.end(),greater<int>());
+        
+        
+        int i=0,j=0,hz=1,vz=1,cost=0;
+        //initially u have only 1 hz and vz piece
+        
+        //start picking the max costs from X and Y first use merge logic
+        
+        while(i<M && j<N)
+        {
+            if(X[i]>=Y[j])
+            {
+                cost+=X[i]*vz;
+                hz++;
+                i++;
+            }
+            else
+            {
+                cost+=Y[j]*hz;
+                vz++;
+                j++;
+            }
+        }
+        
+        while(i<M )
+        {
+            cost+=X[i]*vz;
+            hz++;
+            i++;
+            
+        }
+        
+        while(j<N)
+        {
+            cost+=Y[j]*hz;
+            vz++;
+            j++;
+            
+        }
+        
+        return cost;
+        
+        
+        
+    }
+};
+
