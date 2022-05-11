@@ -1,0 +1,69 @@
+https://www.youtube.com/watch?v=LjPx4wQaRIs&t=752s
+
+1. We are asked to maximise the profit, if we are given 2 jobs that need to be completed in a single unit of time, we will take the one with higher profit.
+2. Sort in desc order of profit. We will do the job on their last allowed day so that remaining prev days can be used.
+3. Take the max profit job, see its deadline, if that is free perform on that day else the first prev day available.
+4. Keep traversing thru the jobs until all the days have been allocated some tasks.
+
+Time:O(nlog n + n*days) , n -> no of jobs, m->no of days
+Space:O(1)
+
+lass Solution 
+{
+    public:
+    
+    static int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    static bool comp(Job a, Job b)
+    {
+        int profitA=a.profit;
+        int profitB=b.profit;
+        return profitA > profitB;
+    }
+    
+    //Function to find the maximum profit and the number of jobs done.
+    vector<int> JobScheduling(Job arr[], int n) 
+    { 
+        // your code here
+        
+        sort(arr,arr+n,comp);
+        int maxDay=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            maxDay=max(maxDay,arr[i].dead);
+        }
+        
+        vector<int> days(maxDay+1, -1);
+        
+        int jobCount=0, maxProfit=0;
+        
+        for(int i=0;i<n;i++) //take jobs one ny one
+        {
+            int iDead=arr[i].dead;
+            
+            for(int j=iDead;j>=1;j--) //assign them the day when they need to be completed
+            {
+                if(days[j]==-1)
+                {
+                    days[j]=arr[i].id;  //if u are asked to print the job just print the IDs
+                    maxProfit+=arr[i].profit;
+                    jobCount++;
+                    break;
+                }
+            }
+        }
+        
+        vector<int> ans;
+        ans.push_back(jobCount);
+        ans.push_back(maxProfit);
+        return ans;
+        
+    } 
