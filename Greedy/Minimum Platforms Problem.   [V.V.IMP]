@@ -1,0 +1,97 @@
+https://www.youtube.com/watch?v=eiM8LGi4h_g&t=3s
+
+Method 1-
+1. The train that arrives first will be assigned a platform first, so sort in inc order of arrival time.
+2. We use min-heap to get the platform which a train will arrive on a pltform which gets empty first as we need min no of platform. In priority queue, we are storing <dep time, platform no>.
+3. Traverve thru the train sorted in asc order of arrival time from i= 1 to n, if arrival of [i] < dep[prev], assign a new platform.
+
+Time:O(n log n+ nlog n), Space:O(n) 
+
+int findPlatform(int arr[], int dep[], int n)
+    {
+    	// Your code here
+    	vector<vector<int>> sch;
+    	
+    	for(int i=0;i<n;i++)
+    	{
+    	    vector<int> temp;
+    	    temp.push_back(arr[i]);
+    	    temp.push_back(dep[i]);
+    	    sch.push_back(temp);
+    	}
+    	
+    	sort(sch.begin(),sch.end());  //sort in order of arrival time
+    	
+    	priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> p;  //<dep,platform number> min heap
+    	
+    	int count=1;
+    	p.push(make_pair(sch[0][1],count));
+    	
+    	for(int i=1;i<n;i++)
+    	{
+    	    if(sch[i][0]>p.top().first) //arr of next train is after dep of prev just add that
+    	    {
+    	        pair<int,int> curr=p.top();
+    	        p.pop();
+    	        p.push(make_pair(sch[i][1],curr.second));
+    	        
+    	    }
+    	    else
+    	    {
+    	        //if arr of next train is before dep of curr, add another platform
+    	        count++;
+    	        p.push(make_pair(sch[i][1],count));
+    	    }
+    	}
+    	
+    	return count;
+    	
+    	
+    }
+};
+
+Method 2- 
+
+1. We sort both arrival and dep time in inc order.
+2. Logic- a train that arrives first will be assigned platform first, and a train that arrives will search for the platform which first becomes empty (based on dep time)
+3. Use 2 pointer approach, i-> arrival, j->dep, increment i when train arrives, j when train departs.
+
+Time:O(nlog n + n), Space:O(1)
+
+int findPlatform(int arr[], int dep[], int n)
+    {
+    	// Your code here
+    	
+    	if(n==0)
+    	{
+    	    return 0;
+    	}
+    	
+    	if(n==1)
+    	{
+    	    return 1;
+    	}
+    	
+    	sort(arr,arr+n);
+    	sort(dep,dep+n);
+    	
+    	int count=1;
+    	int i=1, j=0;
+    	
+    	while(i<n && j<n)
+    	{
+    	    if(arr[i]>dep[j])
+    	    {
+    	        j++;
+    	        i++;
+    	    }
+    	    else
+    	    {
+    	        count++;
+    	        i++;
+    	    }
+    	}
+    	
+    	return count;
+    }
+};
