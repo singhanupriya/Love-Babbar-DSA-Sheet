@@ -1,7 +1,7 @@
 https://www.youtube.com/watch?v=F3PNsWE6_hM
 
 
-1. Dij is used to find smallest dist of all points from a node with no neg weights and cycle.
+1. Dij is used to find smallest dist of all points from a node with no neg weight cycle.
 2. The idea is find the dist of all node from the start node, craete a viisted array and dist vector which will store dist of all node from start, dist[start node from itself]=0.
 3. Update the dist of all neigh of start in the dist vector. Find the closest node makr it as visisted for every non-visisted node, check if min(curr node dist, node dist from src via the closest node)
 4. We run this (V-1) times bcoz at last only one node is left and it has no neighbours.
