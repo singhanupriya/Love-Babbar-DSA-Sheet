@@ -1,0 +1,82 @@
+Concept - https://www.youtube.com/watch?v=ZVJ3asMoZ18
+Code- https://www.youtube.com/watch?v=jvTa0t3-GQo
+
+Note- DFS is used to find min dist in trees as there is a unique path in case of graph there can be exponential paths, hence, we go for BFS as it has polynomial options
+
+
+1. U have to convert start word into end word by converting one char at a time and return min steps required.
+2. If u imagine the words as node in graph and its edge to those nodes which diff by 1 char, problem statement is find min dist between source and dest where all 
+nodes have same weight -> BFS.
+3. Here u are using unordered_set only for for searching, insertion and deletion in O(1) as in vector its O(n) for searching
+4. Logic- first  push all words in set, check if end word present in set, if not return 0. set ans=0.
+5. Push start into queue, push all its adj nodes to the queue(all words diff by 1 char) and increment ans
+5. When u find the end return ans+1.
+
+Time:O(V+E), Space:O(N)
+
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        
+        queue<string> q;
+        unordered_set<string> s;
+        
+        for(int i=0;i<wordList.size();i++)
+        {
+            s.insert(wordList[i]);
+        }
+        
+        //here set is only used for searching, insertion and deletion in O(1) as in vector its O(n) for searching
+        if(s.find(endWord)==s.end())
+        {
+            return 0;
+        }
+        int wordLen=beginWord.length(); //all words of same length
+        
+        int len=0; //ans
+        
+        q.push(beginWord);
+        
+        while(!q.empty())
+        {
+            len++;
+            int qlen=q.size();
+            
+            //adj nodes, next level of BFS
+            for(int i=0;i<qlen;i++)
+            {
+                string curr=q.front();
+                q.pop();
+                
+                for(int j=0;j<wordLen;j++)
+                {
+                    char a=curr[j];
+                    
+                    //search of words that diff by 1 present in set, if yes, push to queu as per bfs
+                    // replace one char at a time in curr by all chars and see if that is present in the set as words in set diff by 1 char only.
+                    for(char x='a';x<='z';x++)
+                    {
+                        curr[j]=x;
+                        if(curr==endWord)
+                        {
+                            return len+1;
+                        }
+                        if(s.find(curr)==s.end())
+                        {
+                            continue; //move to next value of x
+                        }
+                        
+                        //u come here means the word exists in the set
+                        s.erase(curr);
+                        q.push(curr);
+                    }
+                    curr[j]=a; //turn to orignal word and check for next char in curr
+                }
+                
+                
+            }
+        }
+        
+        return 0; //if u are not able to convert via single char change not possible
+        //ed start=hot, end =dog, ["hot"."dog"]
+    }
+};
