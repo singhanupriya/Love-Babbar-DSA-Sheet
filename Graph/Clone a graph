@@ -1,0 +1,76 @@
+https://www.youtube.com/watch?v=f2EfGComRKM 
+https://leetcode.com/problems/clone-graph/discuss/1792834/C%2B%2B-oror-EASY-EXPLANATION-oror-DFS-oror
+
+1. Edge pointer is not given so u can travse the grph using adj matrix, recursion needed.
+2. As the neigh vector is of type Node*, u need to have a Node* type data structure to keep tracxk of visisted nodes.
+3. Clone the node, store the new node in map, traverse th neighs of origanl node, it they are in the map means already created, so just push this new node in the adj list of clone node
+  else recurse thru the neigh and repeat the process.
+  
+  Time:O(V+E), Space:O(V)
+
+
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+class Solution {
+public:
+    
+    Node* dfs(Node* curr, unordered_map<Node*,Node*>& mp)
+    {
+        vector<Node*> neighbour;
+        Node* clone=new Node(curr->val);
+        mp[curr]=clone; 
+        //node has been created, we are storing node* type as we need to push Node* in neigh vector
+        
+        for(auto it: curr->neighbors)
+        {
+            if(mp.find(it)!=mp.end()) //if the node has already been created just add it to the neigh list
+            {
+                neighbour.push_back(mp[it]);
+            }
+            else
+            {
+                //create a node recursively and push to it neigs
+                neighbour.push_back(dfs(it,mp));
+            }
+        }
+        clone->neighbors=neighbour;
+        return clone;
+    }
+    
+    Node* cloneGraph(Node* node) {
+        
+        if(node==NULL)
+        {
+            return NULL;
+        }
+        if(node->neighbors.size()==0) //single node
+        {
+            Node* clone=new Node(node->val);
+            return clone;
+        }
+        
+        unordered_map<Node*,Node*> mp;
+        
+        return dfs(node,mp);
+        
+        
+    }
+};
