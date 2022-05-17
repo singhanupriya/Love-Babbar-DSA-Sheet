@@ -1,0 +1,79 @@
+https://www.youtube.com/watch?v=wMMwRK-w0r4
+
+1. All words in dict are given in sorted order.
+2. Compare every adj word in dict, find the first diff char as words are sorted word1(ch)---comes before--->word2(ch), this way create an adj matrix of every char in the dict
+3. Once we have the adj matrix, we need to find topological sort to get the correct sequence.
+
+Topological sort using dfs-> recursively do dfs, once u reach the end add that node in vector, output the vector in reverse
+
+Time:O(N*S + K*S) 
+Space:O(K)
+
+class Solution{
+    public:
+    
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    //topological sort using dfs
+    void dfs(vector<vector<int>>& adj, vector<bool>& vis, int node, string& ans)
+    {
+        vis[node]=1;
+        
+        for(int i=0;i<adj[node].size();i++)
+        {
+            if(!vis[adj[node][i]])
+            {
+                dfs(adj,vis,adj[node][i],ans);
+            }
+        }
+        
+        char ch=node + 'a';
+        ans=ch+ans;
+    }
+    
+    string findOrder(string dict[], int N, int K) {
+        //code here
+        
+        vector<vector<int>> adj(K); //adj matrix
+        
+        for(int i=0;i<N-1;i++)
+        {
+            string word1=dict[i];
+            string word2=dict[i+1];
+            
+            for(int j=0;j<min(word1.length(),word2.length());j++)
+            {
+                if(word1[j]!=word2[j])
+                {
+                    //as words as sorted, word1 will come before word2.
+                    //word1[j]->word2[j]
+                    
+                    adj[word1[j]-'a'].push_back(word2[j]-'a');
+                    break;
+                    //as soon as u find the diff char move to the next set of words
+                }
+            }
+        }
+        
+        vector<bool> vis(K,false);
+        string ans="";
+        
+        for(int i=0;i<K;i++)
+        {
+            if(!vis[i])
+            {
+                dfs(adj,vis,i,ans);
+            }
+        }
+        
+        return ans;
+        
+        
+    }
