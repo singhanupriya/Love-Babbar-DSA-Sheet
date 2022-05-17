@@ -1,0 +1,98 @@
+https://www.youtube.com/watch?v=h9M0pQ39ha0&t=886s
+
+1. U need max V colors to color V vertices, create a color array of size V of type bool represnting whether that color is available.
+2. Create an ans array of size V where ans[i]= color used to color vertex i.
+3. ans[0]=0 starting
+4. Traverse thur the remaining vertices from 1 to V-1, 
+  if their neighs are colors marked those colors as nt available, traverse thru the color array and assign the first available color.
+  Reset the color array and move to the next vertex .
+  
+  Time:O(V+E)
+  Space:O(V)
+
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+
+using namespace std;
+
+int max(int a, int b)
+{
+    if(a<=b)
+    {
+        return b;
+    }
+    return a;
+}
+
+int minColor(vector<vector<int>>& adj, int V)
+{
+    vector<bool> color(V,false);  //color used array, u need max V colors to color V vertices
+    vector<int> ans(V,-1);
+    
+    ans[0]=0;
+    
+    for(int i=1;i<V;i++)
+    {
+        for(int j=0;j<adj[i].size();j++) //check neighbors
+        {
+            if(ans[adj[i][j]]!=-1) //neigh colored 
+            {
+                color[ans[adj[i][j]]]=true; //mark that color as used
+            }
+        }
+        
+        for(int j=0;j<V;j++)
+        {
+            if(!color[j])
+            {
+                ans[i]=j;  //use the first available color
+                break;
+            }
+        }
+        
+        //reset the color values
+        for(int j=0;j<V;j++)
+        {
+            color[j]=false;
+        }
+    }
+    
+    //travese through the ans array and return max+-1
+    
+    for(int i=0;i<V;i++)
+    {
+        cout<<ans[i]<<" ";
+    }
+    cout<<"\n";
+    
+    int maxAns=0;
+    for(int i=0;i<V;i++)
+    {
+        maxAns=max(maxAns,ans[i]);
+    }
+    
+    return maxAns+1;
+    
+    
+}
+
+
+int main()
+{
+    vector<vector<int>> adj{{1,2},{0,3,4},{0,3,4},{1,2},{1,2}};
+    int V=5;
+    cout<<minColor(adj,V);
+
+    return 0;
+}
