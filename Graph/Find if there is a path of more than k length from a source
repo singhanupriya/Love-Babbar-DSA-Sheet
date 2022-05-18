@@ -1,0 +1,7 @@
+
+
+1. One important thing to note is, simply doing BFS or DFS and picking the longest edge at every step would not work. 
+  The reason is, a shorter edge can produce longer path due to higher weight edges connected through it.
+2. We will have to check all possible paths from source to every destination -> backtracking
+  
+  
