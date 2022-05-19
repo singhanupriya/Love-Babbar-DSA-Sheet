@@ -1,7 +1,75 @@
-
+https://www.youtube.com/watch?v=oZYMOJHWI9w
 
 1. One important thing to note is, simply doing BFS or DFS and picking the longest edge at every step would not work. 
   The reason is, a shorter edge can produce longer path due to higher weight edges connected through it.
 2. We will have to check all possible paths from source to every destination -> backtracking
+
+Logic
+1. We need to find any path from source with dist >=k, destination can be any node.
+2. We start from source, explore all nodes, if there is a back and its not visited, we move to it, mark soutrcxe as visisted and add its distance.
+3. Base case -> when path sum >=k return true
+
+Time: Worst case-> when every node is connected to evry other node.
+Time complexity ->n * (n-1)*(n-2)*....*1 =n!
+Space:O(N)
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+bool solve(vector<vector<int>>& graph, vector<bool>& vis,int n, int node, int sum,int k)
+{
+    if(sum>=k)  //base case, destination can be any node
+    {
+        return true;
+    }
+    
+    //check for all neigh
+    for(int i=0;i<n;i++)
+    {
+        if(i!=node && !vis[i] && graph[node][i]!=0)
+        {
+            vis[node]=true;
+            if(solve(graph,vis,n,i,sum+graph[node][i],k))
+            {
+                return true;
+            }
+            vis[node]=false;
+        }
+    }
+    
+    return false;
+}
+
+int main()
+{
+    vector<vector<int>> graph { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
+                        { 4, 0, 8, 0, 0, 0, 0, 11, 0 },
+                        { 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+                        { 0, 0, 7, 0, 9, 14, 0, 0, 0 },
+                        { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+                        { 0, 0, 4, 14, 10, 0, 2, 0, 0 },
+                        { 0, 0, 0, 0, 0, 2, 0, 1, 6 },
+                        { 8, 11, 0, 0, 0, 0, 1, 0, 7 },
+                        { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+    
+    int n=9;
+    int src=0;
+    int k=68;
+    vector<bool> vis(n,false);
+    cout<<solve(graph,vis,n,src,0,k);
+
+    return 0;
+}
   
   
