@@ -1,0 +1,141 @@
+https://www.geeksforgeeks.org/m-coloring-problem-backtracking-5/
+
+
+Backtrackibg: https://www.youtube.com/watch?v=wuVwUK25Rfc&t=9s
+
+M1- backtracking
+1. Color every node with every possible color.
+2. Base case when u have colored all node, if not take one node, try all possible color, if possible move to next node.
+
+Time:O(m^n), every node can be colored in m ways
+Space:O(V)
+
+
+bool isPossible(bool graph[101][101], vector<int>& color, int node, int n, int col)
+{
+    //check all neigh node
+    for(int j=0;j<n;j++)
+    {
+        if(node!=j && graph[node][j] && color[j]==col)
+        {
+            return false;
+        }
+    }
+    
+    //after checking all neigh
+    return true;
+}
+
+bool solve(bool graph[101][101], vector<int>& color, int m, int n, int node)
+{
+    //base case
+
+    if(node==n)
+    {
+        return true; //once u are able to color return true, dont try other possibilities
+        //as this gives the least no of colors needed
+        
+    }
+    
+    //if not n, then ret coloring each node with every color
+    for(int i=0;i<m;i++)
+    {
+        if(isPossible(graph,color,node,n,i))
+        {
+            //color with that color
+            color[node]=i;
+            //move to next node
+            if(solve(graph,color,m,n,node+1))
+            {
+                return true;
+            }
+            color[node]=-1; //backtrack
+        }
+    }
+    
+    return false;
+}
+
+bool graphColoring(bool graph[101][101], int m, int n) {
+    // your code here
+    
+    vector<int> color(n,-1);
+    if(solve(graph,color,m,n,0))
+    {
+        return true;
+    }
+    return false;
+}
+
+
+M2- BFS (All test cases not passed)
+
+1. Color all nodes with 0.
+2. Travserse thru the nodes, push the node in queue, if it has same colors as neigh, increment the color of neigh, if !vis(neigh) push in queu
+
+Time:O(V+E)
+Space:O(V)
+
+bool graphColoring(bool graph[101][101], int m, int n) {
+    // your code here
+    
+    vector<bool> vis(n,false);
+    vector<int> color(n,0); //initially color all nodes with 0
+    
+    //as we need to color each node, we traverse thru the nodes
+    for(int i=0;i<n;i++)
+    {
+        if(vis[i])
+        {
+            continue; //if visisted move to next
+        }
+        
+        queue<int> q;
+        vis[i]=true;
+        q.push(i);
+        
+        while(!q.empty())
+        {
+            int curr=q.front();
+            q.pop();
+            
+            //check the neigh
+            for(int j=0;j<n;j++)
+            {
+                if(j!=curr && graph[curr][j]) //means neight
+                {
+                    if(color[j]==color[curr])
+                    {
+                        color[j]++; //inc the color of neigh
+                    }
+                    
+                    if(!vis[j])
+                    {
+                        q.push(j);
+                        vis[j]=true;
+                    }
+                }
+                
+                
+            }
+        }
+        
+        
+    }
+    
+    
+    int maxColor=0;
+    for(int i=0;i<n;i++)
+    {
+        maxColor=max(maxColor,color[i]);
+    }
+    
+    if(maxColor+1<=m)
+    {
+        return true;
+    }
+    
+    return false;
+    
+    
+}
