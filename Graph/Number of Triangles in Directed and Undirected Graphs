@@ -1,0 +1,82 @@
+https://www.youtube.com/watch?v=2Fb0kPngzMw
+
+1. To create a triangle u need 3 nodes,take every combination of three nodes i,j,k in the graph and check if there exists an edge between i-j, j-k, k-i.
+2. If yes, count++.
+3. In case of directed graph 1->2->3, u can have three triangles for same set of nodes-> (1,2,3), (2,3,1),(3,1,2)
+                             |_____|
+4. In case of undirected graph, u have 6 triangles for same set of nodes 1--2--3, (1,2,3),(1,3,2),(2,1,3),(2,3,1),(3,1,2),(3,2,1)
+                                                                         |_____|
+5. If graph is directed, return count/3 if undirected return count/6.
+
+Time:O(V^3)
+
+#include <iostream>
+#include<vector>
+#include<set>
+#include<climits>
+
+using namespace std;
+
+
+bool isUnDirected(vector<vector<int>>& graph, int V)
+{
+    
+    //if for every edge i->j, there is an egde j->i, undirected
+    
+    for(int i=0;i<V;i++)
+    {
+        for(int j=0;j<V;j++)
+        {
+            if(i!=j && graph[i][j]!=graph[j][i])
+            {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+int countTriangle(vector<vector<int>>& graph, int V)
+{
+    int count=0;
+    
+    for(int i=0;i<V;i++)
+    {
+        for(int j=0;j<V;j++)
+        {
+            for(int k=0;k<V;k++)
+            {
+                if(graph[i][j] && graph[j][k] && graph[k][i])
+                {
+                    count++;
+                }
+            }
+        }
+    }
+    
+    //cout<<count;
+    
+    bool isUnDir=isUnDirected(graph,V);
+    if(isUnDir)
+    {
+        return count/6;
+    }
+    
+    return count/3;
+}
+
+int main()
+{
+    vector<vector<int>> graph{ {0, 1, 1, 0},
+                       {1, 0, 1, 1},
+                       {1, 1, 0, 1},
+                       {0, 1, 1, 0}
+                     };
+                     
+    int V=4;
+    
+    cout<<countTriangle(graph,V);
+
+    return 0;
+}
