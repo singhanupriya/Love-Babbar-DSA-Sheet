@@ -1,0 +1,89 @@
+https://www.youtube.com/watch?v=porShXfpPqA
+
+
+1. This is an application of Dijkstra's algorithm. We need to find Minimum edges to reverse to make path from a source to a destination.
+2. If we take weight of every edge to be 0 and create a reverse edge for every edge present and give it value 1, we need to find shortest distance between
+   source and dest, eg if shortest dist is 2 means there are 2 reverse nodes in between.
+3. We cannot use BFS to find shortest path as all edges do not have equal weight.
+4. Add extra reverse edges for existing edges, assign them value 1, use dijkstra to find min dist between source and dest.
+
+Time:O(ElogV), Space:O(V);
+
+
+#include <iostream>
+#include<vector>
+#include<set>
+#include<climits>
+
+using namespace std;
+
+int dijkstra(vector<vector<int>>& graph,vector<int>& dist, vector<bool>& vis, int src ,int dest, int V)
+{
+    set<pair<int,int>> s; //<dist,node>
+    dist[src]=0;
+    
+    s.insert(make_pair(0,src));
+    
+    while(!s.empty())
+    {
+        auto it=*(s.begin());
+        s.erase(it);
+        
+        int node=it.second;
+        int nodeDistance=it.first;
+        
+        vis[node]=true;
+        
+        for(int i=0;i<V;i++)
+        {
+            auto it1=s.find(make_pair(dist[i],i));
+            
+            if(!vis[i] && i!=node && graph[node][i]!=INT_MAX && dist[i]>dist[node]+graph[node][i])
+            {
+                if(it1!=s.end())
+                {
+                    s.erase(it1);
+                    
+                }
+                
+                dist[i]=dist[node]+graph[node][i];
+                s.insert(make_pair(dist[i],i));
+            }
+        }
+    }
+    
+    if(dist[dest]==INT_MAX)
+    {
+        return -1;
+    }
+    
+    return dist[dest];
+    
+    
+}
+
+int main()
+{
+    int V = 7;
+    vector<vector<int>> graph(V,vector<int>(V,INT_MAX));
+ 
+    int edge[][2] = {{0, 1}, {2, 1}, {2, 3}, {5, 1}, {4, 5}, {6, 4}, {6, 3}};
+    int E = sizeof(edge) / sizeof(edge[0]);
+    
+    for(int i=0;i<E;i++)
+    {
+        int u=edge[i][0];
+        int v=edge[i][1];
+        graph[u][v]=0;
+        graph[v][u]=1;
+    }
+    
+    vector<bool> vis(V,false);
+    vector<int> dist(V,INT_MAX);
+    int dest=6;
+    int src=0;
+    
+    cout<<dijkstra(graph,dist, vis, src ,dest, V);
+
+    return 0;
+}
