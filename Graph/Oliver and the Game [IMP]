@@ -1,0 +1,95 @@
+https://www.youtube.com/watch?v=5h1JYjin_4o
+https://www.hackerearth.com/practice/algorithms/graphs/topological-sort/practice-problems/algorithm/oliver-and-the-game-3/
+
+1. Bob can find Oliver only when oliver's position (X) is in Bob's path Y.
+2. If bob moves towards the mansion, Y must be in subtee of X.
+3. If bob moves away from mansion, X must be in subtree of Y.
+4. Use Euler tour and find intime and outtime of every node using DFS. Keep doing timer++ as u keep visiting nodes in DFS.
+5. For X to be in subtree of Y, in[X]>in[Y] && out[Y]>out[Y]
+
+Time:O(V+E), Space:O(V)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+void dfs(vector<int> adj[], vector<bool>& vis,int V, int node, vector<int>& in, vector<int>& out, int& timer)
+{
+    vis[node]=true;
+    in[node]=timer++;
+    
+    for(int i=0;i<adj[node].size();i++)
+    {
+        if(!vis[adj[node][i]])
+        {
+            dfs(adj,vis,V,adj[node][i],in,out,timer);
+        }
+    }
+    out[node]=timer++;
+}
+
+int main()
+{
+    int V=9;
+    vector<vector<int>> edges{{1,2},{1,3},{2,6},{2,7},{6,9},{7,8},{3,4},{3,5}};
+    
+    
+    vector<int> adj[V+1];  //as nodes are numbers from 1 to 9.
+    
+    
+    for(int i=0;i<edges.size();i++)
+    {
+        int u=edges[i][0];
+        int v=edges[i][1];
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+    
+    
+    vector<bool> vis(V+1,false);
+    vector<int> in(V+1,-1);
+    vector<int> out(V+1,-1);
+    int timer=0;
+    dfs(adj,vis,V,1,in,out,timer);
+    
+    
+    int t;
+    cout<<"Enter the number of queries ";
+    cin>>t;
+    
+    for(int i=0;i<t;i++)
+    {
+        int way,X,Y;
+        cin>>way>>X>>Y;
+        
+        if(way==0)
+        {
+            //Y should be in subtree of X
+            if(in[Y]>in[X] && out[X]>out[Y])
+            {
+                cout<<"YES\n";
+            }
+            else
+            {
+                cout<<"NO\n";
+            }
+        }
+        else if(way==1)
+        {
+            //X should be in subtree of Y
+            if(in[X]>in[Y] && out[Y]>out[X])
+            {
+                cout<<"YES\n";
+            }
+            else
+            {
+                cout<<"NO\n";
+            }
+        }
+    }
+    
+
+    return 0;
+}
