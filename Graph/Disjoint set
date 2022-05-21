@@ -1,0 +1,106 @@
+Disjoint set: https://www.youtube.com/watch?v=3gbO7FDYNFQ&t=81
+
+1. Used to find if nodes in the graph belong to one component ot different component.
+2. It has two fns 
+    a) findParent()->find parents of a node
+    b)union(a,b) -> combines the component to which 'a' belongs and the component to which 'b' belongs togther. They will have the same parent.
+    All nodes belonging to the same component has same parent.
+ 
+ Implementation:
+ 1. A parent array which contains the parent of each node. Initially every node it is parent.
+ 2. Rank arry, node with lower rank (A) connects to the node with higher rank (B) A->B, rank(B)>rank(A). This is done to reduce the depth of the tree in 
+    order to reduce the complexity.
+ 3. When u combine, 2 similar rank guys any of them can connect to each other, increase the rank of the node to which the other one connects as the height 
+    increases by 1.
+ 4. If u are combining 2 nodes with diff ranks no need to increment the rank. Height of the tree remains the same.
+ 
+ Time of union operation-O(1), space:O(N)
+ 
+ 
+ /******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+//In the parent array, we are storing the ultimate parent ,doing path compression.
+// 7->6->4, p[7]=6, p[6]=4 instead directly p[7]=4.
+int findParent(int node,vector<int>& parent)
+{
+    if(node==parent[node])
+    {
+        return node;
+    }
+    return parent[node]=findParent(parent[node],parent); //path compress
+}
+
+//here we compares the rank of ultimate parents and make connections to the ultimate parent
+void unionNodes(int u, int v, vector<int>& rank, vector<int>& parent)
+{
+    u=findParent(u,parent);
+    v=findParent(v,parent);
+    
+    //if they have the same parent, already in same component
+    if(u==v)
+    {
+        return;
+    }
+    
+    if(rank[u]<rank[v])
+    {
+        parent[u]=v;
+    }
+    else if(rank[u]>rank[v])
+    {
+        parent[v]=u;
+    }
+    else
+    {
+        parent[v]=u;
+        rank[u]++;
+        
+    }
+    
+}
+
+int main()
+{
+    int V=7;
+    vector<int> parent(V,-1);
+    vector<int> rank(V,0);
+    
+    for(int i=0;i<V;i++)
+    {
+        parent[i]=i;
+    }
+    
+    unionNodes(0,1,rank,parent);
+    unionNodes(1,2,rank,parent);
+    unionNodes(3,4,rank,parent);
+    unionNodes(5,6,rank,parent);
+    unionNodes(4,5,rank,parent);
+    unionNodes(2,6,rank,parent);
+    
+    for(int i=0;i<V;i++)
+    {
+        cout<<"Parent of "<<i<<" is "<<parent[i]<<"\n";
+    }
+    
+    if(findParent(3,parent)==findParent(7,parent))
+    {
+        cout<<"Same component\n";
+    }
+    else
+    {
+        cout<<"Different component\n";
+    }
+
+    return 0;
+}
