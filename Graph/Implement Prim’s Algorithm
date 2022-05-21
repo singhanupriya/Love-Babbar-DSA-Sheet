@@ -1,0 +1,103 @@
+https://www.youtube.com/watch?v=HnD676J56ak
+
+Pending -> Using min heap, O(ElogV)
+
+MST explanation: https://www.youtube.com/watch?v=xsM8i0jVF1w
+
+What is MST?
+1. If u can convert a graph of N nodes into a tree of N nodes and (N-1) edges such that every node is reachable by every other node, it is called ST.
+2. Among all the STs, the ST which has the minimum cost of edges is called MST.
+
+Prim's logic:
+1. Take a node and among all its edges, select the edge with minimum cost and add it.
+2. Now u have two nodes, among all unused edges connected to these two nodes, find the smallest edge with minimum cost and add it.
+3. Now u have 3 nodes, among all unused edges connected to these 3 nodes, find the smallest edge with minimum cost and add it.
+4. So on until all nodes are visited.
+
+M1- Using 2D graph
+
+1. Keep a key vector(N,INT_MAX), MST vector(N, false), parent vector(N,-1)
+2. Initially key[0]=0.
+3. Iterate from 0 to V:
+    3a. Find min key index which has not been visisted in MST.
+    3b. Select its min weight edge that that has not been visited and update parent.
+    
+ Time:O(V^2), Space:O(V)
+
+#include <iostream>
+#include<vector>
+#include<climits>
+
+using namespace std;
+
+int minKey(vector<int>& key, vector<bool>& MST, int V)
+{
+    int minNode=-1;
+    int minValue=INT_MAX;
+    
+    for(int i=0;i<V;i++)
+    {
+        if(key[i]!=INT_MAX && MST[i]==false && minValue>key[i])
+        {
+            minValue=key[i];
+            minNode=i;
+        }
+    }
+    return minNode;
+}
+
+int prim(vector<vector<int>> graph, int V)
+{
+    vector<int> key(V,INT_MAX);
+    vector<bool> MST(V,false);
+    vector<int> parent(V,-1);
+    
+    key[0]=0;
+    
+    for(int i=0;i<V;i++)
+    {
+        int node=minKey(key, MST,V);
+        
+        MST[node]=true;
+        
+        //check all its edges
+        for(int j=0;j<V;j++)
+        {
+            if(graph[i][j] && MST[j]==false && key[j]>graph[i][j])
+            {
+                key[j]=graph[i][j];
+                parent[j]=i;
+            }
+        }
+        
+    }
+    
+    //print sum
+    int minCost=0;
+    for(int i=1;i<V;i++)
+    {
+        minCost+=graph[i][parent[i]];
+        cout<<i<<" to "<<parent[i]<<" edge cost "<<graph[i][parent[i]]<<"\n";
+        //cout<<minCost<<"\n";
+    }
+    
+    
+    
+    
+    return minCost;
+}
+
+int main()
+{
+    vector<vector<int>> graph { { 0, 2, 0, 6, 0 },
+                        { 2, 0, 3, 8, 5 },
+                        { 0, 3, 0, 0, 7 },
+                        { 6, 8, 0, 0, 9 },
+                        { 0, 5, 7, 9, 0 } };
+    
+    int V=5;
+    
+    cout<<prim(graph,V);
+
+    return 0;
+}
