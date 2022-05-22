@@ -1,0 +1,127 @@
+https://www.youtube.com/watch?v=uC884ske2uQ&list=PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw&index=11
+
+1. A bipartite graph is possible if the graph coloring is possible using two colors such that vertices in a set are colored with the same color.
+2. Graph with odd cycle is not bipartite, graph will no odd cycle is bipartite.
+
+M1-BFS
+
+1. Create a color array of size V all -1 initially. Takes color 0/1.
+2. Push the starting node in queue color with with 0, color[node]=0.
+3. Check its neigh, if color[nei]==-1, color[nei]=1-color[node] as opposite color.
+                    else if neigh already colored color[nei]==color[node] return false.
+ Note: Graph can be of diff components so run this for all nodes that have not been visited.
+ 
+ Time:O(V+E), Space:O(V+E)
+
+
+ bool bfs(int V, vector<int>adj[], vector<int>& color,int src)
+    {
+        
+        queue<int> q;
+        
+        q.push(src);
+        color[0]=0;
+        while(!q.empty())
+        {
+            int curr=q.front();
+            q.pop();
+            
+            //check the neg if it has already been colored check its not 
+            //same at its color, if not colored color with opp color
+            
+            for(int i=0;i<adj[curr].size();i++)
+            {
+                if(color[adj[curr][i]]==-1)
+                {
+                    color[adj[curr][i]]=1-color[curr];
+                    q.push(adj[curr][i]);
+                }
+                else
+                {
+                    if(color[adj[curr][i]]==color[curr])
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+	bool isBipartite(int V, vector<int>adj[]){
+	    // Code here
+	    
+	    vector<int> color(V,-1);
+	    
+	    //u can have diff components also so u have to check for all nodes
+	    for(int i=0;i<V;i++)
+	    {
+	        if(color[i]==-1)
+	        {
+	            if(!bfs(V,adj,color,i))
+	            {
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;;
+	    
+	}
+
+
+M2- DFS
+
+ Time:O(V+E), Space:O(V+E)
+
+ bool dfs(int V, vector<int>adj[], vector<int>& color,int node)
+    {
+        if(color[node]==-1)
+        {
+            color[node]=0;
+        }
+        
+        for(int i=0;i<adj[node].size();i++)
+        {
+            if(color[adj[node][i]]==-1)
+            {
+                color[adj[node][i]]=1-color[node];
+                if(!dfs(V,adj,color,adj[node][i]))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if(color[adj[node][i]]==color[node])
+                {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+        
+    }
+    
+	bool isBipartite(int V, vector<int>adj[]){
+	    // Code here
+	    
+	    vector<int> color(V,-1);
+	    
+	    //u can have diff components also so u have to check for all nodes
+	    for(int i=0;i<V;i++)
+	    {
+	        if(color[i]==-1)
+	        {
+	            if(!dfs(V,adj,color,i))
+	            {
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;;
+	    
+	}
