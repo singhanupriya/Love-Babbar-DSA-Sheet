@@ -1,0 +1,105 @@
+https://www.youtube.com/watch?v=cA8-mdRJuCI&t=175s
+
+We need to find if a graph can be divided into two components such that all vertices in each component are connected to very other vertice in that component.
+
+
+1. Find the complement of the graph. Eg- 0 to 4 vertices, adj[0]={1,2} in the complement graph adj[0]={3,4}
+2. If the complement graph is bipartite, it can be divided into two cliques.
+Logic- If the complement graph can be divided into 2 sets U and V, such that there is no edge between any nodes in V and U rspy then in the orignal graph,
+all nodes in U and V are connected.
+
+
+Time:O(V^2 + V+E)=O(V^2) -> to create complement graph and BFS
+Space:O(V^2)
+
+https://www.geeksforgeeks.org/two-clique-problem-check-graph-can-divided-two-cliques/
+
+
+#include <iostream>
+#include<vector>
+#include<queue>
+
+using namespace std;
+
+void complementGraph(vector<vector<int>>& graph, vector<vector<int>>& compGraph,int V)
+{
+    
+    
+    for(int i=0;i<V;i++)
+    {
+        for(int j=0;j<V;j++)
+        {
+            if(i!=j)
+            {
+                compGraph[i][j]=1-graph[i][j];
+            }
+        }
+    }
+    
+    
+}
+
+bool bipartite(vector<vector<int>>& compGraph,int V)
+{
+    vector<int> color(V,-1);
+    
+    queue<int> q;
+    q.push(0);
+    color[0]=0;
+    
+    while(!q.empty())
+    {
+        int curr=q.front();
+        q.pop();
+        
+        for(int i=0;i<V;i++)
+        {
+            if(compGraph[curr][i])
+            {
+                if(color[i]==-1)
+                {
+                    color[i]=1-color[curr];
+                }
+                else
+                {
+                    if(color[i]==color[curr])
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    
+    return true;
+}
+
+int main()
+{
+    vector<vector<int>> graph{{0, 1, 1, 0, 0},
+                  {1, 0, 1, 1, 0},
+                  {1, 1, 0, 0, 0},
+                  {0, 1, 0, 0, 1},
+                  {0, 0, 0, 1, 0}};
+    
+    int V=5;
+    vector<vector<int>> compGraph(V,vector<int>(V,0));
+    complementGraph(graph,compGraph,V);
+    
+    /*
+    for(int i=0;i<V;i++)
+    {
+        for(int j=0;j<V;j++)
+        {
+            cout<<compGraph[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+    */
+    
+    
+    cout<<bipartite(compGraph,V);
+    
+
+    return 0;
+}
