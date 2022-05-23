@@ -1,0 +1,122 @@
+https://www.youtube.com/watch?v=WY6Jsp3NxIk
+
+Walk-> Any random traversal where any V or E can be repeated any number of times.
+
+Trail-> A walk in which no edge is repeated (V can be repeated or V can be unvisited)
+
+Euler circuit-> A trail which starts and end at the same vertex. Every edge must be visited only once.
+Euler graph-> which contains a euler circuit.
+
+Conditions for euler graph-
+1.Start node=End node(traversal)
+2. All edges must be visited exactly once
+3. All vertices should have even degree as all nodes will be acting as a medium with incoming and outgoing edge.
+4. All vertices with non-zero degree are connected in a component. Rest all vertices must have 0 degrees.
+Note- graph with no edge is a euler graph
+
+Algo
+1.Check if all edges present in one component only. After DFS, check if any unvisited node with degree >0. 
+2. Check degree of every node , use adj list.
+Coount odd degree nodes:
+count=0, eulerian circuit
+count=2, semi-euler (every edge visited only once but start and end is not same vertex)
+count>2, not euler
+
+Time:O(V+E), Space:O(V)
+         
+         
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+void calculateDegree(vector<int> adj[], int V,vector<int>& degree)
+{
+    
+    for(int i=0;i<V;i++)
+    {
+        for(int j=0;j<adj[i].size();j++)
+        {
+            degree[i]++;
+        }
+    }
+}
+
+void dfs(vector<int> adj[], int V, int node,vector<bool>& vis,vector<int>& path)
+{
+    vis[node]=true;
+    path.push_back(node);
+    
+    for(int i=0;i<adj[node].size();i++)
+    {
+        if(!vis[adj[node][i]])
+        {
+            dfs(adj,V,adj[node][i],vis,path);
+        }
+    }
+}
+
+int main()
+{
+    int V=4;
+    vector<int> adj[V]{
+        {1,2},
+        {0,2},
+        {0,1,2},
+        {2}
+    };
+    
+    vector<int> degree(V,0);
+    vector<bool> vis(V,false);
+    calculateDegree(adj,V,degree);
+    vector<int> path;
+    for(int i=0;i<V;i++)
+    {
+        if(!vis[i])
+        {
+            dfs(adj,V,i,vis, path);
+        }
+        
+    }
+    
+    //if edge not present in single component
+    for(int i=0;i<V;i++)
+    {
+        if(!vis[i] && degree[i]>0)
+        {
+            cout<<"Not Euler\n";
+            return -1;
+        }
+    }
+    
+    int countOdd=0;
+    
+    for(int i=0;i<V;i++)
+    {
+        if(degree[i]%2!=0)
+        {
+            countOdd++;
+        }
+    }
+    
+    if(countOdd==0)
+    {
+        cout<<"Euler graph\n";
+        return 1;
+    }
+    else if(countOdd==2)
+    {
+        cout<<"Semi-Euler graph\nThe path is ";
+        for(int i=0;i<path.size();i++)
+        {
+            cout<<path[i]<<" ";
+        }
+        return 2;
+    }
+    
+    
+    
+
+    return 0;
+}
