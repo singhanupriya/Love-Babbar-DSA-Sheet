@@ -1,0 +1,89 @@
+https://www.youtube.com/watch?v=IQOG3w4abAg
+
+This is a bit modified dijkstra algo.
+
+1. IN the dijkstra, in set, if the node is already present, we erase it and add the updated value.
+2. Here since we want to compare all possible costs of reaching the dest, if one distance of dest is already, we dont pop it, we add another one.
+3. Once the dest if at the start of the set and we have to pop it, it will be marked as visited and that will be the ans.
+4. As we have to have max K stops means (K+1) edges, so if we need a node that is already reached by (K+1) edges, we do not check its neigh as they will be > K+1
+
+Time:O(E + ElogV) -> create adj matrix + dijkstra
+Space:O(V)
+
+public:
+    
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        
+        vector<bool> vis(n,false);
+        //vector<int> dist(n,INT_MAX);
+        set<pair<int,pair<int,int>>> s;
+        //{dist,{node,edges}}
+        
+        //we can use adj matrix adj[0]={{1,100}}
+        //adj[1]={{100,2},{600,3}};
+        //adj[src]={{cost,neigh}}
+        
+        vector<vector<pair<int,int>>> adj(n);
+        for(int i=0;i<flights.size();i++)
+        {
+            int u=flights[i][0];
+            int v=flights[i][1];
+            int wt=flights[i][2];
+            
+            adj[u].push_back(make_pair(wt,v));
+        }
+        
+        //dist[src]=0;
+        s.insert(make_pair(0,make_pair(src,0)));
+        
+        while(!s.empty())
+        {
+            auto it=*(s.begin());
+            int nodeCost=it.first;
+            int node=it.second.first;
+            int edges=it.second.second;
+            
+            s.erase(it); //visited
+            
+            vis[node]=true;
+            
+            if(node==dst)
+            {
+                return nodeCost;
+            }
+            
+            if(edges>=k+1)
+            {
+                continue; 
+                // K stops can have (K+1)edges, if no of edges are already
+                //K+1 and we havent reached dest, all its neigh will have >K+1 edges
+                //which will be more than K stops so dont check their neigh
+            }
+            
+            //check for all neigh
+            for(int i=0;i<adj[node].size();i++)
+            {
+                pair<int,int> temp=adj[node][i];
+                int cost=temp.first;
+                int v=temp.second;
+                
+                //dist[v]=min(dist[v],dist[node]+cost);
+                    s.insert(make_pair(nodeCost+cost,make_pair(v,edges+1)));
+                
+            }
+            
+        }
+        
+        return -1;
+        
+    }
+};
