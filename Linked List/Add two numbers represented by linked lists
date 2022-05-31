@@ -140,3 +140,144 @@ class Solution
         
     }
 };
+
+
+Using recursion:
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+struct Node{
+    int data;
+    Node* next;
+    
+    
+    Node(int value)
+    {
+        data=value;
+        next=nullptr;
+        
+    }
+    
+};
+
+Node* addSame(Node* head1, Node* head2, int& carry)
+{
+    if(!head1)
+    {
+        return nullptr;
+    }
+    
+    int value;
+    Node* newHead=new Node(-1);
+    newHead->next=addSame(head1->next,head2->next,carry);
+    value=head1->data + head2->data + carry;
+    
+    
+    carry=value/10;
+    value=value%10;
+    
+    
+    
+    
+    newHead->data = value;
+    return newHead;
+}
+
+Node* add(Node* head1, Node* head2)
+{
+    if(!head1 && !head2)
+    {
+        return nullptr;
+    }
+    
+    if(!head1)
+    {
+        return head2;
+    }
+    
+    if(!head2)
+    {
+        return head1;
+    }
+    
+    int carry=0;
+    Node* newHead=addSame(head1,head2,carry);
+    
+    if(carry>0)
+    {
+        Node* start=new Node(carry);
+        start->next=newHead;
+        return start;
+    }
+    
+    return newHead;
+}
+
+
+void print(Node* head)
+{
+    Node* p=head;
+    while(p)
+    {
+        cout<<p->data<<" ";
+        p=p->next;
+    }
+    
+    cout<<"\n";
+}
+
+int main()
+{
+    Node* head1=new Node(9);
+    Node* second=new Node(2);
+    Node* third=new Node(3);
+    
+    
+    Node* head2=new Node(4);
+    Node* five=new Node(5);
+    Node* six=new Node(8);
+    
+    
+    head1->next=second;
+    
+    second->next=third;
+    
+    
+    
+    
+    
+    head2->next=five;
+    
+    
+    five->next=six;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    print(head1);
+    print(head2);
+    
+    Node* newHead=add(head1,head2);
+    print(newHead);
+    
+    
+    
+    
+
+    return 0;
+}
