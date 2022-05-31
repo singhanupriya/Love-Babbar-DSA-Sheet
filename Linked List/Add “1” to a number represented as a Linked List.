@@ -61,3 +61,55 @@ class Solution
         return final;
     }
 };
+
+
+Recursion:
+
+Node* sum(Node* head, int& carry)
+    {
+        
+        
+        if(!head->next)
+        {
+            int value=head->data+1;
+            carry=value/10;
+            value=value%10;
+            head->data=value;
+            return head;
+        }
+        
+        head->next=sum(head->next,carry);
+        int value=head->data + carry;
+        
+        carry=value/10;
+        value=value%10;
+        
+        head->data=value;
+        return head;
+        
+    }
+    
+    
+    Node* addOne(Node *head) 
+    {
+        // Your Code here
+        // return head of list after adding one
+        
+        
+        if(!head)
+        {
+            return nullptr;
+        }
+        
+        int carry=0;
+        Node* newHead=sum(head,carry);
+        if(carry>0)
+        {
+            Node* start=new Node(carry);
+            start->next=newHead;
+            return start;
+        }
+        
+        return newHead;
+        
+    }
