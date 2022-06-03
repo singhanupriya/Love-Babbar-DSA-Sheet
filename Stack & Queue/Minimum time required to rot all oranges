@@ -1,0 +1,91 @@
+https://www.geeksforgeeks.org/minimum-time-required-so-that-all-oranges-become-rotten/
+
+1. Since,we need to find min time we can use BFS.
+2. Timer is increased only when a fresh apple is rotten.
+3. At the beggining of each cycle, assume nothing rotten if 1->2 increase timer.
+
+Time:O(M*N), Space:O(M*N)
+
+int orangesRotting(vector<vector<int>>& grid) {
+        // Code here
+        
+        int rows=grid.size();
+        int cols=grid[0].size();
+        
+        queue<pair<int,int>> q;
+        
+        
+        //vector<vector<bool>> vis(rows,vector<bool>(cols,false));
+        
+        for(int i=0;i<rows;i++)
+        {
+            for(int j=0;j<cols;j++)
+            {
+                if(grid[i][j]==2)
+                {
+                    q.push(make_pair(i,j));
+                    //vis[i][j]=true;
+                }
+                
+            }
+        }
+        
+        //time is to be increased only when a new apple is rotten.
+        
+        int dirx[]={0,1,0,-1};
+        int diry[]={1,0,-1,0};
+        int timeReq=0;
+        
+        while(!q.empty() )
+        {
+            //timeReq++;
+            bool flagOnePresent=false;  //indicate no new orange rotten
+            int len=q.size();
+            for(int i=0;i<len;i++)
+            {
+                pair<int,int> qFront=q.front();
+                int x=qFront.first;
+                int y=qFront.second;
+                q.pop();
+                
+                for(int k=0;k<4;k++)
+                {
+                    if(x+dirx[k]>=0 && x+dirx[k]<rows && y+diry[k]>=0 && y+diry[k]<cols )
+                    {
+                        if(grid[x+dirx[k]][y+diry[k]]==1)
+                        {
+                            if(flagOnePresent==false)
+                            {
+                                timeReq++;
+                            }
+                            flagOnePresent=true;
+                            //timeReq++;
+                            grid[x+dirx[k]][y+diry[k]]=2;
+                            q.push(make_pair(x+dirx[k],y+diry[k]));
+                            //vis[x+dirx[k]][y+diry[k]]=true;
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+        
+        for(int i=0;i<rows;i++)
+        {
+            for(int j=0;j<cols;j++)
+            {
+                if(grid[i][j]==1)
+                {
+                    return -1;
+                }
+            }
+        }
+        
+        
+        return timeReq;
+        
+        
+        
+        
+    }
