@@ -1,0 +1,55 @@
+https://www.geeksforgeeks.org/distance-nearest-cell-1-binary-matrix/
+
+1. USe BFS as we need to find min dist from cell with value 1.
+2. Add (x,y) of cells with value 1 in queue.
+3. Move in 4 directions add increment the distnace. dist[neigh]=1+dist[q.front]
+
+Time:O(M*N), Space:O(M*n)
+
+vector<vector<int>>nearest(vector<vector<int>>grid)
+	{
+	    // Code here
+	    
+	    int rows=grid.size();
+	    int cols=grid[0].size();
+	    vector<vector<int>> result(rows,vector<int>(cols,INT_MAX));
+	    
+	    queue<pair<int,int>> q;
+	    
+	    //find all 1s and insert in queue, traverse 4 directions and increase distance
+	    
+	    for(int i=0;i<rows;i++)
+	    {
+	        for(int j=0;j<cols;j++)
+	        {
+	            if(grid[i][j]==1)
+	            {
+	                result[i][j]=0;
+	                q.push(make_pair(i,j));
+	            }
+	        }
+	    }
+	    
+	    int dirx[]={0,1,0,-1};
+	    int diry[]={1,0,-1,0};
+	    
+	    while(!q.empty())
+	    {
+	        pair<int,int> qFront=q.front();
+	        int x=qFront.first;
+	        int y=qFront.second;
+	        q.pop();
+	        
+	        for(int k=0;k<4;k++)
+	        {
+	            if(x+dirx[k]>=0 && x+dirx[k]<rows && y+diry[k]>=0 && y+diry[k]<cols && grid[x+dirx[k]][y+diry[k]]==0 && result[x+dirx[k]][y+diry[k]]==INT_MAX)
+	            {
+	                result[x+dirx[k]][y+diry[k]]=result[x][y]+1;
+	                q.push(make_pair(x+dirx[k],y+diry[k]));
+	            }
+	        }
+	    }
+	    
+	    return result;
+	    
+	}
