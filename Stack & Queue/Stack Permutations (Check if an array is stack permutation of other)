@@ -1,0 +1,33 @@
+
+
+1. U need to convert input array to output array using stack.
+2. Travserse the input array, unless u find the first element of output array in the input array keep puhsing to stack.
+3. If u found, pop() and increment counter of output array. keep doing
+4, At the end. if stack is empty possible else no
+
+Time:O(N), Space:O(N)
+
+
+int isStackPermutation(int N,vector<int> &A,vector<int> &B){
+        
+        stack<int> s;
+        int bCounter=0;
+        
+        for(int i=0;i<N;i++)
+        {
+            s.push(A[i]);
+            
+            while(!s.empty() && B[bCounter]==s.top())
+            {
+                s.pop();
+                bCounter++;
+            }
+        }
+        
+        if(s.empty())
+        {
+            return 1;
+        }
+        return 0;
+        
+    }
