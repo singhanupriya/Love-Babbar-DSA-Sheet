@@ -73,3 +73,45 @@ int main()
 	
 	return 0;
 }
+
+
+Method 2-
+
+vector<int> max_of_subarrays(vector<int> nums, int n, int k) {
+        // your code here
+        
+        deque<int> q;
+        
+        vector<int> result;
+        
+        for(int i=0;i<k;i++)
+        {
+            while(!q.empty() && q.back()<nums[i])
+            {
+                q.pop_back();
+            }
+            q.push_back(nums[i]);
+        }
+        
+        int i=0,j=k-1;
+        
+        while(j<nums.size())
+        {
+            result.push_back(q.front());
+            
+            if(!q.empty() && q.front()==nums[i])
+            {
+                q.pop_front();
+            }
+            i++;
+            j++;
+            while(!q.empty() && q.back()<nums[j])
+            {
+                q.pop_back();
+            }
+            q.push_back(nums[j]);
+            
+        }
+        //result.push_back(q.front());
+        return result;
+    }
