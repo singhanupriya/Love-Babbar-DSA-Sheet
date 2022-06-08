@@ -1,0 +1,56 @@
+https://www.geeksforgeeks.org/check-if-a-given-binary-tree-is-heap/
+
+1. All levels should be full except last level, last level should follow left to right rule.
+2. Parent value> child value
+
+1. Do level order traversal, if left exists check nodes before it are not empty and its value < parent, else return false.
+
+Time:O(N), Space:O(N)
+
+
+bool isHeap(struct Node* tree) {
+        // code here
+        
+        queue<Node*> q;
+        q.push(tree);
+        
+        //level order traversal
+        bool notComplete=false; //means last level doesnt follow left to right prder
+        
+        while(!q.empty())
+        {
+            Node* curr=q.front();
+            q.pop();
+            
+            if(curr->left)
+            {
+                if(notComplete || curr->left->data > curr->data)
+                {
+                    return false;
+                }
+                q.push(curr->left);
+            }
+            else
+            {
+                notComplete=true;
+            }
+            
+            if(curr->right)
+            {
+                //if u come across the level where the previous left nodes are empty 
+                if(notComplete || curr->right->data > curr->data)
+                {
+                    return false;
+                }
+                q.push(curr->right);
+            }
+            else
+            {
+                notComplete=true;
+            }
+        }
+        
+        return true;
+        
+        
+    }
