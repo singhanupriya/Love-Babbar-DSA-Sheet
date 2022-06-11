@@ -2,6 +2,46 @@ https://practice.geeksforgeeks.org/problems/kth-largest-element-in-bst/1
 
 Time:O(N), Space:O(H)
 
+
+void order(Node* root, int& i, int K, int& ans)
+    {
+        if(root && i<=K)
+        {
+            order(root->right,i,K,ans);
+            i++;
+            if(i==K)
+            {
+                ans=root->data;
+                return;
+            }
+            order(root->left,i,K,ans);
+        }
+    }
+    
+    int kthLargest(Node *root, int K)
+    {
+        //Your code here
+        if(!root)
+        {
+            return -1;
+        }
+        
+        int ans=INT_MAX;
+        int i=0;
+        
+        order(root,i,K,ans);
+        if(ans==INT_MAX)
+        {
+            return -1;
+        }
+        
+        return ans;
+        
+    }
+
+
+M2-
+
 void inorder(Node* root, int& k,int limit,int& ans)
     {
         if(root && k<limit)
