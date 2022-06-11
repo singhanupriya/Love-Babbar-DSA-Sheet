@@ -2,6 +2,41 @@ https://practice.geeksforgeeks.org/problems/minimum-element-in-bst/1#
 
 Time:O(N), Space:O(H)
 
+
+
+
+Mthod 1-
+
+void inorder(Node* root, int& minValue)
+{
+    if(root)
+    {
+        inorder(root->left,minValue);
+        minValue=min(minValue,root->data);
+        //maxValue=max(maxValue,root->data);
+        inorder(root->right,minValue);
+    }
+}
+
+int minValue(Node* root) {
+    // Code here
+    
+    int minValue=INT_MAX;
+    
+    
+    if(!root)
+    {
+        return -1;
+    }
+    
+    inorder(root,minValue);
+    return minValue;
+}
+
+Method 2-
+
+Time:O(N), Space:O(N)
+
 void inorder(Node* root,vector<int>& res)
 {
     if(root)
