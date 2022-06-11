@@ -4,6 +4,56 @@ https://practice.geeksforgeeks.org/problems/binary-tree-to-bst/1#
 Time:O(N logN), space;O(N)
 
 
+M1-
+
+void inorder(Node* root, vector<int>& result)
+    {
+        if(root)
+        {
+            inorder(root->left,result);
+            result.push_back(root->data);
+            inorder(root->right,result);
+        }
+    }
+    
+    void arrange(Node* root, int& i, vector<int>& result, int n)
+    {
+        if(root && i<n)
+        {
+            arrange(root->left,i,result,n);
+            root->data=result[i];
+            i++;
+            arrange(root->right,i,result,n);
+        }
+    }
+    
+    
+    Node *binaryTreeToBST (Node *root)
+    {
+        //Your code goes here
+        
+        if(!root)
+        {
+            return nullptr;
+        }
+        
+        vector<int> result;
+        inorder(root,result);
+        
+        sort(result.begin(),result.end());
+        
+        int i=0;
+        int n=result.size();
+        arrange(root,i,result,n);
+        
+        return root;
+        
+        
+    }
+    
+    M2-
+
+
 class Solution{
   public:
     // The given root is the root of the Binary Tree
