@@ -1,0 +1,93 @@
+
+https://www.geeksforgeeks.org/kth-ancestor-node-binary-tree-set-2/
+
+1. First find the node and store all node along its path to root in array.
+
+Time:O(N), Space:O(H)
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int x)
+    {
+        data=x;
+    }
+    
+};
+
+Node* anc(Node* root, int value,vector<Node*>& res)
+{
+    if(!root)
+    {
+        return nullptr;
+    }
+    
+    if(root->data==value)
+    {
+        res.push_back(root);
+        return root;
+    }
+    
+    Node* left=anc(root->left,value,res);
+    Node* right=anc(root->right,value,res);
+    
+    if(left || right)
+    {
+        res.push_back(root);
+        return root;
+    }
+    
+    return nullptr;
+}
+
+int find(Node* root, int value, int k)
+{
+    if(!root)
+    {
+        return -1;
+    }
+    
+    vector<Node*> result;
+    Node* temp=anc(root,value,result);
+    
+    if(k >= result.size())
+    {
+        return -1;
+    }
+    
+    
+    return result[k]->data;
+}
+
+int main()
+{
+    Node *root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+ 
+    int k = 1;
+    int node = 5;
+    
+    cout<<find(root,node,k);
+
+    return 0;
+}
