@@ -4,6 +4,39 @@ https://practice.geeksforgeeks.org/problems/populate-inorder-successor-for-all-n
 2. Inorder, if prev then prev->next=root
 3. Prev=root
 
+M1-
+
+void inorder(Node* root, Node*& prev)
+    {
+        if(root)
+        {
+            inorder(root->left,prev);
+            if(prev)
+            {
+                prev->next=root;
+            }
+            prev=root;
+            inorder(root->right,prev);
+        }
+    }
+
+    void populateNext(Node *root)
+    {
+        //code here
+        if(!root)
+        {
+            return;
+        }
+        Node* prev=nullptr;
+        inorder(root,prev);
+        prev->next=nullptr;
+        
+        
+    }
+
+
+M2-
+
 Time:O(N), Space:O(H)
 
 class Solution
