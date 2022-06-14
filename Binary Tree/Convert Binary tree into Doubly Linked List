@@ -1,5 +1,44 @@
 https://practice.geeksforgeeks.org/problems/binary-tree-to-dll/1#
 
+M1-
+
+void inorder(Node* root, Node*& prev, Node*& head)
+    {
+        if(root)
+        {
+            inorder(root->left,prev,head);
+            if(prev)
+            {
+                prev->right=root;
+            }
+            else
+            {
+                head=root;
+            }
+            root->left=prev;
+            prev=root;
+            inorder(root->right,prev,head);
+        }
+    }
+    
+    Node * bToDLL(Node *root)
+    {
+        // your code here
+        if(!root)
+        {
+            return nullptr;
+        }
+        
+        Node* prev=nullptr;
+        Node* head=nullptr;
+        inorder(root,prev,head);
+        return head;
+    }
+
+
+
+M2
+
 1. Set 2 pointers-head and prev both NULL.
 2. Do inorder travsersal, 
   if prev is null and u reach leftmost, it is the head of the DLL, set both head and prev as root.
