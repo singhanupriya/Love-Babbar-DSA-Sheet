@@ -1,5 +1,10 @@
 https://practice.geeksforgeeks.org/problems/duplicate-subtree-in-binary-tree/1
 
+
+
+
+M1-
+
 1. Convert every root->data as string.
 2. If !root return "$"-->edge case, if leaf node, convert to string and string.
 3. every parent node= parent data+ left+right store it in map, basically store every subtree as a string in map.
@@ -49,3 +54,83 @@ class Solution {
          return false;
     }
     
+    
+    m2-
+    
+    1. Do inorder traversal, if node data not in map, store in map else check if that subtree is duplicate
+    
+    Time:O(N^2), Space:o(n)
+  
+    
+     bool check(Node* root1,Node* root2)
+    {
+        if(!root1 && !root2)
+        {
+            return true;
+        }
+        
+        if(!root1)
+        {
+            return false;
+        }
+        
+        if(!root2)
+        {
+            return false;
+        }
+        
+        if(root1->data != root2->data)
+        {
+            return false;
+        }
+        
+        return check(root1->left,root2->left) && check(root1->right,root2->right);
+    }
+    
+    void inorder(Node* root, unordered_map<int,Node*>& m,bool& ans)
+    {
+        if(ans)
+        {
+            return;
+        }
+        if(root)
+        {
+            inorder(root->left,m,ans);
+            if(root->left || root->right)
+            {
+                if(m.find(root->data)!=m.end())
+                {
+                    if(check(m[root->data],root))
+                    {
+                        ans=true;
+                        return;
+                    }
+                }
+                else
+                {
+                    m[root->data]=root;
+                }
+                
+            }
+            inorder(root->right,m,ans);
+        }
+    }
+    
+    int dupSub(Node *root) {
+         // code here
+         
+         if(!root || (!root->left && !root->right))
+         {
+             return 0;
+         }
+         
+         bool ans=false;
+         unordered_map<int,Node*> m;
+         inorder(root,m,ans);
+         if(ans)
+         {
+             return 1;
+         }
+         
+         return 0;
+    }
