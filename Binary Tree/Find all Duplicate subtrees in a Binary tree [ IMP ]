@@ -1,0 +1,58 @@
+https://practice.geeksforgeeks.org/problems/duplicate-subtrees/1#
+
+1. Same logic as duplicate subtrees of size 2 or more.
+2. IMP point, separate left right and root 
+eg:  11->left=1. && 1->left=11 ny previous logic string generated will be 111$ so ans becomes same but structure if diff, 11,1,$ and 1,11,$.
+
+Time:O(N), Space:O(N)
+
+
+string solve(Node* root, unordered_map<string,int>& m, vector<Node*>& result)
+{
+    if(!root)
+    {
+        return "$";
+    }
+    if(!root->left && !root->right)
+    {
+        string temp=to_string(root->data);
+        if(m[temp]==1)
+        {
+            result.push_back(root);
+            
+        }
+        m[temp]++;
+        return temp;
+    }
+    
+    string temp="";
+    temp+=to_string(root->data)+",";
+    temp+=solve(root->left,m,result)+",";
+    temp+=solve(root->right,m,result);
+    
+    if(m[temp]==1 )
+    {
+        result.push_back(root);
+    }
+    m[temp]++;
+    return temp;
+    
+    
+}
+
+vector<Node*> printAllDups(Node* root)
+{
+    // Code here
+    
+    vector<Node*> result;
+    
+    if(!root || (!root->left && !root->right))
+    {
+        return result;
+    }
+    
+    unordered_map<string,int> m;
+    
+    solve(root,m,result);
+    return result;
+}
