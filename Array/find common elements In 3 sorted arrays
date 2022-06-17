@@ -1,0 +1,45 @@
+https://practice.geeksforgeeks.org/problems/common-elements1132/1#
+
+Time:O(N1+N2+N3), Space:O(N1+N2+N3)
+
+//Handle duplicates
+
+vector <int> commonElements (int A[], int B[], int C[], int n1, int n2, int n3)
+        {
+            //code here.
+            
+            
+            vector<int> result;
+            
+            int i=0,j=0,k=0;
+            
+            while(i<n1 && j<n2 && k<n3 )
+            {
+                if(A[i]==B[j] && A[i]==C[k])
+                {
+                    
+                    
+                    if(result.size()==0 || (result.size()>=1 && result[result.size()-1]!=A[i]))
+                    {
+                        result.push_back(A[i]);
+                    }
+                    i++;
+                    j++;
+                    k++;
+                }
+                else if(A[i]<=B[j] && A[i]<=C[k])
+                {
+                    i++;
+                }
+                else if(B[j]<=A[i] && B[j]<=C[k])
+                {
+                    j++;
+                }
+                else
+                {
+                    k++;
+                }
+            }
+            
+            return result;
+        }
