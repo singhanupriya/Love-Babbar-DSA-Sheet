@@ -2,6 +2,39 @@ https://www.geeksforgeeks.org/move-negative-numbers-beginning-positive-end-const
 
 Space:O(1) Time:O(n)
 
+M1-
+
+
+void solve(int arr[], int n)
+{
+    int m=0,l=0,h=n-1;
+    int count=0;
+    
+    while(m<=h)
+    {
+        if(arr[m]<0)
+        {
+            swap(arr[m],arr[l]);
+            m++;
+            l++;
+            count++;
+        }
+        else
+        {
+            swap(arr[m],arr[h]);
+            h--;
+            count++;
+        }
+        
+    }
+    
+    cout<<count<<"\n";
+}
+
+
+
+M2-
+
 /******************************************************************************
 
 Welcome to GDB Online.
