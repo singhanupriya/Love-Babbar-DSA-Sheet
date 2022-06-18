@@ -2,6 +2,47 @@ https://www.geeksforgeeks.org/three-way-partitioning-of-an-array-around-a-given-
 
 Time: O(N), Space:O(1)
 
+
+M1-
+
+void swap(int& a, int& b)
+    {
+        int temp=a;
+        a=b;
+        b=temp;
+    }
+    
+    void threeWayPartition(vector<int>& arr,int a, int b)
+    {
+        // code here 
+        
+        int m=0,l=0,h=arr.size()-1;
+        
+        while(m<=h)
+        {
+            if(arr[m]<a)
+            {
+                swap(arr[m],arr[l]);
+                m++;
+                l++;
+            }
+            else if(arr[m]>b)
+            {
+                swap(arr[m],arr[h]);
+                h--;
+            }
+            else
+            {
+                m++;
+            }
+        }
+        
+    }
+};  
+
+
+
+m2-
 Three pointer
 
 
