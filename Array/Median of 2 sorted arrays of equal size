@@ -1,5 +1,112 @@
 https://www.geeksforgeeks.org/median-of-two-sorted-arrays/
 
+
+
+M1-
+
+1. Use merge sort logic to merge sorted array and keep a count of elements sorted.
+2. Since the array size is 2n, elements at position 'n' and 'n+1' will be in median.
+
+Time:O(m+n), Space:O(1)
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+int median(int arr1[], int arr2[], int n)
+{
+    int sum=0;
+    int count=1;
+    
+    int i=0,j=0;
+    
+    while(i<n && j<n)
+    {
+        
+        
+        if(arr1[i]<=arr2[j])
+        {
+            
+            if(count==n || count==(n+1))
+            {
+                cout<<arr1[i]<<" ";
+                sum+=arr1[i];
+            }
+
+            i++;
+            count++;
+        }
+        else
+        {
+            if(count==n || count==(n+1))
+            {
+                cout<<arr2[j]<<" ";
+                sum+=arr2[j];
+            }
+            j++;
+            count++;
+        }
+    }
+    
+    
+    while(i<n)
+    {
+        
+        
+        if(count==n || count==(n+1))
+            {
+                cout<<arr1[i]<<" ";
+                sum+=arr1[i];
+            }
+
+            i++;
+            count++;
+        
+        
+    }
+    
+    while(j<n)
+    {
+        
+        
+        if(count==n || count==(n+1))
+            {
+                cout<<arr2[j]<<" ";
+                sum+=arr2[j];
+            }
+
+            j++;
+            count++;
+        
+        
+    }
+    cout<<"\n";
+    
+    return sum/2;
+}
+
+int main()
+{
+    int ar1[] = {1, 12, 15, 26, 38};
+    int ar2[] = {2, 13, 17, 30, 45};
+    int n=5;
+    
+    cout<<"Medain "<<median(ar1,ar2,n);
+ 
+ 
+
+    return 0;
+}
+
 Method 1:
 
 LOGIC- All elements of array 2 which are less than the last element of array 1 should be in array 1, so compare arr1 from n-1 and arr2 from 0 index.
@@ -36,57 +143,39 @@ Method 2: https://www.youtube.com/watch?v=MHNTl_NvOj0
 
 Time: O(log n), Space: O(1)
 
-/******************************************************************************
+1. We compare the medians of the two arrays. M1 and M2
+2. If M1==M2, return M1
+3. If M1>M2,  cartesain line M2---M1, all elements between arr1[0]-median1 and arr2[median2]--arr2[end] will play role and vice versa if m2>m1.
+4. use recursion for this.
 
-                              Online C++ Compiler.
-               Code, Compile, Run and Debug C++ program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
 
 #include <iostream>
 
 using namespace std;
 
-int min(int a,int b)
-{
-    if(a<=b)
-    {
-        return a;
-    }
-    
-    return b;
-}
-
-int max(int a,int b)
-{
-    if(a>=b)
-    {
-        return a;
-    }
-    return b;
-}
-
-int median(int arr[],int n)
+int calMedian(int arr[], int n)
 {
     if(n%2==0)
     {
-        return arr[n/2]+arr[n/2-1]/2;
+        return (arr[n/2]+arr[n/2-1])/2;
     }
     return arr[n/2];
 }
 
-int getMedian(int arr1[],int arr2[],int n)
+
+int median(int arr1[], int arr2[], int n)
 {
+    
+    
     if(n==0)
     {
         return -1;
+        
     }
     
     if(n==1)
     {
         return (arr1[0]+arr2[0])/2;
-        
     }
     
     if(n==2)
@@ -94,44 +183,43 @@ int getMedian(int arr1[],int arr2[],int n)
         return (max(arr1[0],arr2[0])+min(arr1[1],arr2[1]))/2;
     }
     
-    int m1=median(arr1,n);
-    int m2=median(arr2,n);
-    cout<<m1<<" "<<m2<<"\n";
+    int m1=calMedian(arr1,n);
+    int m2=calMedian(arr2,n);
     
     if(m1==m2)
     {
         return m1;
     }
-    
-    else if(m2>m1)
+    else if(m1>m2)
     {
         if(n%2==0)
         {
-            return getMedian(arr1+n/2-1,arr2,n/2+1);
+            return median(arr1,arr2+n/2-1,n/2+1);
         }
         
-        return getMedian(arr1+n/2,arr2,n-n/2);
+        return median(arr1,arr2+n/2,n/2+1);
     }
-    
     else
     {
         if(n%2==0)
         {
-            return getMedian(arr2+n/2-1,arr1,n/2+1);
+            return median(arr1+n/2-1,arr2,n/2+1);
         }
         
-        return getMedian(arr2+n/2,arr1,n-n/2);
+        return median(arr1+n/2,arr2,n/2+1);
     }
+    
 }
-
-
 
 int main()
 {
-    int arr1[]={ 1, 12, 15, 26, 38 };
-    int arr2[]=  { 2, 13, 17, 30, 45 };
-    int n=5;
-    cout<<getMedian(arr1,arr2,n);
+    int ar1[] = {1, 2, 3, 6};
+    int ar2[] = {4, 6, 8, 10};
+    int n=4;
+    
+    cout<<"Medain "<<median(ar1,ar2,n);
+ 
+ 
 
     return 0;
 }
