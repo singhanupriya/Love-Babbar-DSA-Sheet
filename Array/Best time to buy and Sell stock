@@ -4,6 +4,41 @@ https://leetcode.com/problems/best-time-to-buy-and-sell-stock/submissions/
 Naive: Time:O(N^2), Space:O(1)
 
 
+M1-
+
+1. Find next greater interger from reverse, max profit=maxInteger-arr[i]
+
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    int maxProfit(vector<int>& prices) {
+        
+        int days=prices.size();
+        
+        int maxProfit=0;
+        int maxNo=prices[days-1];
+        
+        for(int i=days-2;i>=0;i--)
+        {
+            maxNo=max(maxNo,prices[i]);
+            maxProfit=max(maxProfit,maxNo-prices[i]);
+        }
+        
+        return maxProfit;
+        
+    }
+
+M2-
+
+
 Time: O(N), Space:O(1)
 
 class Solution {
