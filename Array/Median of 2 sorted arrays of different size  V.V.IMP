@@ -5,12 +5,15 @@ M1- Keep a count of elements.
 Time:O(M+N), Space:O(1)
 
 M2-
+
+
 1. We will be using binary search on the smaller array.
 2. We will make a cut1 on arr1 and cut2 on arr2, if l1<=r2 and l2<=r1 find median else move left or right.
 3. If total elements is even the medium will be max(l1,l2)+min(r1+r2)/2 as we will have equal elements on both side.
 4. If total elements is odd, we will have the medium as last element of the left half i.e. max(l1,l2)
 
-
+Time:O(min(logn,log m)) as we are working on the smaller array
+Space:O(1)
 
 #include <iostream>
 
