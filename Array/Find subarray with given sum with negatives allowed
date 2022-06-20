@@ -1,0 +1,66 @@
+https://www.youtube.com/watch?v=20v8zSo2v18
+
+https://www.geeksforgeeks.org/find-subarray-with-given-sum/
+
+M1- find all subarrays.
+
+Time:O(N^2), Space:O(1)
+
+M2- 
+
+1. Store all prefix sum in a map with its index, means sum from start till that index, m[sumTillIndexI]=i
+2. Logic, prefixSum-k exists in the map means we have found a subarray with sum k.
+
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<unordered_map>
+
+using namespace std;
+
+void solve(int arr[], int n, int k)
+{
+    unordered_map<int,int> m;
+    
+    int preSum=0;
+    
+    for(int i=0;i<n;i++)
+    {
+        preSum+=arr[i];
+        
+        if(preSum==i)
+        {
+            cout<<"0 "<<i<<"\n";
+            return;
+        }
+        
+        if(m.find(preSum-k)!=m.end())
+        {
+            int index=m[preSum-k]+1;
+            cout<<index<<" "<<i<<"\n";
+            return;
+        }
+        
+        m[preSum]=i;
+    }
+    
+    cout<<"No subarray exists\n";
+}
+
+int main()
+{
+    int arr[] = {10, 2, -2, -20, 10};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int sum = -10;
+    
+    solve(arr,n,sum);
+
+    return 0;
+}
