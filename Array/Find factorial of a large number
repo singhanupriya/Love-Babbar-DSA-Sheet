@@ -1,0 +1,83 @@
+https://www.geeksforgeeks.org/factorial-large-number/
+https://www.youtube.com/watch?v=V1VKKZlTsUg
+
+1. Using linkedlist, create a node called temp with value =0 and prev=nullptr;
+2. multiply n, if carry exists create a prev node and add value there.
+3. Loop to mutiple it will every no in factorial
+4. Print the node in reverse using recursion.
+
+Time:??
+
+
+#include <iostream>
+
+using namespace std;
+
+
+class Node{
+    public:
+    
+    int data;
+    Node* prev=NULL;
+    
+    Node(int x)
+    {
+        data=x;
+        prev=NULL;
+    }
+};
+
+
+void solve(Node* tail, int n)
+{
+    int carry=0;
+    Node* temp=tail;
+    
+    Node* p=NULL;
+    
+    while(temp)
+    {
+        int data= temp->data * n + carry;
+        int val=data%10;
+        carry=data/10;
+        
+        temp->data=val;
+        p=temp;
+        temp=temp->prev;
+    }
+    
+    
+    while(carry!=0)
+    {
+        int val=carry%10;
+        p->prev=new Node(val);
+        carry=carry/10;
+        p=p->prev;
+        
+    }
+}
+
+void print(Node* tail)
+{
+    if(tail)
+    {
+        
+        print(tail->prev);
+        cout<<tail->data;
+    }
+}
+
+int main()
+{
+    Node* tail=new Node(1);
+    
+    int n=5;
+    for(int i=2;i<=n;i++)
+    {
+        solve(tail,i);
+    }
+    
+    print(tail);
+
+    return 0;
+}
