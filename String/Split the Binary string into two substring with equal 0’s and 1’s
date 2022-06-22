@@ -1,5 +1,48 @@
 https://www.geeksforgeeks.org/split-the-binary-string-into-substrings-with-equal-number-of-0s-and-1s/
 
+
+  int maxSubStr(string str){
+        //Write your code here
+        
+        //For all substrings to be balanced u need to have equal no of 1's and 0's in the string
+        
+        int count1=0;
+        int count0=0;
+        
+        int ans=0;
+        
+        int len=str.length();
+        
+        for(int i=0;i<len;i++)
+        {
+            if(str[i]=='0')
+            {
+                count0++;
+            }
+            else
+            {
+                count1++;
+            }
+            
+            if(count1==count0)
+            {
+                ans++;
+                
+            }
+        }
+        
+        
+        if(count1!=count0)
+        {
+            return -1;
+        }
+        
+        return ans;
+        
+    }
+};
+
+
 Time:O(N), Space:O(1)
 
 /******************************************************************************
