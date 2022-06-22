@@ -1,5 +1,50 @@
 https://www.geeksforgeeks.org/function-to-find-number-of-customers-who-could-not-get-a-computer/
 
+
+Time:O(N), Space:O(N)
+
+int solve(string str, int n)
+{
+    unordered_map<char,int> m;
+    
+    int len=str.length();
+    
+    int count=0;
+    
+    for(int i=0;i<len;i++)
+    {
+        if(m.find(str[i])!=m.end())
+        {
+            m.erase(str[i]);
+        }
+        else
+        {
+            if(m.size()<n)
+            {
+                m[str[i]]=1;
+            }
+            else
+            {
+                count++;
+            }
+        }
+    }
+    
+    return count/2;
+}
+
+int main()
+{
+    string str="ABCBCADEED";
+    int n=1;
+    cout<<solve(str,n);
+
+    return 0;
+}
+
+
+
+
 Time:O(N), Space:O(26)
 
 U need a DS to track who came and left with no of comps available and allows popping from any index with min complexity, use unordered_set as each char occurs max twice.  
