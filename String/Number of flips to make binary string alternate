@@ -2,6 +2,57 @@ https://practice.geeksforgeeks.org/problems/min-number-of-flips3210/1#
 https://www.geeksforgeeks.org/minimum-number-of-replacements-to-make-the-binary-string-alternating-set-2/
 
 
+
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int minFlips (string S)
+{
+    // your code here
+    
+    
+    int countStartWith1=0;
+    
+    for(int i=0;i<S.length();i++)
+    {
+        if(i%2==0 && S[i]=='0')
+        {
+            countStartWith1++;
+        }
+        else if(i%2!=0 && S[i]=='1')
+        {
+            countStartWith1++;
+        }
+    }
+    
+    
+    int countStartWith0=0;
+    
+    for(int i=0;i<S.length();i++)
+    {
+        if(i%2==0 && S[i]=='1')
+        {
+            countStartWith0++;
+        }
+        else if(i%2!=0 && S[i]=='0')
+        {
+            countStartWith0++;
+        }
+    
+    }
+    
+    return min(countStartWith0, countStartWith1);
+    
+    
+}
+
 Time:O(N), Space:O(1)
 
 1. Every string has 2 possibilities:
