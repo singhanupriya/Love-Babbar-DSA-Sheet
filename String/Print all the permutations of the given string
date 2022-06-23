@@ -3,7 +3,48 @@ https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string2041/1
 Prints all permutations (including duplicates)
 
 Time:O(n*n!), n!->no of permutations, n->time to print each
-Space:O(1)
+Space:O(n)
+
+M1-
+
+ void permute(string a, int l, int r,unordered_set<string>& ans)
+	    {
+	        if(l==r)
+	        {
+	            ans.insert(a);
+	            return;
+	        }
+	        
+	        for(int i=l;i<=r;i++)
+	        {
+	            swap(a[l],a[i]);
+	            permute(a,l+1,r,ans);
+	            swap(a[l],a[i]);
+	        }
+	    }
+	    
+		vector<string>find_permutation(string S)
+		{
+		    // Code here there
+		    unordered_set<string> st;
+		    vector<string> ans;
+		    int l=0;
+		    int r=S.length()-1;
+		    
+		    permute(S,l,r,st);
+		    
+		    for(auto it: st)
+		    {
+		        ans.push_back(it);
+		    }
+		    
+		    sort(ans.begin(),ans.end());
+		    return ans;
+		    
+		}
+
+
+M2-
 
 public:
 	    void swap(char& a,char& b)
