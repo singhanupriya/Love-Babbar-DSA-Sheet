@@ -2,6 +2,99 @@ https://practice.geeksforgeeks.org/problems/smallest-window-in-a-string-containi
 
 Time:O(N), Space:O(1)
 
+M1-
+
+1. Create a map of chars in p and keep a count of distinct chars, if len(S)<len(p), not possible
+2. Traverse s, m[s[j]]--, if any m[s[j]]==0 count-- as it will become 0 only if it is present in p, else it will become neg.
+3. While count==0, find window
+
+string smallestWindow (string s, string p)
+    {
+        // Your code here
+        int arr[256];
+        memset(arr,0,sizeof(arr));
+        
+        int sLength=s.length();
+        int pLength=p.length();
+        
+        int startIndex=-1;
+        int endIndex=-1;
+        
+        if(sLength<pLength)
+        {
+            return "-1";
+        }
+        
+        int count=0;
+        
+        for(int i=0;i<pLength;i++)
+        {
+            if(arr[p[i]-'a']==0)
+            {
+                count++;
+            }
+            
+            arr[p[i]-'a']++;
+        }
+        
+        int i=0,j=0,ans=INT_MAX;
+        
+        while(j<sLength)
+        {
+            arr[s[j]-'a']--;
+            
+            //only those chars that have occured in p will have count>0 so they can becomne 0
+            //rest all will be in negative
+            if(arr[s[j]-'a']==0)
+            {
+                count--;
+            }
+            
+            while(count==0)
+            {
+                if(ans>j-i+1)
+                {
+                    ans=j-i+1;
+                    startIndex=i;
+                    endIndex=j;
+                }
+                arr[s[i]-'a']++;
+                
+                //only those which have occured in p will have count>0 rest all will stop at 0
+                if(arr[s[i]-'a']>0)
+                {
+                    count++;
+                }
+                i++;
+            }
+            
+            j++;
+        }
+        
+        
+        string result="";
+        
+        if(startIndex==-1)
+        {
+            return "-1";
+        }
+        
+        for(int i=startIndex;i<=endIndex;i++)
+        {
+            result+=s[i];
+        }
+        
+        return result;
+        
+    }
+
+
+
+
+
+
+M2-
+
 1. use string array dont use map.
 2. keep a count of no of chars in the pattern
 
