@@ -1,0 +1,39 @@
+https://www.youtube.com/watch?v=KCEPvdLqlYI&t=210s
+
+1. Every char will have 2 choices to include it or not.
+2. Take an input string ans output string=""
+3. two choices - dont take the starting char, input will now start from next index and output remains as it is.
+                 take the starting char, input will now start from next index and add input[0] to output.
+     
+     Note- this will not handle duplicates
+     
+Time:(2^N)
+
+
+
+#include <iostream>
+
+using namespace std;
+
+void solve(string input, string output)
+{
+    if(input.length()==0)
+    {
+        cout<<output<<" ";
+        return;
+    }
+    
+    //dont include the starting char
+    solve(input.substr(1),output); //start from index 1 
+    
+    //include starting char and add in output
+    solve(input.substr(1),output+input[0]);
+}
+
+int main()
+{
+   string input="abc";
+   solve(input,"");
+
+    return 0;
+}
