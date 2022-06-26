@@ -107,3 +107,159 @@ int main()
     cout<<"Popped "<<st.pop()<<"\n";
     cout<<"min "<<st.getMin()<<"\n";
 }
+
+
+Time:O(1), Space:O(N)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+
+class Stack{
+    
+    int* arr;
+    int size;
+    int top;
+    
+    public:
+    Stack(int size)
+    {
+        this->size=size;
+        arr=new int[size];
+        top=-1;
+    }
+    
+    void push(int x)
+    {
+        if(top==size-1)
+        {
+            cout<<"Stack overflow\n";
+            return;
+        }
+        
+        top++;
+        arr[top]=x;
+        //cout<<x<<" has been pushed at index "<<top<<"\n";
+        return;
+        
+        
+    }
+    
+    void pop()
+    {
+        if(top==-1)
+        {
+            cout<<"Stack underflow\n";
+            return;
+        }
+        top--;
+    }
+    
+    int viewTop()
+    {
+        if(top==-1)
+        {
+            return -1;
+        }
+        
+        return arr[top];
+    }
+    
+    bool isEmpty()
+    {
+        if(top==-1)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
+    
+};
+
+class MinStack{
+    
+    Stack* s;
+    Stack* aux;
+    int size;
+    
+    public:
+    
+    MinStack(int size)
+    {
+        s=new Stack(size);
+        aux=new Stack(size);
+        
+    }
+    
+    void minPush(int x)
+    {
+        if(s->isEmpty())
+        {
+            s->push(x);
+            aux->push(x);
+            return;
+        }
+        
+        s->push(x);
+        if(aux->viewTop() >= x)
+        {
+            aux->push(x);
+        }
+    }
+    
+    int getMin()
+    {
+        if(!aux->isEmpty())
+        {
+            return aux->viewTop();
+        }
+        return -1;
+    }
+    
+    void minPop()
+    {
+        if(s->viewTop()==aux->viewTop())
+        {
+            s->pop();
+            aux->pop();
+            return;
+        }
+        
+        s->pop();
+    }
+    
+    
+};
+
+int main()
+{
+    MinStack* s=new MinStack(10);
+    s->minPush(16);
+    cout<<s->getMin()<<endl;
+    s->minPush(15);
+    cout<<s->getMin()<<endl;
+    s->minPush(18);
+    cout<<s->getMin()<<endl;
+    s->minPush(29);
+    cout<<s->getMin()<<endl;
+    s->minPush(19);
+    cout<<s->getMin()<<endl;
+    s->minPush(10);
+    cout<<s->getMin()<<endl;
+    s->minPop();
+    cout<<s->getMin()<<endl;
+    
+    return 0;
+}
