@@ -2,7 +2,7 @@ https://practice.geeksforgeeks.org/problems/special-stack/1#
 
 1. Use a global variable min that will store the min value.
 2. If stack is empty, push(a) and min=a.
-3. If element(x) to be pushed>min, push normally else min=x, pushed ele=2*x-me --> this value will be less that the new min which is used a flag, means the min element resides here
+3. If element(x) to be pushed>min, push normally else  pushed ele=2*x-min, min= x --> this value will be less that the new min which is used a flag, means the min element resides here
 4. If popping, if top>=min pop, else means u have hit a flag means min element is being popped, new min=2*old min-top
 
 Time:O(1), Space:O(1)
@@ -106,6 +106,178 @@ int main()
     cout<<"min "<<st.getMin()<<"\n";
     cout<<"Popped "<<st.pop()<<"\n";
     cout<<"min "<<st.getMin()<<"\n";
+}
+
+
+
+
+POinter approach:
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+
+class Stack{
+    
+    int* arr;
+    int size;
+    int top;
+    
+    public:
+    Stack(int size)
+    {
+        this->size=size;
+        arr=new int[size];
+        top=-1;
+    }
+    
+    void push(int x)
+    {
+        if(top==size-1)
+        {
+            cout<<"Stack overflow\n";
+            return;
+        }
+        
+        top++;
+        arr[top]=x;
+        //cout<<x<<" has been pushed at index "<<top<<"\n";
+        return;
+        
+        
+    }
+    
+    void pop()
+    {
+        if(top==-1)
+        {
+            cout<<"Stack underflow\n";
+            return;
+        }
+        top--;
+    }
+    
+    int viewTop()
+    {
+        if(top==-1)
+        {
+            return -1;
+        }
+        
+        return arr[top];
+    }
+    
+    bool isEmpty()
+    {
+        if(top==-1)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    
+    
+};
+
+class MinStack{
+    
+    Stack* s;
+    int min;
+    int size;
+    
+    public:
+    
+    MinStack(int size)
+    {
+        s=new Stack(size);
+        
+        
+    }
+    
+    void minPush(int x)
+    {
+        if(s->isEmpty())
+        {
+            s->push(x);
+            min=x;
+            return;
+        }
+        
+        if(x<min)
+        {
+           
+            s->push(2*x-min);  //flag to denotes that this element is smaller than min
+            min=x;
+        }
+        else
+        {
+            s->push(x);
+        }
+        
+        
+    }
+    
+    int getMin()
+    {
+        if(s->isEmpty())
+        {
+            return -1;
+        }
+        return min;
+    }
+    
+    void minPop()
+    {
+        if(s->isEmpty())
+        {
+            cout<<"Stack Underflow\n";
+            return;
+        }
+        
+        if(s->viewTop()>=min)
+        {
+            s->pop();
+        }
+        else
+        {
+            min=2*min - s->viewTop();
+            s->pop();
+        }
+    }
+    
+    
+};
+
+int main()
+{
+    MinStack* s=new MinStack(10);
+    s->minPush(16);
+    cout<<s->getMin()<<endl;
+    s->minPush(15);
+    cout<<s->getMin()<<endl;
+    s->minPush(18);
+    cout<<s->getMin()<<endl;
+    s->minPush(29);
+    cout<<s->getMin()<<endl;
+    s->minPush(19);
+    cout<<s->getMin()<<endl;
+    s->minPush(10);
+    cout<<s->getMin()<<endl;
+    s->minPop();
+    cout<<s->getMin()<<endl;
+    
+    return 0;
 }
 
 
