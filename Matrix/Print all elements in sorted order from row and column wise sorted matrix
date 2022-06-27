@@ -1,0 +1,46 @@
+https://www.geeksforgeeks.org/print-elements-sorted-order-row-column-wise-sorted-matrix/
+
+Time:O(N^2 logN), Space:O(N^2)
+
+vector<vector<int>> sortedMatrix(int N, vector<vector<int>> mat) {
+        // code here
+        
+    vector<vector<int>> ans(N,vector<int>(N,-1));
+        
+    priority_queue<pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> pq;
+   //<value,<ArrNo,ArrIndex>
+
+   int count=0;
+
+   for(int i=0;i<N;i++)
+   {
+       pq.push(make_pair(mat[i][0],make_pair(i,0)));
+
+
+   }
+
+   while(!pq.empty())
+   {
+       pair<int,pair<int,int>> temp=pq.top();
+       int element=temp.first;
+       pq.pop();
+
+       int arrNo=temp.second.first;
+       int arrIndex=temp.second.second;
+       
+       ans[count/N][count%N]=element;
+       count++;
+
+       
+
+       int nextIndex=arrIndex+1;
+
+       if(nextIndex<N)
+       {
+           pq.push(make_pair(mat[arrNo][nextIndex],make_pair(arrNo,nextIndex)));
+       }
+    }
+    
+    return ans;
+        
+    }
