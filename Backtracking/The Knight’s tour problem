@@ -28,13 +28,13 @@ bool move(vector<vector<int>>& ans,vector<vector<int>>& vis, int i, int j,int& c
 			count++;
 			ans[i+diri[x]][j+dirj[x]]=count;
 			//cout<<ans[i][j]<<"\n";
-			vis[i+diri[x]][j+dirj[x]]=1;
+			vis[i][j]=1;
 			
 			if(move(ans,vis,i+diri[x],j+dirj[x],count,n,diri,dirj))
 			{
 				return true;
 			}
-			vis[i+diri[x]][j+dirj[x]]=0;
+			vis[i][j]=0;
 			
 			
 		}
