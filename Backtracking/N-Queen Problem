@@ -197,3 +197,107 @@ int main()
 	
 	return 0;
 }
+
+
+Print all solutions:
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+
+bool isSafe(int row, int col,vector<vector<int>>& mat,int n)
+{
+    int i=row;
+    int j=col;
+    
+    while(i>=0)
+    {
+        if(mat[i][j]==1)
+        {
+            return false;
+        }
+        i--;
+    }
+    
+    i=row;
+    while(i>=0 && col>=0)
+    {
+        if(mat[i][j]==1)
+        {
+            return false;
+        }
+        i--;
+        j--;
+    }
+    
+    i=row;
+    j=col;
+    
+    while(i>=0 && j<n)
+    {
+        if(mat[i][j]==1)
+        {
+            return false;
+            
+        }
+        i--;
+        j++;
+    }
+    
+    return true;
+}
+
+void solve(vector<vector<int>>& mat, int n, int row,vector<int> temp, vector<vector<int>>& ans)
+{
+    if(row==n)
+    {
+        ans.push_back(temp);
+        return;
+    }
+    for(int col=0;col<n;col++)
+    {
+        if(isSafe(row,col,mat,n))
+        {
+            mat[row][col]=1;
+            temp.push_back(col+1);
+            solve(mat,n,row+1,temp,ans);
+            
+            
+            mat[row][col]=0;
+            temp.pop_back();
+        }
+    }
+    
+    
+}
+
+int main()
+{
+    int n=4;
+    vector<vector<int>> mat(n,vector<int>(n,0));
+    vector<int> temp;
+    vector<vector<int>> ans;
+    solve(mat,n,0,temp,ans);
+    
+    
+    for(int i=0;i<ans.size();i++)
+    {
+        for(int j=0;j<ans[i].size();j++)
+        {
+            cout<<ans[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+
+    return 0;
+}
