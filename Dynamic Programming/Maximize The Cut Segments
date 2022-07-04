@@ -8,6 +8,73 @@ a=cut(l-p), b=cut(l-q), c=cut(l-r) if l>=x
 return 1+max(a,b,c)
 
 
+
+
+public:
+    //Function to find the maximum number of cuts.
+    
+    int max(int a, int b, int c)
+    {
+        if(a>=b && a>=c)
+        {
+            return a;
+        }
+        else if(b>=a && b>=c)
+        {
+             return b;
+        }
+        else
+        {
+            return c;
+        }
+       
+    }
+    int solve(int n, int x, int y, int z)
+    {
+        if(n==0)
+        {
+            return 0;
+        }
+        
+        int cutX=INT_MIN, cutY=INT_MIN, cutZ=INT_MIN;
+        
+        if(n>=x)
+        {
+            cutX=1 + solve(n-x,x,y,z);
+        }
+        
+        if(n>=y)
+        {
+            cutY=1 + solve(n-y,x,y,z);
+        }
+        
+        if(n>=z)
+        {
+            cutZ=1 + solve(n-z,x,y,z);
+        }
+        
+        
+        return max(cutX, cutY, cutZ);
+        
+    }
+    
+    int maximizeTheCuts(int n, int x, int y, int z)
+    {
+        //Your code here
+        
+        int ans=solve(n,x,y,z);
+        if(ans==INT_MIN)
+        {
+            return -1;
+        }
+        return ans;
+        
+    }
+    
+    
+    Metjhod 2
+
+
 void cut(int n, int p, int q, int r, int count, int& ans)
     {
         if(n==0)
