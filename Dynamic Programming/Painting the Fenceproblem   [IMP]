@@ -18,6 +18,11 @@ Logic-
          
          
          U can use dp[2][n] or just use two variables to store prev same and diff
+         
+For every post, u will have 4 options:
+
+Current same -> prev same or prev diff
+Current diff -> prev same or prev diff
 
 
 long long countWays(int n, int k){
