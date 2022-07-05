@@ -118,7 +118,7 @@ int solve(int* arr, int n , int index, int prev)
   
   Top down
   
-  Time:O(N), Space:O(N)
+  Time:O(N), Space:O(N) ->O(1) as only prev 2 values are needed.
   
   int max(int a, int b)
 	{
