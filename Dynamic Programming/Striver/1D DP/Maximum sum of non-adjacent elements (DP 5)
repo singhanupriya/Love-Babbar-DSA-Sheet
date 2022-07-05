@@ -1,6 +1,8 @@
 https://practice.geeksforgeeks.org/problems/max-sum-without-adjacents2430/1/
 https://www.youtube.com/watch?v=GrMBfJNk_NY
 
+Similar question House robber: https://www.geeksforgeeks.org/find-maximum-possible-stolen-value-houses/
+
 Method 1: Recursion
 
 1. Two possible cases, index to be picked or not.
@@ -145,6 +147,52 @@ int solve(int* arr, int n , int index, int prev)
 	    }
 	    
 	    return dp[n];
+	    
+	    
+	}
+	
+	
+	
+	Time:O(N), Space:O(1)
+	
+	int max(int a, int b)
+	{
+	    if(a>=b)
+	    {
+	        return a;
+	    }
+	    return b;
+	}
+	
+	int findMaxSum(int *nums, int len) {
+	    // code here
+	    
+	     
+        if(len==0)
+        {
+            return 0;
+        }
+        
+        if(len==1)
+        {
+            return nums[0];
+        }
+        
+        int prevOne=0;  //n-2
+        int prevTwo=nums[0];  //n-1
+        
+        
+        for(int i=2;i<=len;i++)
+        {
+            int pick=nums[i-1]+prevOne;
+            int notPick=prevTwo;
+            
+            int curr=max(pick,notPick);
+            prevOne=prevTwo;
+            prevTwo=curr;
+        }
+        
+        return prevTwo;
 	    
 	    
 	}
