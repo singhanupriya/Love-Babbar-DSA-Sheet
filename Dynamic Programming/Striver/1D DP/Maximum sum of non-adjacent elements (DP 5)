@@ -1,0 +1,150 @@
+https://practice.geeksforgeeks.org/problems/max-sum-without-adjacents2430/1/
+https://www.youtube.com/watch?v=GrMBfJNk_NY
+
+Method 1: Recursion
+
+1. Two possible cases, index to be picked or not.
+2. If prev!=index-1 that index can be picked.
+3. Find max sum of the pick and nonPick case.
+
+Time:O(2^N), Space:O(2^N)
+
+int solve(int* arr, int n , int index, int prev)
+	{
+	    if(index==n) //index being processed
+	    {
+	        return 0;
+	    }
+	    
+	    //not take, prev remains same
+	    
+	    int notPick=solve(arr,n,index+1,prev);
+	    int pick=INT_MIN;
+	    
+	    //take now index becomes prev
+	    
+	    if(prev==-1 || prev!=index-1)
+	    {
+	         pick=arr[index]+ solve(arr,n,index+1,index);
+	    }
+	   
+	    
+	    return max(notPick, pick);
+	}
+	
+	int findMaxSum(int *arr, int n) {
+	    // code here
+	    
+	    int prev=-1;
+	    return solve(arr,n,0,-1);
+	    
+	}
+  
+  
+  Approach 2: Recursion:
+  
+  int solve(int* arr, int index)
+	{
+	    if(index==0)
+	    {
+	        return arr[index]; //means u have not picked arr[1] so just return it
+	    }
+	    
+	    if(index<0)
+	    {
+	        return 0;
+	    }
+	    
+	    //if u have picked index, u can't pick index-1 so u need to go to index-2
+	    int pick=arr[index] + solve(arr,index-2);
+	    int notPick=solve(arr,index-1);
+	    
+	    return max(pick,notPick);
+	    
+	    
+	}
+	
+	int findMaxSum(int *arr, int n) {
+	    // code here
+	    
+	    
+	    return solve(arr,n-1);
+	    
+	}
+  
+  Method 2-
+  
+  Memoisation:
+  
+  Time:O(N), Space:O(N)
+  
+  	int solve(int* arr,  int index, vector<int>& dp)
+	{
+	    if(index==0)
+	    {
+	        return arr[index]; //means u have not picked arr[1] so just return it
+	    }
+	    
+	    if(index<0)
+	    {
+	        return 0;
+	    }
+	    
+	    if(dp[index+1]!=-1)
+	    {
+	        return dp[index+1];
+	    }
+	    
+	    //if u have picked index, u can't pick index-1 so u need to go to index-2
+	    int pick=arr[index] + solve(arr,index-2,dp);
+	    int notPick=solve(arr,index-1,dp);
+	    
+	    return dp[index+1]=max(pick,notPick);
+	    
+	    
+	}
+	
+	int findMaxSum(int *arr, int n) {
+	    // code here
+	    
+	    vector<int> dp(n+1,-1);
+	    return solve(arr,n-1,dp);
+	    
+	    
+	}
+  
+  
+  Method 3-
+  
+  Top down
+  
+  Time:O(N), Space:O(N)
+  
+  int max(int a, int b)
+	{
+	    if(a>=b)
+	    {
+	        return a;
+	    }
+	    return b;
+	}
+	
+	int findMaxSum(int *arr, int n) {
+	    // code here
+	    
+	    vector<int> dp(n+1,-1);
+	    dp[0]=0;
+	    dp[1]=arr[0]; 
+	    
+	    for(int i=2;i<=n;i++)
+	    {
+	        int pick=arr[i-1]+dp[i-2];
+	        int notPick=dp[i-1];
+	        
+	        dp[i]=max(pick,notPick);
+	    }
+	    
+	    return dp[n];
+	    
+	    
+	}
