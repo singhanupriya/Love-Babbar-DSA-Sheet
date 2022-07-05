@@ -1,0 +1,70 @@
+https://www.youtube.com/watch?v=3WaxQMELSkw
+https://leetcode.com/problems/house-robber-ii/submissions/
+
+1. Same logic as max sum subsequence such that no two elements are adj 
+2. as last and and first are adjacent, they cant be in ans together.
+3. Take two arrays arr1=0 to index n-2 and arr2=1 to n-1
+4. Return max of two
+
+Time:O(N), Space:O(N)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    int solve(vector<int>& nums)
+    {
+        int len=nums.size();
+        
+        if(len==0)
+        {
+            return 0;
+        }
+        
+        if(len==1)
+        {
+            return nums[0];
+        }
+        
+        
+        int first=0;  //n-2
+        int second=nums[0];  //n-1
+        
+        for(int i=2;i<=len;i++)
+        {
+            int pick=nums[i-1]+first;
+            int notPick=second;
+            
+            int curr=max(pick,notPick);
+            first=second;
+            second=curr;
+        }
+        return second;
+    }
+    
+    
+    int rob(vector<int>& nums) {
+        
+        
+        
+        int n=nums.size();
+        
+        if(n==1)
+        {
+            return nums[0];
+        }
+        
+        
+        
+        vector<int> temp1(nums.begin(),nums.end()-1);
+        vector<int> temp2(nums.begin()+1,nums.end());
+        
+        return max(solve(temp1),solve(temp2));
+        
+    }
