@@ -1,0 +1,156 @@
+https://takeuforward.org/data-structure/dynamic-programming-frog-jump-dp-3/
+
+Time:O(2^N)
+
+Recursion:
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    
+    return b;
+}
+
+n->total number of stairs
+int solve(int n, vector<int> arr)
+{
+    if(n<=1)  //if only 1 stair means n==0 no jump so ans =0;
+    {
+        return 0;
+    }
+    
+    return min(abs(arr[n-1]-arr[n-2])+solve(n-1,arr), abs(arr[n-1]-arr[n-3])+ solve(n-2,arr));
+    
+}
+
+int main()
+{
+    vector<int> arr={30,10,60 , 10 , 60 , 50};
+    int n=6;
+    
+    cout<<solve(n,arr);
+
+    return 0;
+}
+
+
+Memoisation:
+
+Time:O(N), Space:O(N)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    
+    return b;
+}
+
+//n->total number of stairs
+int solve(int n, vector<int> arr,vector<int>& dp)
+{
+    if(n<=1)  //if only 1 stair means n==0 no jump so ans =0;
+    {
+        return 0;
+    }
+    
+    if(dp[n]!=-1)
+    {
+        return dp[n];
+    }
+    
+    return dp[n]=min(abs(arr[n-1]-arr[n-2])+solve(n-1,arr,dp), abs(arr[n-1]-arr[n-3])+ solve(n-2,arr,dp));
+    
+}
+
+int main()
+{
+    vector<int> arr={30,10,60 , 10 , 60 , 50};
+    int n=6;
+    vector<int> dp(n+1,-1);
+    
+    
+    cout<<solve(n,arr,dp);
+
+    return 0;
+}
+
+
+method 3:
+
+Top down:
+Time:O(N), Space:O(N)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    
+    return b;
+}
+
+//n->total number of stairs
+int solve(int n, vector<int> arr)
+{
+    vector<int> dp(n+1,-1);
+    //dp[n] -> min energy when there are total n stairs
+    
+    
+    dp[0]=0;  //no jumps
+    dp[1]=0;  //no jumps
+    
+    for(int i=2;i<=n;i++)
+    {
+        int two=0;
+        if(i-3>=0)
+        {
+            two= abs(arr[i-1]-arr[i-3]) + dp[i-2];
+        }
+        
+        dp[i]=min(dp[i-1]+ abs(arr[i-1]-arr[i-2]), two);
+    }
+    
+    return dp[n];
+    
+}
+
+int main()
+{
+    vector<int> arr={30,10,60 , 10 , 60 , 50};
+    int n=6;
+    
+    
+    cout<<solve(n,arr);
+
+    return 0;
+}
