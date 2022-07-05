@@ -1,5 +1,50 @@
 https://www.youtube.com/watch?v=odrfUCS9sQk
 
+
+Recursion:https://www.youtube.com/watch?v=ekcwMsSIzVc
+
+Time:O(2^N), Space:O(2^N)
+
+public:
+    //Function to find length of longest increasing subsequence.
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int a[], int index, int prev, int n)
+    {
+        if(index==n)
+        {
+            return 0;
+        }
+        
+        int len1=solve(a,index+1,prev,n);
+        int len2=0;
+        
+        if(prev==-1 || a[index]>a[prev])
+        {
+            len2=1+solve(a,index+1,index,n);
+        }
+        
+        return max(len1,len2);
+        
+    }
+    
+    int longestSubsequence(int n, int a[])
+    {
+       // your code here
+       
+       int prev=-1;
+       return solve(a,0,prev,n);
+       
+    }
+};
+
 dp[i]- length of LIS ending at index i.
 Compare j-0 to i-1, if arr[j]<arr[i] means arr[i] can be added behind arr[j], dp[i]=max(dp[j]+1,dp[i]]
 
@@ -29,3 +74,41 @@ int longestSubsequence(int n, int arr[])
        return ans;
     }
 };
+
+
+Method 3:
+
+Lower bound: https://www.youtube.com/watch?v=on2hvxBXJH4
+
+
+Instead of creating different arrays for the subsequences we make changes in a single array itself.
+
+Lower bound is actually binary search O(log n) which gives the index where arr[i] exist or first element greater than arr[i].
+We cannot derive the subsequence from here.
+
+
+Time:O(nlogn), Space:O(N)
+
+int longestSubsequence(int n, int a[])
+    {
+       // your code here
+       
+       vector<int> temp;
+       temp.push_back(a[0]);
+       
+       for(int i=1;i<n;i++)
+       {
+           if(a[i]>temp.back())
+           {
+               temp.push_back(a[i]);
+           }
+           else 
+           {
+           //this will return an iterator which is either the index where arr[i] exists or the index of first element greater than ar[i] which will be replaced
+               int index=lower_bound(temp.begin(),temp.end(),a[i])-temp.begin();
+               temp[index]=a[i];
+           }
+       }
+       
+       return temp.size();
+       
