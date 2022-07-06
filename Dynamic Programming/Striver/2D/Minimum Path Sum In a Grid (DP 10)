@@ -1,0 +1,156 @@
+https://takeuforward.org/data-structure/minimum-path-sum-in-a-grid-dp-10/
+https://leetcode.com/problems/minimum-path-sum/submissions/
+
+Method 1: Recursion
+
+Time:O(2^(m*n))
+
+//moving from m-1,n-1 to 0,0
+ int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    int solve(int i, int j, vector<vector<int>>& grid)
+    {
+        if(i==0 && j==0)
+        {
+            return grid[0][0];
+        }
+        
+        if(i<0 || j<0)
+        {
+            return INT_MAX;
+        }
+        
+        int up=solve(i-1,j,grid);
+        int left=solve(i,j-1,grid);
+        
+        return grid[i][j] + min(left,up);
+        
+    }
+    
+    
+    int minPathSum(vector<vector<int>>& grid) {
+        
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        return solve(m-1,n-1,grid);
+        
+    }
+    
+    
+    Method 2:
+    
+    Memoisation
+    
+    Time:O(M*N), 
+    
+    
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    int solve(int i, int j, vector<vector<int>>& grid,vector<vector<int>>& dp)
+    {
+        if(i==0 && j==0)
+        {
+            return grid[0][0];
+        }
+        
+        if(i<0 || j<0)
+        {
+            return INT_MAX;
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int up=solve(i-1,j,grid,dp);
+        int left=solve(i,j-1,grid,dp);
+        
+        return dp[i][j]=grid[i][j] + min(left,up);
+        
+    }
+    
+    Method 3:
+    
+    Top down
+    
+    Time:O(M*N), Space:O(M*N)
+    
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int minPathSum(vector<vector<int>>& grid) {
+        
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        vector<vector<int>> dp(m,vector<int>(n,-1));
+        
+        
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(i==0 && j==0)
+                {
+                    dp[i][j]=grid[0][0];
+                    continue;
+                }
+                
+                int left=INT_MAX;
+                if(j>0)
+                {
+                    left=dp[i][j-1];
+                }
+                
+                int up=INT_MAX;
+                
+                if(i>0)
+                {
+                    up=dp[i-1][j];
+                }
+                
+                
+                dp[i][j]=grid[i][j]+ min(left,up);
+                
+                
+            }
+        }
+        
+        return dp[m-1][n-1];
+        
+    }
+    
+    int minPathSum(vector<vector<int>>& grid) {
+        
+        int m=grid.size();
+        int n=grid[0].size();
+        
+        vector<vector<int>> dp(m,vector<int>(n,-1));
+        
+        return solve(m-1,n-1,grid,dp);
+        
+    }
