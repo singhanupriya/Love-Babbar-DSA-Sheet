@@ -1,0 +1,172 @@
+https://leetcode.com/problems/triangle/submissions/
+https://takeuforward.org/data-structure/minimum-path-sum-in-triangular-grid-dp-11/
+
+
+Method 1: Recursion
+
+Time:O(2^(M*N))
+
+int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int i, int j, vector<vector<int>>& triangle)
+    {
+        if(j<0 || j>i)  //even if u are on 1st row but out of bounds
+        {
+            return INT_MAX;
+        }
+        
+        if(i==0)
+        {
+            return triangle[i][j];
+        }
+        
+        int minPath=INT_MAX;
+        
+        int up=solve(i-1,j,triangle);
+        int diaUp=solve(i-1,j-1,triangle);
+        
+        minPath=triangle[i][j] + min(minPath,min(up,diaUp));
+        return minPath;
+    }
+    
+    int minimumTotal(vector<vector<int>>& triangle) {
+        
+        int n=triangle.size();
+        int ans=INT_MAX;
+        
+        for(int j=0;j<n;j++)
+        {
+            ans=min(ans,solve(n-1,j,triangle));
+        }
+        
+        return ans;
+        
+    }
+    
+    Method 2: Memoization
+    
+    Time:O(M*N)
+    
+     int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int i, int j, vector<vector<int>>& triangle,vector<vector<int>>& dp)
+    {
+        if(j<0 || j>i)  //even if u are on 1st row but out of bounds
+        {
+            return INT_MAX;
+        }
+        
+        if(i==0)
+        {
+            return triangle[i][j];
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int minPath=INT_MAX;
+        
+        int up=solve(i-1,j,triangle,dp);
+        int diaUp=solve(i-1,j-1,triangle,dp);
+        
+        minPath=triangle[i][j] + min(minPath,min(up,diaUp));
+        return dp[i][j]=minPath;
+    }
+    
+    int minimumTotal(vector<vector<int>>& triangle) {
+        
+        int n=triangle.size();
+        int ans=INT_MAX;
+        
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        
+        for(int j=0;j<n;j++)
+        {
+            ans=min(ans,solve(n-1,j,triangle,dp));
+        }
+        
+        return ans;
+        
+    }
+    
+    
+    Method 3:
+    
+    Top down
+    
+    Time:O(M*N), Space:O(M*N)
+    
+     int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    int minimumTotal(vector<vector<int>>& triangle) {
+        
+        int n=triangle.size();
+        vector<vector<int>> dp(n,vector<int>(n,INT_MAX));
+        
+        //min path from ith row till 0th
+        
+        dp[0][0]=triangle[0][0];
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<=i;j++)
+            {
+                
+                
+                int minPath=INT_MAX;
+                
+                int up=INT_MAX;
+                
+                if(j>=0 && j<=i)
+                {
+                    up=dp[i-1][j];
+                }
+                
+                int diaUp=INT_MAX;
+                if(j-1>=0 && j-1<=i)
+                {
+                    diaUp=dp[i-1][j-1];
+                }
+                
+                minPath=triangle[i][j]+min(minPath,min(up,diaUp));
+                dp[i][j]=minPath;
+                
+            }
+        }
+        
+        
+        int ans=INT_MAX;
+        
+        for(int j=0;j<n;j++)
+        {
+            ans=min(ans,dp[n-1][j]);
+        }
+        
+        return ans;
+        
+        
+    }
