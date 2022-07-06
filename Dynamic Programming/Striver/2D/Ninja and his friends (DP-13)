@@ -1,0 +1,155 @@
+https://takeuforward.org/data-structure/3-d-dp-ninja-and-his-friends-dp-13/
+https://www.youtube.com/watch?v=QGfn7JeXK54
+
+Method 1: Recursion
+
+Time:3^(M*n)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+
+//max from current point till last row
+int solve(int i, int j1, int j2, vector<vector<int>> &grid, int r, int c)
+{
+    if(j1<0 || j1>=c || j2<0 || j2>=c) //even on last row if out of bounds
+    {
+        return INT_MIN;
+    }
+    if(i==r-1) //last row
+    {
+        if(j1==j2)
+        {
+            return grid[i][j1]; //will be picked only once
+        }
+        else
+        {
+            return grid[i][j1]+grid[i][j2];
+        }
+    }
+    
+    int ans=INT_MIN;
+    
+    //for every move of alice there will be three moves of bob
+    //3 x 3 combinations.
+    //i=i+1, j1=-1,0,+1, j2=-1,0,+1
+    //three ways to move from this point
+    for(int di=-1;di<=1;di++)
+    {
+        for(int dj=-1;dj<=1;dj++)
+        {
+            int temp;
+            
+            if(j1==j2)
+            {
+                temp=grid[i][j1] + solve(i+1,j1+di,j2+dj,grid,r,c);
+            }
+            else
+            {
+                temp=grid[i][j1] + grid[i][j2]+solve(i+1,j1+di,j2+dj,grid,r,c);
+            }
+            
+            ans=max(ans,temp);
+            
+        }
+    }
+    
+    return ans;
+    
+}
+
+
+
+int maximumChocolates(int r, int c, vector<vector<int>> &grid) {
+    // Write your code here.
+    
+    return solve(0,0,c-1,grid,r,c);
+    
+    
+}
+
+Method 2:
+
+Memoization
+
+Time:O(M*N*N*9)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+
+//max from current point till last row
+int solve(int i, int j1, int j2, vector<vector<int>> &grid, int r, int c,vector<vector<vector<int>>>& dp)
+{
+    if(j1<0 || j1>=c || j2<0 || j2>=c) //even on last row if out of bounds
+    {
+        return INT_MIN;
+    }
+    if(i==r-1) //last row
+    {
+        if(j1==j2)
+        {
+            return grid[i][j1]; //will be picked only once
+        }
+        else
+        {
+            return grid[i][j1]+grid[i][j2];
+        }
+    }
+    if(dp[i][j1][j2]!=-1)
+    {
+        return dp[i][j1][j2];
+    }
+    
+    int ans=INT_MIN;
+    
+    //for every move of alice there will be three moves of bob
+    //3 x 3 combinations.
+    //i=i+1, j1=-1,0,+1, j2=-1,0,+1
+    //three ways to move from this point
+    for(int di=-1;di<=1;di++)
+    {
+        for(int dj=-1;dj<=1;dj++)
+        {
+            int temp;
+            
+            if(j1==j2)
+            {
+                temp=grid[i][j1] + solve(i+1,j1+di,j2+dj,grid,r,c,dp);
+            }
+            else
+            {
+                temp=grid[i][j1] + grid[i][j2]+solve(i+1,j1+di,j2+dj,grid,r,c,dp);
+            }
+            
+            ans=max(ans,temp);
+            
+        }
+    }
+    
+    return dp[i][j1][j2]=ans;
+    
+}
+
+
+
+int maximumChocolates(int r, int c, vector<vector<int>> &grid) {
+    // Write your code here.
+    
+    vector<vector<vector<int>>> dp(r,vector<vector<int>>(c,vector<int>(c,-1)));
+    return solve(0,0,c-1,grid,r,c,dp);
+    
+    
+}
