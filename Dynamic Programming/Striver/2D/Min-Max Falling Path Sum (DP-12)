@@ -1,0 +1,218 @@
+https://takeuforward.org/data-structure/minimum-maximum-falling-path-sum-dp-12/
+https://leetcode.com/problems/minimum-falling-path-sum/submissions/
+
+Recursion:
+
+Time:3*(2^(m*n)), 
+
+//check from last row to first row
+ int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    //starting from end last row
+    int solve(int i, int j, vector<vector<int>>& matrix, int n)
+    {
+        
+        //even if u are on 0th row but this is out of bound so this needs to be checked before
+        if(j>=n || j<0)  
+        
+        {
+            return INT_MAX;
+        }
+        
+        if(i==0)
+        {
+            return matrix[i][j];
+        }
+        
+      
+  
+  Method 2:
+  Memoization: overlapping subproblems
+  
+  Time:O(M*N)
+  
+  class Solution {
+public:
+    
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    //starting from end last row
+    int solve(int i, int j, vector<vector<int>>& matrix, int n,vector<vector<int>>& dp)
+    {
+        
+        //even if u are on 0th row but this is out of bound so this needs to be checked before
+        if(j>=n || j<0)  
+        
+        {
+            return INT_MAX;
+        }
+        
+        if(i==0)
+        {
+            return matrix[i][j];
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        
+        int minPath=INT_MAX;
+        int up=solve(i-1,j,matrix,n,dp);
+        int diaUp=solve(i-1,j-1,matrix,n,dp);
+        int diaDown=solve(i-1,j+1,matrix,n,dp);
+        
+        minPath=min(minPath,min(up,min(diaUp,diaDown)));
+        
+        if(minPath!=INT_MAX)
+        {
+            minPath+=matrix[i][j];
+        }
+         
+        
+        return dp[i][j]=minPath;
+        
+    }
+    
+    
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        
+        
+        int n=matrix.size();
+        
+        int ans=INT_MAX;
+        
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        
+        for(int j=0;j<n;j++)
+        {
+            dp[n-1][j]=solve(n-1,j,matrix,n,dp);
+            ans=min(ans,dp[n-1][j]);
+        }
+        
+        return ans;
+        
+    }
+        
+        int minPath=INT_MAX;
+        int up=solve(i-1,j,matrix,n);
+        int diaUp=solve(i-1,j-1,matrix,n);
+        int diaDown=solve(i-1,j+1,matrix,n);
+        
+        minPath=min(minPath,min(up,min(diaUp,diaDown)));
+        
+        if(minPath!=INT_MAX)
+        {
+            minPath+=matrix[i][j];
+        }
+         
+        
+        return minPath;
+        
+    }
+    
+    
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        
+        
+        int n=matrix.size();
+        
+        int ans=INT_MAX;
+        
+        for(int j=0;j<n;j++)
+        {
+            ans=min(ans,solve(n-1,j,matrix,n));
+        }
+        
+        return ans;
+        
+    }
+    
+    
+    Method 3: Top down
+    
+    Time:O(M*N), Space:O(M*N)
+    
+      
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        
+        int n=matrix.size();
+        
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        
+        //min sum from row i to row 0
+        
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(i==0)
+                {
+                    dp[i][j]=matrix[i][j];
+                    continue;
+                }
+                
+                int minPath=INT_MAX;
+                
+                int up=INT_MAX;
+                if(i>0)
+                {
+                    up=dp[i-1][j];
+                }
+                
+                int diaUp=INT_MAX;
+                if(i>0 && j>0)
+                {
+                    diaUp=dp[i-1][j-1];
+                }
+                
+                int diaDown=INT_MAX;
+                if(i>0 && j+1<n)
+                {
+                    diaDown=dp[i-1][j+1];
+                }
+                
+                minPath=matrix[i][j]+ min(minPath,min(up,min(diaDown,diaUp)));
+                dp[i][j]=minPath;
+                    
+            }
+        }
+        
+        
+        int ans=INT_MAX;
+        
+        for(int j=0;j<n;j++)
+        {
+            ans=min(ans,dp[n-1][j]);
+        }
+        
+        return ans;
+        
+    }
+};
