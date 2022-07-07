@@ -1,0 +1,95 @@
+https://www.codingninjas.com/codestudio/problems/partitions-with-given-difference_3751628?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTab=1
+
+V.V.VIMP-> if sum=0, and u have elements n=1 which is 0 u can't initialise it as 1. there will be 2 possibilities take 0 or not take 0.
+
+
+Method 1:
+
+Recursion:
+Time:O(2^N)
+
+int solve(int arr[], int n, int sum)
+{
+    if(n==0 && sum>0)
+    {
+        return 0;
+    }
+    
+    if(n==0 && sum==0)
+    {
+        return 1;
+    }
+    
+    if(arr[n-1]<=sum)
+    {
+        return solve(arr,n-1,sum-arr[n-1]) + solve(arr,n-1,sum);
+    }
+    else
+    {
+        return solve(arr,n-1,sum);
+    }
+    
+    
+    
+}
+
+
+Method 3: 
+
+
+int countPartitions(int n, int D, vector<int> &arr) {
+    // Write your code here.
+    //S1-S2=D;
+    //S2=totalSum-S1;
+    //totalSum-D=2*s1
+    //as s1 >=s2, this has to be positive.
+    int totalSum=0;
+    for(int i=0;i<n;i++)
+    {
+        totalSum+=arr[i];
+    }
+    
+    
+    
+    if((totalSum-D < 0) || (totalSum-D)%2!=0)
+    {
+        return 0;
+    }
+    
+    int sum=(totalSum-D)/2;
+    
+    
+    vector<vector<int>> dp(n+1, vector<int>(sum+1,0));
+    
+    dp[0][0]=1;
+    for(int j=1;j<=sum;j++) //if sum>0 and u have no elements
+    {
+        dp[0][j]=0;
+    }
+    
+    
+    int mod=1000000007;
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=0;j<=sum;j++)
+        {
+            if(arr[i-1]<=j)
+            {
+                dp[i][j]=(dp[i-1][j-arr[i-1]]%mod+dp[i-1][j]%mod)%mod;
+            }
+            else
+            {
+                dp[i][j]=dp[i-1][j]%mod;
+            }
+        }
+    }
+    
+    return dp[n][sum];
+    
+    
+   
+    
+    
+}
+
