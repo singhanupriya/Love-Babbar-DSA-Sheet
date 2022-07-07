@@ -1,0 +1,64 @@
+https://www.youtube.com/watch?v=Hw6Ygp3JBYw&t=414s
+
+You want to build an expression out of nums by adding one of the symbols '+' and '-' before "each integer" in nums and then concatenate all the integers.
+
+U have to take every integer in the arr, every integer will have two options + or -.
+
+The orignal set will be partitioned into two subsets S1(all positives) and s2(ALL NEG), S1+S2=target here since one subset will only comprise of neg
+nos its sum will be neg lets us assume s2 to be that set, we have to find S1-S2=target.
+
+S2=TARGET-S1
+S1-SUM+S1=TARGET
+
+S1=(target + sum)/2;  this can be + o - but has to be even as all are integers so sum can't be fractional.
+
+
+ int findTargetSumWays(vector<int>& nums, int target) {
+        
+        int sum=0;
+        
+        int n=nums.size();
+        
+        for(int i=0;i<n;i++)
+        {
+            sum+=nums[i];
+        }
+        
+        int amount=(sum+target)/2; //amount needs to be pos as S1>0
+        
+        
+        
+        if((sum+target)%2!=0 || sum+target<0)
+        {
+            return 0;
+        }
+        
+        vector<vector<int>> dp(n+1,vector<int>(amount+1,0));
+        
+        //subset sum logic
+        
+        dp[0][0]=1; //sum=0 and n=0;
+        
+        for(int i=1;i<=amount;i++)  //sum>0 but n=0
+        {
+            dp[0][i]=0;
+        }
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=0;j<=amount;j++) //sum=0 but if n=1,2,3 check as nums[0] has 2 possibilities
+            {
+                if(nums[i-1]<=j)
+                {
+                    dp[i][j]=dp[i-1][j-nums[i-1]]+dp[i-1][j];
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        
+        return dp[n][amount];
+        
+    }
