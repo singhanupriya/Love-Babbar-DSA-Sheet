@@ -1,0 +1,75 @@
+https://www.youtube.com/watch?v=GS_OqZb2CWc
+https://takeuforward.org/data-structure/partition-set-into-2-subsets-with-min-absolute-sum-diff-dp-16/
+
+
+1. U need to minimise the sum of abs(S1-S2), if we know S1, S2 can be derived S2=sum-S1.
+2. Min possible value of S1=0, max possible value of S1=sum.
+3. Find all possible S1 that can be possible from [0,SUM], last row to target sum question.
+4. Traverse thru the last row, abs(S1-S2)=abs(2*S1-SUM), find all possible diff and return min.
+
+Time:O(M*N), Space:O(M*N)
+
+
+int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+  
+  
+	int minDifference(int arr[], int n)  { 
+	    // Your code goes here
+	    
+	    
+	    int sum=0;
+	    for(int i=0;i<n;i++)
+	    {
+	        sum+=arr[i];
+	    }
+	    
+	    vector<vector<int>> dp(n+1,vector<int>(sum+1,0));
+	    
+	    for(int i=0;i<=n;i++)
+	    {
+	        for(int j=0;j<=sum;j++)
+	        {
+	            if(j==0)
+	            {
+	                dp[i][j]=1;
+	                continue;
+	            }
+	            
+	            int take=0,notTake=0;
+	            
+	            if(i>0)
+	            {
+	                notTake=dp[i-1][j];
+	            }
+	            
+	            if(i>0 && arr[i-1]<=j)
+	            {
+	                take=dp[i-1][j-arr[i-1]];
+	            }
+	            
+	            dp[i][j]=take || notTake;
+	        }
+	    }
+	    
+	    
+	    int ans=INT_MAX;
+	    
+	    for(int j=0;j<=sum;j++) //last row, check all possible S1
+	    {
+	        if(dp[n][j]==1)
+	        {
+	            ans=min(ans,abs(2*j-sum));
+	        }
+	    }
+	    
+	    return ans;
+	    
+	    
+	} 
