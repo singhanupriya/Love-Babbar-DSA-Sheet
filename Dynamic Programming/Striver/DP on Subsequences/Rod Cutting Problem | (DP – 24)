@@ -1,0 +1,44 @@
+https://takeuforward.org/data-structure/rod-cutting-problem-dp-24/
+
+Similar to unbounded knapsack weight and value question
+
+Time:O(M*N), Space:O(M*N)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int cutRod(vector<int> &price, int n)
+{
+	// Write your code here.
+    
+    int piece=price.size();
+    
+    vector<vector<int>> dp(piece+1,vector<int>(n+1,0));
+    
+    //n==0 || piece ==0 no profit
+    
+    for(int i=1;i<=piece;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(i<=j)
+            {
+                dp[i][j]=max(price[i-1]+dp[i][j-i],dp[i-1][j]);
+            }
+            else
+            {
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+    }
+    
+    return dp[piece][n];
+    
+}
+
