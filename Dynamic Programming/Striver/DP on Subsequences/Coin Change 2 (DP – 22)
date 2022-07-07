@@ -1,0 +1,118 @@
+https://leetcode.com/problems/coin-change-2/submissions/
+https://takeuforward.org/data-structure/coin-change-2-dp-22/
+
+Method 1: Recursion
+
+Time:O(2^N)
+
+ int solve(int amount, vector<int>& coins , int n)
+    {
+        if(amount==0)
+        {
+            return 1; //dont include anything
+        }
+        
+        if(n==0)
+        {
+            return 0;
+        }
+        
+        if(coins[n-1]>amount)
+        {
+            return solve(amount, coins, n-1);
+        }
+        else
+        {
+            return solve(amount-coins[n-1],coins,n)+solve(amount, coins, n-1);
+        }
+        
+    }
+    
+    int change(int amount, vector<int>& coins) {
+        
+        int n=coins.size();
+        
+        return solve(amount, coins, n);
+        
+    }
+    
+    Method 2: Memoization
+    
+    Time:O(M*N)
+    
+    int solve(int amount, vector<int>& coins , int n,vector<vector<int>>& dp)
+    {
+        if(amount==0)
+        {
+            return 1; //dont include anything
+        }
+        
+        if(n==0)
+        {
+            return 0;
+        }
+        
+        if(dp[n][amount]!=-1)
+        {
+            return dp[n][amount];
+        }
+        
+        if(coins[n-1]>amount)
+        {
+            return dp[n][amount]=solve(amount, coins, n-1,dp);
+        }
+        else
+        {
+            return dp[n][amount]=solve(amount-coins[n-1],coins,n,dp)+solve(amount, coins, n-1,dp);
+        }
+        
+    }
+    
+    int change(int amount, vector<int>& coins) {
+        
+        int n=coins.size();
+        vector<vector<int>> dp(n+1, vector<int>(amount+1,-1));
+        return solve(amount, coins, n,dp);
+        
+    }
+    
+    Method 3: Top down
+    
+    Time:O(M*N), Space:O(M*N)
+    
+    int change(int amount, vector<int>& coins) {
+        
+        int n=coins.size();
+        vector<vector<int>> dp(n+1, vector<int>(amount+1,0));
+        
+        
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=0;j<=amount;j++)
+            {
+                if(j==0)
+                {
+                    dp[i][j]=1;
+                    continue;
+                }
+                
+                
+                
+                if(coins[i-1]<=j)
+                {
+                    dp[i][j]=dp[i][j-coins[i-1]] + dp[i-1][j];
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j];
+                }
+                
+                
+            }
+        }
+        
+        return dp[n][amount];
+            
+        
+    }
