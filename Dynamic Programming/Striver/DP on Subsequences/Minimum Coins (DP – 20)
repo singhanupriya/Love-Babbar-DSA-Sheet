@@ -1,0 +1,161 @@
+https://takeuforward.org/data-structure/minimum-coins-dp-20/
+
+
+Method 1: Recursion
+
+Time:n^amount
+
+  int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(vector<int>& coins, int n, int amount)
+    {
+        if(n==0 || amount==0)
+        {
+            return 0;
+        }
+        
+        int ans=1000000009;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(coins[i]<=amount)
+            {
+                int temp=1+solve(coins,n,amount-coins[i]);
+                ans=min(ans,temp);
+            }
+        }
+        
+        return ans;
+        
+    }
+    
+    int coinChange(vector<int>& coins, int amount) {
+        
+        int n=coins.size();
+        int ans= solve(coins,n,amount);
+        
+        if(ans>=1000000009)
+        {
+            return -1;
+        }
+        
+        return ans;
+        
+    }
+    
+    Method 2: Memoization
+    
+    Time:O(N*amount)
+    
+     int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(vector<int>& coins, int n, int amount,vector<vector<int>>& dp)
+    {
+        if(n==0 || amount==0)
+        {
+            return 0;
+        }
+        
+        if(dp[n][amount]!=-1)
+        {
+            return dp[n][amount];
+        }
+        
+        int ans=1000000009;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(coins[i]<=amount)
+            {
+                int temp=1+solve(coins,n,amount-coins[i],dp);
+                ans=min(ans,temp);
+            }
+        }
+        
+        return dp[n][amount]=ans;
+        
+    }
+    
+    int coinChange(vector<int>& coins, int amount) {
+        
+        int n=coins.size();
+        
+        vector<vector<int>> dp(n+1,vector<int>(amount+1,-1));
+        
+        int ans= solve(coins,n,amount,dp);
+        
+        if(ans>=1000000009)
+        {
+            return -1;
+        }
+        
+        return ans;
+        
+    }
+};
+
+
+Method 3: Top down
+
+Time:O(M*N), Space:O(amount)
+
+class Solution {
+public:
+    
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    int coinChange(vector<int>& coins, int amount) {
+        
+        int n=coins.size();
+        
+        vector<int> dp(amount+1,1000000009);
+        
+        dp[0]=0;
+        
+        
+        
+        for(int i=1;i<=amount;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(coins[j]<=i)
+                {
+                    dp[i]=min(dp[i],1+dp[i-coins[j]]);
+                }
+            }
+        }
+        
+        
+        if(dp[amount]>=1000000009)
+        {
+            return -1;
+        }
+        
+        return dp[amount];
+        
+    }
+};
+
+    
