@@ -1,0 +1,82 @@
+https://takeuforward.org/data-structure/count-subsets-with-sum-k-dp-17/
+
+
+V.V.VIMP-> if sum=0, and u have elements n=1 which is 0 u can't initialise it as 1. there will be 2 possibilities take 0 or not take 0.
+
+
+Method 1:
+
+Recursion
+
+int solve(int arr[], int n, int sum)
+{
+    if(n==0 && sum>0) //only when sum>0 && u have no elements u return 0
+    {
+        return 0;
+    }
+    
+    if(n==0 && sum==0) //if sum=0 and no elements empty set
+    {
+        return 1;
+    }
+    
+    if(arr[n-1]<=sum)
+    {
+        return solve(arr,n-1,sum-arr[n-1]) + solve(arr,n-1,sum);
+    }
+    else
+    {
+        return solve(arr,n-1,sum);
+    }
+    
+    
+    
+}
+
+
+
+Method 2:
+
+Time:O(N*M), Space:O(M*N)
+
+Take + notTake
+
+int findWays(vector<int> &arr, int sum)
+{
+    // Write your code here.
+    int n=num.size();
+    
+    vector<vector<int>> dp(n+1,vector<int>(tar+1,0));
+    
+    vector<vector<int>> dp(n+1, vector<int>(sum+1,0));
+    
+    dp[0][0]=1; //if sum=0 & n=0 empty set
+    
+    for(int j=1;j<=sum;j++) //only when sum>0 && n=0 return 0, if sum=0 and n[0]=0 2 possibilities
+    {
+        dp[0][j]=0;
+    }
+    
+    
+    int mod=1000000007;
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=0;j<=sum;j++)
+        {
+            if(arr[i-1]<=j)
+            {
+                dp[i][j]=(dp[i-1][j-arr[i-1]]%mod+dp[i-1][j]%mod)%mod;
+            }
+            else
+            {
+                dp[i][j]=dp[i-1][j]%mod;
+            }
+        }
+    }
+    
+    return dp[n][sum];
+    
+    
+    
+}
