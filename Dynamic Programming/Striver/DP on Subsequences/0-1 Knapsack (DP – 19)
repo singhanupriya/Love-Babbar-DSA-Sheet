@@ -1,0 +1,128 @@
+https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
+
+Method 1: Recursion
+
+Time:O(2^N)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int solve(vector<int> weight, vector<int> value, int n, int maxWeight)
+{
+    if(n==0 || maxWeight==0)
+    {
+        return 0;
+    }
+    
+    if(weight[n-1]<=maxWeight)  //maxWeight will never become neg
+    {
+        return max(value[n-1]+solve(weight,value,n-1,maxWeight-weight[n-1]), solve(weight,value,n-1,maxWeight));
+    }
+    else
+    {
+        return solve(weight,value,n-1,maxWeight);
+    }
+}
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+{
+	// Write your code here
+    
+    return solve(weight,value,n,maxWeight);
+    
+    
+    
+    
+}
+
+Method 2: Memoization
+
+Time:O(M*N), Space:O(M*N)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int solve(vector<int> weight, vector<int> value, int n, int maxWeight,vector<vector<int>> &dp)
+{
+    if(n==0 || maxWeight==0)
+    {
+        return 0;
+    }
+    
+    if(dp[n][maxWeight]!=-1)
+    {
+        return dp[n][maxWeight];
+    }
+    
+    if(weight[n-1]<=maxWeight)  //maxWeight will never become neg
+    {
+        return dp[n][maxWeight]=max(value[n-1]+solve(weight,value,n-1,maxWeight-weight[n-1],dp), solve(weight,value,n-1,maxWeight,dp));
+    }
+    else
+    {
+        return dp[n][maxWeight]=solve(weight,value,n-1,maxWeight,dp);
+    }
+}
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+{
+	// Write your code here
+    vector<vector<int>> dp(n+1,vector<int>(maxWeight+1,-1));
+    return solve(weight,value,n,maxWeight,dp);
+    
+    
+    
+    
+}
+
+Method 3:
+
+Top down
+
+Time:O(M*N), Space:O(M*N)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) 
+{
+	// Write your code here
+    
+    vector<vector<int>> dp(n+1, vector<int>(maxWeight+1,0));
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=maxWeight;j++)
+        {
+            if(weight[i-1]<=j)
+            {
+                dp[i][j]=max(value[i-1]+dp[i-1][j-weight[i-1]], dp[i-1][j]);
+            }
+            else
+            {
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+    }
+    
+    return dp[n][maxWeight];
+    
+}
