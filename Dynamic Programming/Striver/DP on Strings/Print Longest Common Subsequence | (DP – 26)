@@ -1,0 +1,95 @@
+https://www.youtube.com/watch?v=-zI4mrF2Pb4
+
+
+Logic: Trace back and see where u have s1[i-1]==s2[j-1] add that char
+
+Time:O(M*N), Space:O(M*N)
+
+#include <iostream>
+#include<vector>
+
+
+using namespace std;
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+
+string solve(string s1, string s2, int n, int m)
+{
+    vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+   
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=m;j++)
+        {
+            if(s1[i-1]==s2[j-1])
+            {
+                
+                dp[i][j]=1+ dp[i-1][j-1];
+            }
+            else
+            {
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+    }
+    
+    //cout<<dp[n][m];
+    
+    int len=dp[n][m];
+    string ans="";
+    for(int i=0;i<len;i++)
+    {
+        ans+="$"; //dummy string
+    }
+    
+    
+    int i=n,j=m;
+    int index=len-1;
+    
+    while(i>0 && j>0) //trace back
+    {
+        if(s1[i-1]==s2[j-1])
+        {
+            ans[index]=s1[i-1];  
+            index--;
+            j--;
+            i--; 
+            
+            //as dp[i][j]=1+ dp[i-1][j-1]; so u are tracing back
+        }
+        else if(dp[i-1][j]>dp[i][j-1])
+        {
+            i--; //as dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        }
+        else 
+        {
+            j--;
+        }
+    }
+    
+    return ans;
+    
+    
+    
+}
+
+int main()
+{
+  string s1 = "AGGTAB";
+  string s2 = "GXTXAYB";
+  int n=s1.length();
+  int m=s2.length();
+  
+  cout<<solve(s1,s2,n,m);
+
+    return 0;
+}
