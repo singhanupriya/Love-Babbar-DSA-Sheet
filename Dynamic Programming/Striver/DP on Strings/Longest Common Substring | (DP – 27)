@@ -1,0 +1,91 @@
+https://practice.geeksforgeeks.org/problems/longest-common-substring1452/1/
+https://www.youtube.com/watch?v=_wP9mWNPL5w
+
+
+Similar logic as LCS diff is when s[i-1]!=s2[j-1] we did max(dp[i-1][j],dp[i][j-1]) here we were breaking the consecutive rule which needs to be there is 
+substring.
+
+only if s[i-1]==s2[j-1], dp[i][j]=1+dp[i-1][j-1] else it will be 0, longest will be max of all DPs.
+
+int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    int longestCommonSubstr (string S1, string S2, int n, int m)
+    {
+        // your code here
+        
+        
+        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+        
+        int ans=0;
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=m;j++)
+            {
+                if(S1[i-1]==S2[j-1])
+                {
+                    dp[i][j]=1+dp[i-1][j-1];
+                    ans=max(ans,dp[i][j]);
+                }
+                else
+                {
+                    dp[i][j]=0;  
+                }
+            }
+        }
+        
+        return ans;
+        
+    }
+    
+    Method 2: Space optimised top down 
+    Time:O(M*N), Space:O(M)
+    
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    int longestCommonSubstr (string S1, string S2, int n, int m)
+    {
+        // your code here
+        
+        
+        vector<vector<int>> dp(2,vector<int>(m+1,0));
+        
+        int ans=0;
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=m;j++)
+            {
+                
+                int row=i&1;
+                if(S1[i-1]==S2[j-1])
+                {
+                    dp[row][j]=1+dp[1-row][j-1];
+                    ans=max(ans,dp[row][j]);
+                }
+                else
+                {
+                    dp[row][j]=0;
+                }
+            }
+        }
+        
+        return ans;
+        
+    }
