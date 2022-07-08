@@ -1,0 +1,222 @@
+https://www.youtube.com/watch?v=nVG7eTiD2bY
+https://practice.geeksforgeeks.org/problems/distinct-occurrences/1/#
+
+1. U need to find distinct occurences of T as a sub-seq in S.
+2. If len(s)==0 && len(T)==0 return 1, if len(S)==0 return 0,  An empty
+    // string can't have another string as subsequence
+    if len(T)==0  return 1, An empty
+    // string is subsequence of all.
+3. Compare the last char in S and T, if same u can either take that and search in rem S, f(n-1,m-1) or u can search for diff occ of that char of T in S
+    f(n-1,m)
+4. If not same, search in the rem S, if that char of T occurs f(m-1,n)
+
+Method 1: Recursion
+
+Time: o(2^n)
+
+int solve(string S, string T, int n, int m)
+    {
+        
+        if(n==0 && m==0)
+        {
+            return 1;
+        }
+        
+        if(n==0) //no main string, empty string can't have sub
+        {
+            return 0;
+        }
+        
+        if(m==0) //if 0 size subsequence
+        {
+            return 1;
+        }
+        
+        //if last index matxh, u can either take that or check for another 
+        //occ of it in the main string
+        
+        if(S[n-1]==T[m-1])
+        {
+            return (solve(S,T,n-1,m-1)%1000000007 + solve(S,T,n-1,m)%1000000007)%1000000007;
+            //take that.    + search for another occ of T[m-1]
+        }
+        else
+        {
+            return solve(S,T,n-1,m)%1000000007; //search in the rem main string
+        }
+        
+        
+    }
+    
+    int subsequenceCount(string S, string T)
+    {
+      //Your code here
+      
+      int n=S.length();
+      int m=T.length();
+      
+      if(m>n)
+        {
+            return 0;
+        }
+      
+      return solve(S,T,n,m);
+      
+    }
+};
+
+Method 2: Memoization
+
+Time:O(M*N)
+
+int solve(string S, string T, int n, int m,vector<vector<int>>& dp)
+    {
+        
+        if(n==0 && m==0)
+        {
+            return 1;
+        }
+        
+        if(n==0) //no main string, empty string can't have sub
+        {
+            return 0;
+        }
+        
+        if(m==0) //if 0 size subsequence
+        {
+            return 1;
+        }
+        
+        if(dp[n][m]!=-1)
+        {
+            return dp[n][m];
+        }
+        
+        //if last index matxh, u can either take that or check for another 
+        //occ of it in the main string
+        
+        if(S[n-1]==T[m-1])
+        {
+            return dp[n][m]=(solve(S,T,n-1,m-1,dp)%1000000007 + solve(S,T,n-1,m,dp)%1000000007)%1000000007;
+            //take that.    + search for another occ of T[m-1]
+        }
+        else
+        {
+            return dp[n][m]=solve(S,T,n-1,m,dp)%1000000007; //search in the rem main string
+        }
+        
+        
+    }
+    
+    int subsequenceCount(string S, string T)
+    {
+      //Your code here
+      
+      int n=S.length();
+      int m=T.length();
+      
+      if(m>n)
+        {
+            return 0;
+        }
+        
+        vector<vector<int>> dp(n+1,vector<int>(m+1,-1));
+      
+      return solve(S,T,n,m,dp);
+      
+    }
+    
+    Method 3: Top down
+    
+    Time:O(M*N), Space:O(M*N)
+    
+    int subsequenceCount(string S, string T)
+    {
+      //Your code here
+      
+      int n=S.length();
+      int m=T.length();
+      
+      if(m>n)
+        {
+            return 0;
+        }
+        
+        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+        
+        for(int i=0;i<=n;i++)
+        {
+            dp[i][0]=1;
+        }
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=m;j++)
+            {
+                if(S[i-1]==T[j-1])
+                {
+                    dp[i][j]=(dp[i-1][j-1]%1000000007+dp[i-1][j]%1000000007)%1000000007;
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j]%1000000007;
+                }
+            }
+        }
+        
+        return dp[n][m];
+      
+      
+      
+    }
+    
+    Method 4: Space optimised top down
+    
+    Time:O(M*N), Space:O(M)
+    
+    int subsequenceCount(string S, string T)
+    {
+      //Your code here
+      
+      int n=S.length();
+      int m=T.length();
+      
+      if(m>n)
+        {
+            return 0;
+        }
+        
+        vector<vector<int>> dp(2,vector<int>(m+1,0));
+        
+        dp[0][0]=1;
+        int row=0;
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=0;j<=m;j++)
+            {
+                row=i & 1;
+                
+                if(j==0)
+                {
+                    dp[row][j]=1;
+                    continue;
+                }
+                
+                if(S[i-1]==T[j-1])
+                {
+                    dp[row][j]=(dp[1-row][j-1]%1000000007+dp[1-row][j]%1000000007)%1000000007;
+                }
+                else
+                {
+                    dp[row][j]=dp[1-row][j]%1000000007;
+                }
+            }
+        }
+        
+        return dp[row][m];
+      
+      
+      
+    }
+ 
