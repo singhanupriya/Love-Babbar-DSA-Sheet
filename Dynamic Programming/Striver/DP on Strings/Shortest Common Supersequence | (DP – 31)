@@ -1,0 +1,98 @@
+https://www.youtube.com/watch?v=xElxAuBcvsU
+https://takeuforward.org/data-structure/shortest-common-supersequence-dp-31/
+https://leetcode.com/problems/shortest-common-supersequence/submissions/
+
+Variation 1:
+If we were asked length of shortest common supersequence=> len(lcs) + remaining chars from both string
+
+Variation 2: 
+Print shortest common supersequence, order must be maitained that u get the same lcs from 2 strings.
+create the lcs table and then trace the path, at last, u will be at 1st row or col, trace the remaining elements.
+
+Time:O(M*N), Space:O(M*N)
+
+
+class Solution {
+public:
+    
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    string shortestCommonSupersequence(string str1, string str2) {
+        
+        
+        int n=str1.length();
+        int m=str2.length();
+        
+        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=m;j++)
+            {
+                if(str1[i-1]==str2[j-1])
+                {
+                    dp[i][j]=1+dp[i-1][j-1];
+                }
+                else
+                {
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        
+        //we need to get the string containing lcs string
+        //note here was are not finding lcs string
+        int i=n,j=m;
+        int len=dp[n][m];
+        string ans="";
+        
+        while(i>0 && j>0)
+        {
+            if(str1[i-1]==str2[j-1])
+            {
+                ans+=str1[i-1];
+                i--;
+                j--;
+            }
+            else if(dp[i-1][j]>dp[i][j-1])
+            {
+                ans+=str1[i-1];
+                i--;
+            }
+            else
+            {
+                ans+=str2[j-1];
+                j--;
+            }
+                
+        }
+        //ans -> LCS
+        
+        //add remaining chars from both string
+        
+        while(i>0)
+        {
+            ans+=str1[i-1];
+            i--;
+            
+        }
+        
+        while(j>0)
+        {
+            ans+=str2[j-1];
+            j--;
+        }
+        
+        reverse(ans.begin(),ans.end());
+        return ans;
+        
+        
+    }
+};
