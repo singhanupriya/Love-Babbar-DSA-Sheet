@@ -1,0 +1,123 @@
+https://takeuforward.org/data-structure/minimum-insertions-deletions-to-convert-string-dp-30/
+https://www.codingninjas.com/codestudio/problems/can-you-make_4244510?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTab=1
+
+
+Similar to edit distance
+
+Method 1: Top down
+
+Time:O(M*N), Space:O(M*N)
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    
+    return b;
+}
+
+
+int canYouMake(string &str, string &ptr)
+{
+    // Write your code here.
+    //str -> ptr;
+    int n=str.length();
+    int m=ptr.length();
+    
+    vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+    
+    for(int i=1;i<=n;i++)
+    {
+        dp[i][0]=i;
+    }
+    
+    for(int i=1;i<=m;i++)
+    {
+        dp[0][i]=i;
+    }
+    
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=m;j++)
+        {
+            if(str[i-1]==ptr[j-1])
+            {
+                dp[i][j]=dp[i-1][j-1];
+            }
+            else
+            {
+                dp[i][j]=1+min(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+    }
+    
+    return dp[n][m];
+    
+    
+    
+    
+}
+
+Method 2: Space optimised top down
+
+Time:O(M*N), Space:O(M)
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    
+    return b;
+}
+
+
+int canYouMake(string &str, string &ptr)
+{
+    // Write your code here.
+    //str -> ptr;
+    int n=str.length();
+    int m=ptr.length();
+    
+    vector<vector<int>> dp(2,vector<int>(m+1,0));
+    
+    for(int i=1;i<=m;i++)
+    {
+        dp[0][i]=i;
+    }
+    
+    
+    
+    int row=0;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=0;j<=m;j++)
+        {
+            
+            row=i & 1;
+            if(j==0)
+            {
+                dp[row][j]=i;
+                continue;
+            }
+            
+            if(str[i-1]==ptr[j-1])
+            {
+                dp[row][j]=dp[1-row][j-1];
+            }
+            else
+            {
+                dp[row][j]=1+min(dp[1-row][j],dp[row][j-1]);
+            }
+        }
+    }
+    
+    return dp[row][m];
+    
+    
+    
+    
+}
