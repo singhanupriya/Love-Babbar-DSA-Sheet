@@ -1,0 +1,97 @@
+https://takeuforward.org/data-structure/longest-palindromic-subsequence-dp-28/
+https://leetcode.com/problems/longest-palindromic-subsequence/submissions/
+
+LCS(s1,reverse(s1))
+
+Method 3: Top down
+
+Time:O(M^2), Space:O(M^2)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    
+    int longestPalindromeSubseq(string s) {
+        
+        string s2=s;
+        reverse(s2.begin(),s2.end());
+        int n=s.length();
+        
+        
+        vector<vector<int>> dp(n+1,vector<int>(n+1,0));
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                if(s[i-1]==s2[j-1])
+                {
+                    dp[i][j]=1+dp[i-1][j-1];
+                }
+                else
+                {
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        
+        return dp[n][n];
+        
+        
+    }
+};
+
+Method 2: Space optimised top down
+
+Time:O(N^2), Space:O(N)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        
+        return b;
+    }
+    
+    
+    int longestPalindromeSubseq(string s) {
+        
+        string s2=s;
+        reverse(s2.begin(),s2.end());
+        int n=s.length();
+        
+        
+        vector<vector<int>> dp(2,vector<int>(n+1,0));
+        
+        int row=0;
+        
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                row=i&1;
+                
+                if(s[i-1]==s2[j-1])
+                {
+                    dp[row][j]=1+dp[1-row][j-1];
+                }
+                else
+                {
+                    dp[row][j]=max(dp[1-row][j],dp[row][j-1]);
+                }
+            }
+        }
+        
+        return dp[row][n];
+        
+        
+    }
