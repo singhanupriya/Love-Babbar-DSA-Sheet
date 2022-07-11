@@ -1,0 +1,169 @@
+https://leetcode.com/problems/longest-increasing-subsequence/submissions/
+
+
+Method 1: Recursion
+
+Time:O(2^n), Space:O(N)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int lis(vector<int>& nums, int index, int prev, int n)
+    {
+        if(index==n) //no element
+        {
+            return 0;
+        }
+        
+        int pick=INT_MIN;
+        int notPick=lis(nums,index+1,prev,n);
+        if(prev==-1 || nums[prev]<nums[index])
+        {
+            pick=1+lis(nums,index+1,index,n);
+        }
+        
+        return max(pick,notPick);
+        
+    }
+    
+    int lengthOfLIS(vector<int>& nums) {
+        
+        int n=nums.size();
+        
+        return lis(nums,0,-1,n);
+        
+    }
+    
+    Method 2: Memoization
+    
+    Time:O(N^2), Space:O(N^2 + N)
+    
+     int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int lis(vector<int>& nums, int index, int prev, int n,vector<vector<int>>& dp)
+    {
+        if(index==n) //no element
+        {
+            return 0;
+        }
+        
+        if(dp[index][prev+1]!=-1)
+        {
+            return dp[index][prev+1];
+        }
+        
+        int pick=INT_MIN;
+        int notPick=lis(nums,index+1,prev,n,dp);
+        if(prev==-1 || nums[prev]<nums[index])
+        {
+            pick=1+lis(nums,index+1,index,n,dp);
+        }
+        
+        return dp[index][prev+1]=max(pick,notPick);
+        
+    }
+    
+    int lengthOfLIS(vector<int>& nums) {
+        
+        int n=nums.size();
+        
+        vector<vector<int>> dp(n,vector<int>(n+1,-1));
+        
+        //index -> 0 to n-1 
+        //prev -> -1 to n-1
+        
+        return lis(nums,0,-1,n,dp);
+        
+    }
+    
+    Method 3: Top down
+    
+    Time:o(N^2), Space:O(N)
+    
+     int lengthOfLIS(vector<int>& nums) {
+        
+        
+        
+        int n=nums.size();
+        
+        if(n==0)
+        {
+            return 0;
+        }
+        
+        vector<int> dp(n,1);
+        
+        int ans=1;
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                if(nums[i]>nums[j])
+                {
+                    dp[i]=max(dp[i],1+dp[j]);
+                    ans=max(ans,dp[i]);
+                }
+            }
+        }
+        
+        return ans;
+        
+        
+        
+    }
+    
+    Method 4: Lower bound
+    
+    Time:O(NlogN), Space:O(N)
+    
+     int lengthOfLIS(vector<int>& nums) {
+        
+        
+        
+        int n=nums.size();
+        
+        if(n==0)
+        {
+            return 0;
+        }
+        
+        vector<int> temp;
+        
+        temp.push_back(nums[0]);
+        
+        for(int i=1;i<n;i++)
+        {
+            if(nums[i]>temp[temp.size()-1])
+            {
+                temp.push_back(nums[i]);
+            }
+            else
+            {
+                int index=lower_bound(temp.begin(),temp.end(),nums[i])-temp.begin();
+                temp[index]=nums[i];
+            }
+        }
+        
+        return temp.size();
+        
+        
+        
+        
+        
+        
+        
+    }
