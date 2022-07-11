@@ -1,0 +1,64 @@
+https://www.youtube.com/watch?v=cKVl1TFdNXg
+https://www.codingninjas.com/codestudio/problems/number-of-longest-increasing-subsequence_3751627?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTab=0
+
+
+1. Given a arr[50, 3, 90, 60, 80] -> LIS {50,60,80} and {3,60,80} so ans =2;
+2. Maintain a dp array and count array which will count the max no of LIS till that index
+
+arr={1,5}, dp[0]=1, dp[1]=2 now dp[i]=dp[j]+1 no of LIS till will be same as no of LIS till 1 as u will just add 5 to the end of LIS till 1 as dp[i]>dp[j]+1
+
+if dp[i]==dp[j]+1 and arr[i]>arr[j] to the existing count of i will u will j, count[i]+=count[j]
+
+Time:O(N^2), Space:O(N)
+
+
+
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int findNumberOfLIS(vector<int> &arr)
+{
+    // Write your code here.
+    
+    int n=arr.size();
+    
+    vector<int> dp(n,1);
+    vector<int> count(n,1);
+    
+    int maxValue=1;
+    int maxIndex=0;
+    
+    for(int i=1;i<n;i++)
+    {
+        for(int j=0;j<i;j++)
+        {
+            if(arr[i]>arr[j] && dp[i]<dp[j]+1)
+            {
+                dp[i]=dp[j]+1;
+                count[i]=count[j];
+                
+            }
+            else if(arr[i]>arr[j] && dp[i]==dp[j]+1)
+            {
+                count[i]+=count[j];
+            }
+        }
+        maxValue=max(maxValue,dp[i]);
+    }
+    int ans=0;
+    for(int i=0;i<n;i++)
+    {
+        if(dp[i]==maxValue)
+        {
+            ans+=count[i];
+        }
+    }
+    return ans;
+}
