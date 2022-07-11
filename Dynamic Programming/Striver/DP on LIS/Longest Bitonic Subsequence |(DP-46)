@@ -1,0 +1,66 @@
+https://www.youtube.com/watch?v=y4vN0WNdrlg
+https://practice.geeksforgeeks.org/problems/longest-bitonic-subsequence0824/1/
+
+1. Similar to LIS.
+2. Calculate lis from front and back, dp[i]->lis till index i.
+3. ans =max(ans, dpforward[i]+backward[i]-1) as that index will be counted twice.
+
+method 1: Top down
+
+Time:O(N^2), Space:O(N)
+
+
+int max(int a, int b)
+	{
+	    if(a>=b)
+	    {
+	        return a;
+	    }
+	    return b;
+	}
+	
+	int LongestBitonicSequence(vector<int>nums)
+	{
+	    // code here
+	    
+	    int n=nums.size();
+	    
+	    vector<int> dpForward(n,1);
+	    vector<int> dpBackward(n,1);
+	    
+	    
+	    for(int i=1;i<n;i++)
+	    {
+	        for(int j=0;j<i;j++)
+	        {
+	            if(nums[i]>nums[j])
+	            {
+	                if(dpForward[i]<dpForward[j]+1)
+	                {
+	                    dpForward[i]=dpForward[j]+1;
+	                }
+	            }
+	        }
+	    }
+	    
+	    for(int i=n-2;i>=0;i--)
+	    {
+	        for(int j=n-1;j>i;j--)
+	        {
+	            if(nums[i]>nums[j])
+	            {
+	                dpBackward[i]=max(dpBackward[i],dpBackward[j]+1);
+	            }
+	        }
+	    }
+	    
+	    int ans=1;
+	    
+	    for(int i=0;i<n;i++)
+	    {
+	        ans=max(ans, dpForward[i]+dpBackward[i]-1);
+	    }
+	    
+	    return ans;
+	    
+	}
