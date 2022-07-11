@@ -1,0 +1,105 @@
+https://www.youtube.com/watch?v=IFfYfonAFGc
+
+1. Use top down approach, keep a dp vector and a prevIndex vector that will keep track of the prev index in LIS.
+2. Initalise prev[i]=i, means it is only in the LIS, ------> base case.
+3. Do the top down, id u are updating dp[i] also update prevIndex[i].
+4. Finally print
+
+Time:O(N^2), Space:O(N)
+
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    
+    return b;
+}
+
+void printLIS(int arr[], int n)
+{
+    if(n==0)
+    {
+        cout<<"No array\n";
+        return;
+    }
+    
+    if(n==1)
+    {
+        cout<<arr[0]<<endl;
+    }
+    
+    
+    vector<int> dp(n,1);
+    vector<int> prevIndex(n,0);
+    
+    for(int i=1;i<n;i++)
+    {
+        prevIndex[i]=i;
+    }
+    
+    int ans=1;
+    int ansIndex=-1;
+    
+    for(int i=1;i<n;i++)
+    {
+        for(int j=0;j<i;j++)
+        {
+            if(arr[i]>arr[j])
+            {
+                if(dp[i]<dp[j]+1)
+                {
+                    prevIndex[i]=j;
+                    dp[i]=1+dp[j];
+                }
+            }
+        }
+        if(ans<dp[i])
+        {
+            ans=dp[i];
+            ansIndex=i;
+        }
+    }
+    
+    
+    for(int i=0;i<n;i++)
+    {
+        cout<<dp[i]<<" ";
+    }
+    cout<<endl;
+    
+    for(int i=0;i<n;i++)
+    {
+        cout<<prevIndex[i]<<" ";
+    }
+    cout<<endl;
+    
+    cout<<arr[ansIndex]<<" ";
+    //now backtrack
+    
+    while(prevIndex[ansIndex]!=ansIndex)
+    {
+        
+        ansIndex=prevIndex[ansIndex];
+        cout<<arr[ansIndex]<<" ";
+    }
+    
+    
+}
+
+int main()
+{
+    int arr[]={0,1,0,3,2,3};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    printLIS(arr,n);
+    
+
+    return 0;
+}
