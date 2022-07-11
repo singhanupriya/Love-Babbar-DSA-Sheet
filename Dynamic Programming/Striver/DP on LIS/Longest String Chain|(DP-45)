@@ -1,0 +1,180 @@
+https://leetcode.com/problems/longest-string-chain/
+https://www.youtube.com/watch?v=YY8iBaYcc4g
+
+
+1. Similar to LIS
+2. In LIS, we checked if arr[i]>arr[j], here we need to check if string1=stringj + a char
+
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    bool compare(string& s1, string& s2)
+    {
+        //s1->arr[i]
+        //s2->arr[j]
+        
+        int len1=s1.length();
+        int len2=s2.length();
+        
+        if(len1!= len2+1)
+        {
+            return false;
+        }
+        
+        int first=0;
+        int second=0;
+        
+        while(first<len1)
+        {
+            if(s1[first]==s2[second])
+            {
+                first++;
+                second++;
+            }
+            else
+            {
+                first++;
+            }
+        }
+        
+        if(first==len1 && second==len2) //they both end as order of the origanl word has to be maintained
+        {
+            return true;
+        }
+        
+        return false;
+        
+    }
+    
+    
+    int lis(vector<string>& words, int index, int prev, int n)
+    {
+        if(index==n)
+        {
+            return 0;
+        }
+        
+        int pick=0;
+        
+        int notPick=lis(words,index+1,prev,n);
+        
+        if(prev==-1 || compare(words[index],words[prev]) )
+        {
+            pick=1 + lis(words,index+1,index,n);
+        }
+        
+        return max(pick,notPick);
+    }
+    
+    
+    bool comp(string& a, string& b)
+    {
+        return a.length()<b.length();
+    }
+    
+    int longestStrChain(vector<string>& words) {
+        
+        sort(words.begin(),words.end(),[]
+    (const string& first, const string& second){
+        return first.size() < second.size();
+    });
+        
+        int n=words.size();
+        
+        return lis(words,0,-1,n);
+        
+    }
+    
+    Method 2: Top down
+    
+    Time:O(N^2), Space:O(N)
+    
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    bool compare(string& s1, string& s2)
+    {
+        //s1->arr[i]
+        //s2->arr[j]
+        
+        int len1=s1.length();
+        int len2=s2.length();
+        
+        if(len1!= len2+1)
+        {
+            return false;
+        }
+        
+        int first=0;
+        int second=0;
+        
+        while(first<len1)
+        {
+            if(s1[first]==s2[second])
+            {
+                first++;
+                second++;
+            }
+            else
+            {
+                first++;
+            }
+        }
+        
+        if(first==len1 && second==len2) //they both end as order of the origanl word has to be maintained
+        {
+            return true;
+        }
+        
+        return false;
+        
+    }
+    
+    
+    
+    static bool comp(string& a, string& b)
+    {
+        return a.length()<b.length();
+    }
+    
+    int longestStrChain(vector<string>& words) {
+        
+        sort(words.begin(),words.end(),comp);
+    
+        
+        int n=words.size();
+        
+       vector<int> dp(n,1);
+        
+        int ans=1;
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                if(compare(words[i],words[j]))
+                {
+                    dp[i]=max(dp[i],1+dp[j]);
+                }
+            }
+            
+            ans=max(ans,dp[i]);
+        }
+        
+        return ans;
+        
+        
+    }
