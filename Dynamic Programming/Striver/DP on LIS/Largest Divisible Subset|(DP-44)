@@ -1,0 +1,137 @@
+https://www.youtube.com/watch?v=gDuZwBW9VvM&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=45
+https://leetcode.com/problems/largest-divisible-subset/submissions/
+
+1. Similar to LIS,
+2. Sort the array, suppose the sorted array is n1,n2,n3,n4 now if(n3%n2)==0 and n2%n1==0 means n3%n1 will also be 0
+3. So similar to LIS, instead of checking arr[index]>arr[prevIndex], u have to check if arr[index]%arr[prevIndex]==0
+4. use prevIdex vector to print the lis
+
+Subset -> subsequence (not consecutive)
+
+
+Method 1: Recursion (to find length of longest subset)
+
+#include <iostream>
+#include<vector>
+#include<climits>
+#include<algorithm>
+
+using namespace std;
+
+int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int lis(vector<int>& nums, int index, int prevIndex, int n)
+    {
+        if(index==n)
+        {
+            return 0;
+        }
+        
+        int pick=INT_MIN;
+        
+        int notPick=lis(nums,index+1,prevIndex,n);
+        
+        if(prevIndex==-1 || nums[index]%nums[prevIndex]==0)
+        {
+            pick=1+lis(nums,index+1,index,n);
+        }
+        
+        return max(pick,notPick);
+        
+    }
+    
+    
+    int largestDivisibleSubset(vector<int>& nums) {
+        
+        sort(nums.begin(),nums.end());
+        
+        int n=nums.size();
+        
+        return lis(nums,0,-1,n);
+        
+    }
+
+int main()
+{
+    vector<int> nums{5, 4, 11, 1 ,16 ,8};
+    
+    cout<<largestDivisibleSubset(nums);
+    
+
+    return 0;
+}
+
+Method 2: Top down
+
+ vector<int> largestDivisibleSubset(vector<int>& nums) {
+        
+        sort(nums.begin(),nums.end());
+        
+        int n=nums.size();
+        
+        vector<int> result;
+        
+        if(n==0)
+        {
+            return result;
+        }
+        
+        if(n==1)
+        {
+            result.push_back(nums[0]);
+            return result;
+        }
+        
+        vector<int> dp(n,1);
+        vector<int> prevIndex(n,0);
+        
+        for(int i=1;i<n;i++)
+        {
+            prevIndex[i]=i;
+        }
+        
+        int maxValue=1;
+        int maxIndex=0;
+        
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                if(nums[i]%nums[j]==0)
+                {
+                    if(dp[i]<dp[j]+1)
+                    {
+                        dp[i]=dp[j]+1;
+                        prevIndex[i]=j;
+                    }
+                }
+            }
+            
+            if(maxValue<dp[i])
+            {
+                maxValue=dp[i];
+                maxIndex=i;
+            }
+        }
+        
+        result.push_back(nums[maxIndex]);
+        
+        while(prevIndex[maxIndex]!=maxIndex)
+        {
+            maxIndex=prevIndex[maxIndex];
+            result.push_back(nums[maxIndex]);
+        }
+        
+        return result;
+        
+        
+        
+    }
