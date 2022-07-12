@@ -1,0 +1,139 @@
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/submissions/
+
+Method 1: Recursion
+
+Time:O(2^N), Space:O(N)
+
+
+ int solve(int index, bool buy, int cap, int n, vector<int>& prices)
+    {
+        if(cap==0)
+        {
+            return 0;
+        }
+        
+        if(index==n)
+        {
+            return 0;
+        }
+        
+        if(buy)
+        {
+            return max(-prices[index]+solve(index+1,0,cap,n,prices), solve(index+1,1,cap,n,prices));
+        }
+        else
+        {
+            return max(prices[index]+solve(index+1,1,cap-1,n,prices), solve(index+1,0,cap,n,prices));
+        }
+    }
+    
+    int maxProfit(int k, vector<int>& prices) {
+        
+        int n =prices.size();
+        
+        return solve(0,1,k,n,prices);
+        
+    }
+};
+
+Method 2: Memoization
+
+Time:O(N*K*2), Space:O(N*2*K+n)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int index, bool buy, int cap, int n, vector<int>& prices,vector<vector<vector<int>>>& dp)
+    {
+        if(cap==0)
+        {
+            return 0;
+        }
+        
+        if(index==n)
+        {
+            return 0;
+        }
+        
+        if(dp[index][buy][cap]!=-1)
+        {
+            return dp[index][buy][cap];
+        }
+        
+        if(buy)
+        {
+            return dp[index][buy][cap]=max(-prices[index]+solve(index+1,0,cap,n,prices,dp), solve(index+1,1,cap,n,prices,dp));
+        }
+        else
+        {
+            return dp[index][buy][cap]=max(prices[index]+solve(index+1,1,cap-1,n,prices,dp), solve(index+1,0,cap,n,prices,dp));
+        }
+    }
+    
+    int maxProfit(int k, vector<int>& prices) {
+        
+        int n =prices.size();
+        
+        vector<vector<vector<int>>> dp(n,vector<vector<int>>(2,vector<int>(k+1,-1)));
+        
+        return solve(0,1,k,n,prices,dp);
+        
+    }
+};
+
+
+Method 3: Bottom up
+
+Time:O(N*K*2), Space:O(N*2*K)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+   
+    
+    int maxProfit(int k, vector<int>& prices) {
+        
+        int n =prices.size();
+        
+        vector<vector<vector<int>>> dp(n+1,vector<vector<int>>(2,vector<int>(k+1,0)));
+        
+        
+        // index -> 0 to n, if index==n, return 0;
+        //buy = 0 or 1
+        //cap= 0,1,2...k, if cap=0 return 0
+        
+        
+        for(int index=n-1;index>=0;index--)
+        {
+            for(int buy=0;buy<=1;buy++)
+            {
+                for(int cap=1;cap<=k;cap++)
+                {
+                    if(buy==0) //sell or not sell
+                    {
+                        dp[index][buy][cap]=max(prices[index]+dp[index+1][1][cap-1],dp[index+1][0][cap]);
+                    }
+                    else  //buy or not buy
+                    {
+                        dp[index][buy][cap]=max(-prices[index]+dp[index+1][0][cap],dp[index+1][1][cap]);
+                    }
+                }
+            }
+        }
+        
+        return dp[0][1][k];
+        
+    }
+};
