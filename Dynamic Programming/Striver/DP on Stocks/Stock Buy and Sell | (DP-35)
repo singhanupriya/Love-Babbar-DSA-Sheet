@@ -1,0 +1,37 @@
+https://takeuforward.org/data-structure/stock-buy-and-sell-dp-35/
+https://www.codingninjas.com/codestudio/problems/stocks-are-profitable_893405?source=youtube&campaign=striver_dp_videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_dp_videos&leftPanelTab=0
+
+Time:O(N), Space:O(1)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int maximumProfit(vector<int> &prices){
+    // Write your code here.
+    int mins=prices.size();
+    
+    if(mins<=1)
+    {
+        return 0;
+    }
+    
+    int maxPrice=prices[mins-1];
+    
+    int maxProfit=0;
+    
+    for(int i=mins-2;i>=0;i--)
+    {
+        maxPrice=max(maxPrice,prices[i]);
+        maxProfit=max(maxProfit, maxPrice-prices[i]);
+    }
+    
+    return maxProfit;
+    
+    
+}
