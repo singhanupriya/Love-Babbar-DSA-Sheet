@@ -1,0 +1,173 @@
+https://www.youtube.com/watch?v=-uQGzhYj8BQ
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/submissions/
+
+Method 1: Recursion
+
+Time:O(2^N), Space:O(N)
+
+1. Here u have a cap of 2 transations.
+2. 1 transation= buy and sell, hence, ur cap count will decrease only if u have sold.
+3. If u buy and sell on the same day, ur net profit on that day will be 0 and u can buy the next day, which will be same as 
+        0 + solve(index+1,1,cap,prices,n) 
+        in   
+        
+        if(buy)
+        {
+            return max(-prices[index]+solve(index+1,0,cap,prices,n), 0 + solve(index+1,1,cap,prices,n)); 
+            //buy , not buy
+        }
+
+int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int index, bool buy, int cap,vector<int>& prices , int n)
+    {
+        if(cap==0)
+        {
+            return 0;
+        }
+        
+        if(index==n)
+        {
+            return 0;
+        }
+        
+        if(buy)
+        {
+            return max(-prices[index]+solve(index+1,0,cap,prices,n), 0 + solve(index+1,1,cap,prices,n)); 
+            //buy , not buy
+        }
+        else
+        {
+            return max(prices[index]+solve(index+1,1,cap-1,prices,n), 0 + solve(index+1,0,cap,prices,n));
+            //sell , not sell
+        }
+    }
+    
+    int maxProfit(vector<int>& prices) {
+        
+        int cap=2;
+        int n=prices.size();
+        
+        return solve(0,1,cap,prices,n);
+        
+    }
+};
+
+Method 2: memoization
+
+Changing parameters:
+index-> 0 to n
+buy -> 0/1
+cap-> 0/1/2
+
+3D-DP
+
+Time:O(N*2*3), Space:O(N*2*3+N)
+
+  int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int index, bool buy, int cap,vector<int>& prices , int n,vector<vector<vector<int>>>& dp)
+    {
+        if(cap==0)
+        {
+            return 0;
+        }
+        
+        if(index==n)
+        {
+            return 0;
+        }
+        
+        if(dp[index][buy][cap]!=-1)
+        {
+            return dp[index][buy][cap];
+        }
+        
+        if(buy)
+        {
+            return dp[index][buy][cap]=max(-prices[index]+solve(index+1,0,cap,prices,n,dp), 0 + solve(index+1,1,cap,prices,n,dp)); 
+            //buy , not buy
+        }
+        else
+        {
+            return dp[index][buy][cap]=max(prices[index]+solve(index+1,1,cap-1,prices,n,dp), 0 + solve(index+1,0,cap,prices,n,dp));
+            //sell , not sell
+        }
+    }
+    
+    int maxProfit(vector<int>& prices) {
+        
+        int cap=2;
+        int n=prices.size();
+        
+        vector<vector<vector<int>>> dp(n,vector<vector<int>>(2,vector<int>(cap+1,-1)));
+        
+        return solve(0,1,cap,prices,n,dp);
+        
+    }
+};
+
+Method 3: Bottom up
+
+Time:O(N*2*3), Space:O(N*2*3)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+   
+    
+    int maxProfit(vector<int>& prices) {
+        
+        int cap=2;
+        int n=prices.size();
+        //index goes from 0 to n
+        vector<vector<vector<int>>> dp(n+1,vector<vector<int>>(2,vector<int>(cap+1,0)));
+        
+        //if cap=0, ans will be 0
+        //index==n, 0 as per recurrence
+        
+        for(int index=n-1;index>=0;index--)
+        {
+            for(int buy=0;buy<=1;buy++)
+            {
+                for(int cap=1; cap<=2;cap++) //as cap=0 , 0
+                {
+                    if(buy==1)
+                    {
+                        dp[index][buy][cap]=max(-prices[index]+dp[index+1][0][cap],0+ dp[index+1][1][cap]);
+                        //buy , not buy
+                    }
+                    else
+                    {
+                        dp[index][buy][cap]=max(prices[index]+dp[index+1][1][cap-1],0+dp[index+1][0][cap]);
+                        //sell or not sell
+                    }
+                }
+                    
+            }
+        }
+        
+        return dp[0][1][2]; //buy=1 and cap=2
+        
+    }
+};
