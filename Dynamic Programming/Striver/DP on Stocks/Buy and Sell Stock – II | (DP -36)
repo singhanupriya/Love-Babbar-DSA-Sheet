@@ -1,0 +1,222 @@
+https://www.youtube.com/watch?v=nGJmxkUJQGs
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+
+
+Approach:
+
+1. Here u can have numerous combinations of buy and sell, u need to try all possible ways and get the best ans -> Recursion
+2. As it is array, u can express in terms of any index as u have to sell after buy, u need to check if u have bought previously or not, if not u have to buy
+, if bought u have to sell.
+3. If u have bought, u have 2 options to sell or not on a day.
+
+
+Method 1: Recursion
+
+buy -> 1= allowed to buy , 0= bought prev can only sell
+
+If buy=1, u can buy or not buy on a day
+if buy=1, u can sell or not sell on a day
+
+Time:O(2^N), on each day u can buy or not buy or sell or not sell
+Space:O(N)
+
+long solve(int index, bool buy, int n,long *values)
+{
+    if(index==n)
+    {
+        return 0;
+    }
+    
+    if(buy)
+    {
+        int take=-values[index]+solve(index+1,0,n,values);
+        int notTake=0+solve(index+1,1,n,values);
+        return max(take,notTake);
+    }
+    else
+    {
+        int sell=values[index]+solve(index+1,1,n,values);
+        int notSell=0+solve(index+1,0,n,values);
+        
+        return max(sell,notSell);
+    }
+    
+    
+}
+
+
+long getMaximumProfit(long *values, int n)
+{
+    //Write your code here
+    
+    return solve(0,1,n,values);
+    
+}
+
+Method 2: Memoisation
+
+Time:O(N), Space:O(N+n)
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+long solve(int index, bool buy, int n,long *values,vector<vector<long>>& dp)
+{
+    if(index==n)
+    {
+        return 0;
+    }
+    
+    if(dp[buy][index]!=-1)
+    {
+        return dp[buy][index];
+    }
+    
+    if(buy)
+    {
+        int take=-values[index]+solve(index+1,0,n,values,dp);
+        int notTake=0+solve(index+1,1,n,values,dp);
+        return dp[buy][index]=max(take,notTake);
+    }
+    else
+    {
+        int sell=values[index]+solve(index+1,1,n,values,dp);
+        int notSell=0+solve(index+1,0,n,values,dp);
+        
+        return dp[buy][index]=max(sell,notSell);
+    }
+    
+    
+}
+
+
+long getMaximumProfit(long *values, int n)
+{
+    //Write your code here
+    vector<vector<long>> dp(2,vector<long>(n,-1));
+    return solve(0,1,n,values,dp);
+    
+}
+
+Method 3: Bottom up
+
+long max(long a, long b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+long getMaximumProfit(long *values, int n)
+{
+    //Write your code here
+    
+    vector<vector<long>> dp(n+1,vector<long>(2,0));
+    
+    //dp[0][i]-> max profit u can earn till day i if buy not allowed
+    //dp[1][i]-> max profit u can earn till day i if buy allowed
+    
+    //index -> 0 to n-1
+    //same as recurrence
+    dp[n][0]=0;
+    dp[n][1]=0; 
+    //as when index==n, return 0 in recurrence
+    
+    long profit=0;
+    
+    for(int index=n-1;index>=0;index--)
+    {
+        for(int buy=0;buy<=1;buy++)
+        {
+            if(buy==0) //not allowed to buy
+            {
+                dp[index][buy]=max(values[index]+dp[index+1][1],dp[index+1][0]);
+                
+                //sell and not sell
+            }
+            
+            else //allowed to buy
+            {
+                dp[index][buy]=max(-values[index]+dp[index+1][0],dp[index+1][1]);
+                //buy and not buy
+            }
+            
+            
+            
+        }
+    }
+    
+    return dp[0][1];
+    
+}
+
+Method 4: Space optimised bottom up
+
+Time:O(N), Space:O(1)
+
+long max(long a, long b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+long getMaximumProfit(long *values, int n)
+{
+    //Write your code here
+    
+    
+    
+    //dp[0][i]-> max profit u can earn till day i if buy not allowed
+    //dp[1][i]-> max profit u can earn till day i if buy allowed
+    
+    //index -> 0 to n-1
+    //same as recurrence
+    long aheadBuy=0;  //dp[n][1]
+    long aheadNotBuy=0;  //dp[n][0]
+    //as when index==n, return 0 in recurrence
+    
+    long currBuy=0;
+    long currNotBuy=0;
+    
+    
+    
+    for(int index=n-1;index>=0;index--)
+    {
+        for(int buy=0;buy<=1;buy++)
+        {
+            if(buy==0) //not allowed to buy
+            {
+               currNotBuy =max(values[index]+aheadBuy,aheadNotBuy);
+                
+                //sell and not sell
+            }
+            
+            else //allowed to buy
+            {
+                currBuy=max(-values[index]+aheadNotBuy,aheadBuy);
+                //buy and not buy
+            }
+            
+            
+            
+        }
+        
+        aheadNotBuy=currNotBuy;
+        aheadBuy=currBuy;
+    }
+    
+    return aheadBuy;
+    
+}
+
