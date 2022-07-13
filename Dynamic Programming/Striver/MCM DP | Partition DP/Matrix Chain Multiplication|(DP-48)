@@ -1,0 +1,95 @@
+
+Method 1: Recursion
+
+Time:O(k^N), Space:O(N)
+
+
+int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+
+    int solve(int arr[], int i, int j)
+    {
+        if(i>=j)
+        {
+            return 0;
+        }
+        
+        int ans=INT_MAX;
+        
+        for(int k=i+1;k<=j;k++)
+        {
+            int temp=solve(arr,i,k-1)+solve(arr,k,j)+ arr[i]*arr[k]*arr[j+1];
+            ans=min(ans,temp);
+        }
+        
+        return ans;
+        
+    }
+
+    int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        
+        int j=N-2;
+        
+        return solve(arr,0,j);
+        
+    }
+    
+    Method 2: Memoization
+    
+    Time:O(N^2), Space:O:o(n)
+    
+     int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+
+    int solve(int arr[], int i, int j,vector<vector<int>>& dp)
+    {
+        if(i>=j)
+        {
+            return 0;
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int ans=INT_MAX;
+        
+        for(int k=i+1;k<=j;k++)
+        {
+            int temp=solve(arr,i,k-1,dp)+solve(arr,k,j,dp)+ arr[i]*arr[k]*arr[j+1];
+            ans=min(ans,temp);
+        }
+        
+        return dp[i][j]=ans;
+        
+    }
+
+    int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        
+        int j=N-2;
+        
+        //i -> 0 to n-2 so n-1 elements in dp, to be safe we take a dp size of n
+        vector<vector<int>> dp(N,vector<int>(N,-1));
+        
+        return solve(arr,0,j,dp);
+        
+    }
+    
+    Method 3: 
