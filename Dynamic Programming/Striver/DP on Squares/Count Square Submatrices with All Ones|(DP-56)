@@ -1,0 +1,68 @@
+https://www.youtube.com/watch?v=auS1fynpnjo
+https://leetcode.com/problems/count-square-submatrices-with-all-ones/submissions/
+
+Time:O(M*N), Space:O(M*N)
+
+
+1. Every element in the matrix which is 1 is a square in itself of size 1.
+2. dp[i][j]= no of sqaures ending at (i,j) (right bottom) can start anywhere.
+3. To get total number of sqaures we take sum of all dps.
+
+Here if an element is 1 it is a square in itself so 1 , now if its adjs are also sqaure it can contribute in it
+
+dp[i][j]= 1 (itself) + min(dp[i-1][j], dp[i-1][j-1],dp[i][j-1]) -> min(up,diag left, left)
+
+for row=0, col=0 value will be itself.
+
+
+
+ int min(int a, int b, int c)
+    {
+        if(a<=b && a<=c)
+        {
+            return a;
+        }
+        else if(b<=a && b<=c)
+        {
+            return b;
+        }
+        return c;
+    }
+    
+    int countSquares(vector<vector<int>>& matrix) {
+        
+        int rows=matrix.size();
+        int cols=matrix[0].size();
+        
+        vector<vector<int>> dp(rows,vector<int>(cols,0));
+        
+        int count=0;
+        
+        for(int i=0;i<rows;i++)
+        {
+            dp[i][0]=matrix[i][0];
+            count+=dp[i][0];
+        }
+        
+        for(int j=1;j<cols;j++)
+        {
+            dp[0][j]=matrix[0][j];
+            count+=dp[0][j];
+        }
+        
+        for(int i=1;i<rows;i++)
+        {
+            for(int j=1;j<cols;j++)
+            {
+                if(matrix[i][j]==1)
+                {
+                    dp[i][j]=1+ min(dp[i-1][j],dp[i-1][j-1],dp[i][j-1]);
+                    count+=dp[i][j];
+                }
+            }
+        }
+        
+        return count;
+        
+        
+    }
