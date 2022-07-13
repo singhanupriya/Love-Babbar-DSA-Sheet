@@ -29,7 +29,7 @@ void sort(vector<int>& arr, int n)
         int arr_min=arr[i];
         for(int j=i+1;j<n;j++)
         {
-            if(arr[i]>arr[j])
+            if(arr[i]>arr[j]). //bcoz of this swapping in min no of swaps
             {
                 swap(arr[i],arr[j]);
             }
