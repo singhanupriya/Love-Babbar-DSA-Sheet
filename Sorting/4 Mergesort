@@ -10,73 +10,80 @@ Time:O(nlog n), Space:O(N) not in place.
 
 
 
-#include<vector>
-
-using namespace std;
-
-void merge(int arr[], int l, int mid, int h)
-{
-    int* b=new int[h-l+1];              //every merge call, we create a temp array same as the size of array we have to merge and at the end we copy its content to the orignal array
-    
-    int i=l,j=mid+1,k=l;                  //IMP  ---> i and k will start from l
-    
-    while(i<=mid && j<=h)
+void merge(int arr[], int low, int mid, int high)
     {
-        if(arr[i]<arr[j])
-        {
-            b[k]=arr[i];
-            i++;
-            k++;
-        }
-        else
-        {
-            b[k]=arr[j];
-            j++;
-            k++;
-        }
-    }
-    
-    while(i<=mid )
-    {
-        b[k]=arr[i];
-        i++;
-        k++;
-       
-    }
-    
-    while(j<=h)
-    {
-        b[k]=arr[j];
-        j++;
-        k++;
+         // Your code here
+         
+         
+         int i=low;
+        int j=mid+1;
+        int k=0;
         
-    }
+        int* newArr=new int[high-low+1]; //indexing will start from 0
+        
+        while(i<=mid && j<=high)
+        {
+            if(arr[i]<=arr[j])
+            {
+                newArr[k]=arr[i];
+                i++;
+                k++;
+            }
+            else
+            {
+                newArr[k]=arr[j];
+                j++;
+                k++;
+            }
+        }
+        
+        while(i<=mid )
+        {
+            newArr[k]=arr[i];
+                i++;
+                k++;
+            
+        }
+        
+        while(j<=high )
+        {
+            newArr[k]=arr[j];
+                j++;
+                k++;
+            
+        }
+        
+        i=0,j=low; //i->index of new array
+        //j->index of new array
+        
+        while(i<=k && j<=high)
+        {
+            arr[j]=newArr[i];
+            j++;
+            i++;
+        }
     
-    for(int i=l;i<=h;i++) 
-    {
-        arr[i]=b[i];                 //copy contents of temp array to orignal array
+    
     }
-}
-
-
-void mergesort(int arr[], int l, int h)
-{
-    int mid;
-    if(l<h)
+    public:
+    void mergeSort(int arr[], int low, int high)
     {
-        mid=(l+h)/2;
-        mergesort(arr,l,mid);       O(log n)
-        mergesort(arr,mid+1,h);      O(log n)
-        merge(arr,l,mid,h);          O(n), compare every element and copy into new array
+        //code here
+        int mid;
+    if(low<high)
+    {
+        mid=low + (high-low)/2;
+        mergeSort(arr,low,mid);
+        mergeSort(arr,mid+1,high);
+        merge(arr,low,mid,high);
     }
-}
-
-
+    }
+};
 int main()
 {
     int arr[]={10,4,56,23,7,1};
     int n=sizeof(arr)/sizeof(arr[0]);
-    mergesort(arr,0,n-1);
+    mergeSort(arr,0,n-1);
     for(int i=0;i<n;i++)
     {
         cout<<arr[i]<<" ";
