@@ -1,0 +1,112 @@
+https://www.youtube.com/watch?v=X0X6G-eWgQ8&t=1157s
+
+Time:O(N), Space:O(N)
+
+1. For each height, the max area with that height will be [(index of right smaller +1)-(index of left smaller -1) + 1] * height
+
+eg: elements   3 5 7 6 2
+         index 0 1 2 3 4
+         
+         Now consider 6, we want the max area with height 6, first left smaller index of 6 is 1(element=5) so left boundary of 6 will start from index 1+1=2
+         first right smaller index of 6 is 4(element=2) so right boundary of 6 will be 4-1=3
+         
+         no the indexes we will be taking to make area 6 will be index 2 and 3, area -> (3-2+1)*6=12.
+         
+2. Do this for all indexes
+3. U can use stack to get left smaller and right smaller, store indexes in stack.
+
+
+Time:O(N), Space:o(n)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int largestRectangleArea(vector<int>& heights) {
+        
+        int n=heights.size();
+        vector<int> leftSmaller(n,-1);   //storing index of first left smallest element
+        vector<int> rightSmaller(n,-1);  //storing index of first right smallest element
+        
+        
+        stack<int> s; //storing index
+        
+        //left smaller
+        for(int i=0;i<n;i++)
+        {
+            if(s.empty())
+            {
+                leftSmaller[i]=0;
+            }
+            else
+            {
+                while(!s.empty() && heights[s.top()]>=heights[i])
+                {
+                    s.pop();
+                }
+                
+                if(s.empty())
+                {
+                    leftSmaller[i]=0;
+                }
+                else
+                {
+                    leftSmaller[i]=s.top()+1;
+                }
+                
+                
+            }
+            s.push(i);
+        }
+        
+        while(!s.empty())
+        {
+            s.pop();
+        }
+        
+        //right smaller
+        
+        for(int i=n-1;i>=0;i--)
+        {
+            if(s.empty())
+            {
+                rightSmaller[i]=n-1;
+            }
+            else
+            {
+                while(!s.empty() && heights[s.top()]>=heights[i])
+                {
+                    s.pop();
+                }
+                
+                if(s.empty())
+                {
+                    rightSmaller[i]=n-1;
+                }
+                else
+                {
+                    rightSmaller[i]=s.top()-1;
+                }
+            }
+            
+            s.push(i);
+        }
+        
+        
+        
+        int ans=-100000009;
+        
+        for(int i=0;i<n;i++)
+        {
+            ans=max(ans,abs(rightSmaller[i]-leftSmaller[i]+1)*heights[i]);
+        }
+        
+        return ans;
+        
+        
+    }
