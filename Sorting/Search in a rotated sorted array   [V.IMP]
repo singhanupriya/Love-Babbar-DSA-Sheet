@@ -107,50 +107,49 @@ Observation- If we find the middle element, either the left or right side will b
 3. else right str inc, if in range, low=mid+1 else high=mid-1
 
 
-class Solution {
-public:
-    int search(vector<int>& arr, int target) {
+ int search(vector<int>& arr, int target) {
         
-        
+        int n=arr.size();
         
         int low=0;
-        int high=arr.size()-1;
+        int high=n-1;
         
         while(low<=high)
         {
-            int mid=low +(high-low)/2;
+            int mid=low + (high-low)/2;
             
-            if(arr[mid]==target)
+            if(target==arr[mid])
             {
                 return mid;
             }
-            else if(arr[mid]>=arr[low]) //left strictly increasing, element not found above
+            else if(arr[mid]>=arr[low]) //left sorted, take = also as mid can be index 0
             {
-                if(target>=arr[low] && target<=arr[mid])
+                if(arr[low]<=target && arr[mid]>=target)
                 {
-                    high=mid; 
+                    high=mid;
                 }
                 else
                 {
-                    low=mid+1;
+                    low=mid+1; //lies on the right side
                 }
-            }
-            else //right strictly increasing
+            } 
+            else //right side sorted
             {
-                if(target>=arr[mid] && target<=arr[high])
+                if(arr[mid]<=target && arr[high]>=target)
                 {
                     low=mid;
                 }
-                else
+                else //lies on the lest side
                 {
                     high=mid-1;
                 }
             }
+            
+            
+            
         }
         
         return -1;
-        
-        
         
     }
 };
