@@ -81,11 +81,13 @@ nt kthElement(int arr1[], int arr2[], int n, int m, int k)
             return kthElement(arr2,arr1,m,n,k);
         }
         
-        int low=max(0,k-m);  //if m>=k then we can select min 0 elemnst from arr1
-        //if m <k, then we will have to select some elements from arr1
+       //min elements u have to pick from the array
+        //if the size of second array is < k, u will have to pick some elemenst
+        //from 1st array so low can't be 0
+        int low=max(0,k-m);
         
+        //if 1st array has k elements, u high will be k given k<n
         int high=min(n,k);
-        //if k<n then high will be k else we can select entire arr1;
         
         while(low<=high)
         {
