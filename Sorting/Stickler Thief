@@ -1,0 +1,130 @@
+https://practice.geeksforgeeks.org/problems/stickler-theif-1587115621/1
+
+Method 1: Memoization
+
+Time:O(N), Space:O(N+N)
+ 
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int arr[], int index, int n,vector<int>& dp)
+    {
+        if(index>=n)
+        {
+            return 0;
+        }
+        
+        if(dp[index]!=-1)
+        {
+            return dp[index];
+        }
+        
+        int take=arr[index]+solve(arr,index+2,n,dp);
+        int notTake=solve(arr,index+1,n,dp);
+        
+        return dp[index]=max(take,notTake);
+        
+    }
+    
+    int FindMaxSum(int arr[], int n)
+    {
+        // Your code here
+        
+        //index from 0 to n
+        
+        vector<int> dp(n+1,-1);
+        return solve(arr,0,n,dp);
+    }
+    
+    Method 2: Bottom up;
+    
+    Time:O(N), SPace:O(N)
+    
+     int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    
+    int FindMaxSum(int arr[], int n)
+    {
+        // Your code here
+        
+        //index from 0 to n
+        
+        vector<int> dp(n+1,0);
+        dp[n]==0;
+        
+        
+        for(int index=n-1;index>=0;index--)
+        {
+            int notTake=dp[index+1];
+            int take=arr[index];
+            
+            if(index+2<=n)
+            {
+                take+=dp[index+2];
+            }
+            
+            dp[index]=max(take,notTake);
+        }
+        
+        return dp[0];
+    }
+    
+    
+    Method 3: Space optimised bottom up
+    
+    Time:O(N), SPace:O(1)
+    
+     public:
+    //Function to find the maximum money the thief can get.
+    
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    
+    int FindMaxSum(int arr[], int n)
+    {
+        // Your code here
+        
+        //index from 0 to n
+        
+        int aheadNextNext=0;
+        int aheadNext=0;
+        
+        int curr=0;
+        for(int index=n-1;index>=0;index--)
+        {
+            int notTake=aheadNext;
+            int take=arr[index]+aheadNextNext;
+            
+            
+            
+            curr=max(take,notTake);
+            
+            aheadNextNext=aheadNext;
+            aheadNext=curr;
+        }
+        
+        return aheadNext;
+    }
+};
