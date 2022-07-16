@@ -1,0 +1,102 @@
+https://leetcode.com/problems/product-of-array-except-self/submissions/
+https://www.geeksforgeeks.org/a-product-array-puzzle/
+
+Method 1:
+
+
+1. productPrefix[i]=product of all elements from start till i*1
+2. productSuffix[i] is product of all elements from end till index i+1
+3. Multiple these two to get the ans.
+
+Time:O(N), Space:O(N)
+        
+
+ vector<int> productExceptSelf(vector<int>& nums) {
+        
+        int n=nums.size();
+        
+        vector<int> result(n,0);
+        
+        if(n<=1)
+        {
+            return result;
+        }
+        
+        vector<int> productPrefix(n,1); //productPrefix[i]=product of all elements from start till i*1
+        vector<int> productSuffix(n,1);//productSuffix[i] is product of all elements from end till index i+1
+        
+        
+        
+        
+        for(int i=1;i<n;i++)
+        {
+            productPrefix[i]=productPrefix[i-1]*nums[i-1];
+        }
+        
+        
+        for(int i=n-2;i>=0;i--)
+        {
+            productSuffix[i]=productSuffix[i+1]*nums[i+1];
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            result[i]=productPrefix[i]*productSuffix[i];
+        }
+        
+        return result;
+    }
+    
+    Method 2:
+    
+    1. Traverse the array, count no of zeros and calculate total product
+    2. If count of zeros>1, all products will be 0
+    3. if count of zeros=0, ans[i]=product/nums[i]
+    4. if count of zeros=1 && nums[i]==0, ans[i]=product
+    5. if count of zeros=0 and nums[i]!=0 return 0;
+    
+    Time:O(N), Space:O(1)
+    
+    vector<int> productExceptSelf(vector<int>& nums) {
+        
+        
+        int n=nums.size();
+        
+        vector<int> ans(n,0);
+        
+        int countOfZeros=0;
+        int product=1;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(nums[i]==0)
+            {
+                countOfZeros++;
+            }
+            else
+            {
+                product*=nums[i];
+            }
+        }
+        
+        
+        if(countOfZeros>1)  //if more than one zero, all products will be 0;
+        {
+            return ans;
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            if(countOfZeros==0)
+            {
+                ans[i]=product/nums[i];
+            }
+            else if(countOfZeros==1 && nums[i]==0)
+            {
+                ans[i]=product;
+            }
+        }
+        
+        return ans;
+        
+    }
