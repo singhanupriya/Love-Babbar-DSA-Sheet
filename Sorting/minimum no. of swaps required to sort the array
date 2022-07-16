@@ -1,0 +1,123 @@
+https://www.geeksforgeeks.org/minimum-number-swaps-required-sort-array/
+https://www.youtube.com/watch?v=m-8_yQao-lI
+
+Method 1: Selection sort
+
+	Time:O(N^2), Space:O(1)
+  
+	void swap(int& a, int& b)
+	{
+	    int temp=a;
+	    a=b;
+	    b=temp;
+	}
+	
+	int minSwaps(vector<int>&nums)
+	{
+	    // Code here
+	    
+	    int n=nums.size();
+	    int count=0;
+	    
+	    
+	    for(int i=0;i<n-1;i++)
+	    {
+	        int minIndex=i;
+	        for(int j=i+1;j<n;j++)
+	        {
+	            if(nums[j]<nums[minIndex])
+	            {
+	                minIndex=j;
+	            }
+	        }
+	        
+	        if(nums[minIndex]!=nums[i])
+	        {
+	            swap(nums[minIndex],nums[i]);
+	            count++;
+	        }
+	    }
+	    
+	    return count;
+	    
+	    
+	}
+  
+  
+  Method 2:
+  
+  1. Create a vector of pair<element,index> and sort it.
+  2. Image the elements as graph node, there will be an edge from index i to j in the sorted array if element at index i in the sorted array came from jth poistion
+  3. If there is a cycle of 2 nodes, 1 swap will be needed, if a cycle of 3 nodes, 2 swaps will be needed.
+  4. Create a visisted array to keep track.
+  
+  Eg:  10.  9.  6.  3. 5
+  In sorted array :   <3,3>.  <5,4>.  6,2>.  <10,0>.  <19,1>
+                        0.      1.     2.      3.       4
+  
+  Now if u traverse thru the sorted array, i=0 this element 3 came from 3rd position so an edge from index 0 to 3 and go to the 3rd index, from 3rd index 
+  element came from 0tgh index so edge from index 3rd->0th now a cycle if formed 0-->3 and 3-->0, this cycle has 2 nodes, so 1 swap is needed.
+  
+  If an element or already visisted or its at the correct postion, move ahead.
+  
+  Time:ONlogN), Space:O(N)
+  
+   static bool comp(pair<int,int>& a, pair<int,int>& b)
+    {
+        return a.first<b.first;
+    }
+    
+    //Function to find the minimum number of swaps required to sort the array. 
+	int minSwaps(vector<int>&nums)
+	{
+	    // Code here
+	    
+	    int n=nums.size();
+	    
+	    vector<pair<int,int>> sortedArray;
+	    //<element,index>
+	    
+	    for(int i=0;i<n;i++)
+	    {
+	        sortedArray.push_back(make_pair(nums[i],i));
+	    }
+	    
+	    
+	    sort(sortedArray.begin(),sortedArray.end(),comp);
+	    
+	    
+	    int ans=0;
+	    
+	    vector<bool> vis(n,false);
+	    
+	    //traverse the sorted array
+	    for(int i=0;i<n;i++)
+	    {
+	        //if the element is visited or in its correct position
+	        if(vis[i] || sortedArray[i].second==i)
+	        {
+	            continue;
+	        }
+	        
+	        int cycleSize=0;
+	        int j=i;
+	        
+	        while(!vis[j])
+	        {
+	            vis[j]=true;
+	            j=sortedArray[j].second;
+	            cycleSize++;
+	        }
+	        
+	        if(cycleSize>0)
+	        {
+	            ans+=cycleSize-1;
+	        }
+	    }
+	    
+	    return ans;
+	    
+	    
+	    
+	    
+	}
