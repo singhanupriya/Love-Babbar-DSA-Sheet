@@ -2,7 +2,7 @@ https://www.youtube.com/watch?v=X0X6G-eWgQ8&t=1157s
 
 Time:O(N), Space:O(N)
 
-1. For each height, the max area with that height will be [(index of right smaller +1)-(index of left smaller -1) + 1] * height
+1. For each height, the max area with that height will be [(index of right smaller -1)-(index of left smaller +1) + 1] * height
 
 eg: elements   3 5 7 6 2
          index 0 1 2 3 4
