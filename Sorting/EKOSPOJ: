@@ -1,0 +1,80 @@
+https://www.spoj.com/problems/EKO/
+https://www.youtube.com/watch?v=tkoucfh10SI
+
+
+#include <iostream>
+
+using namespace std;
+
+bool find(int arr[], int mid, int n, int m)
+{
+    int sum=0;
+    for(int i=0;i<n;i++)
+    {
+        if(arr[i]>mid)
+        {
+            sum=sum + (arr[i]-mid);
+        }
+    }
+    
+    if(sum>=m)
+    {
+        return true;
+    }
+    
+    return false;
+    
+    
+}
+
+
+int solve(int arr[], int n, int m)
+{
+    int low=0; //min height
+    
+    int maxElement=0;
+    for(int i=0;i<n;i++)
+    {
+        maxElement=max(maxElement,arr[i]);
+    }
+    
+    int ans=-1;
+    
+    int high=maxElement; //max height he can cut at will be the max element on the array 
+    
+    
+    //Help Mirko find the maximum integer height of the sawblade that still allows
+    //him to cut off at least M metres of wood.
+    
+    while(low<=high)
+    {
+        int mid=low + (high-low)/2; //height at which he can cut such that he has atleast m length logs
+        
+        if(find(arr,mid,n,m)) //if he can cut at mid height, that can be a possible ans
+        {
+            ans=mid;
+            low=mid+1; //as we need to find max height check for higher value
+        }
+        else
+        {
+            high=mid-1;
+        }
+        
+        
+        
+    }
+    
+    return ans;
+    
+}
+
+
+int main()
+{
+    int arr[]={4 ,42 ,40 ,26, 46};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    int m=20;
+    cout<<solve(arr,n,m);
+
+    return 0;
+}
