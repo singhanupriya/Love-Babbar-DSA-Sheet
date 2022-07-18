@@ -1,0 +1,62 @@
+https://www.youtube.com/watch?v=0y6Hy5zLSkk
+https://www.geeksforgeeks.org/smallest-number-least-n-trailing-zeroes-factorial/
+
+Time:O(log(2)N *log(5)N)
+
+        bool solve(int mid, int n)
+        {
+            int temp=1;
+            int sum=0;
+            int i=1;
+            
+            
+            while(temp>0)
+            {
+                temp=mid/ pow(5,i);
+                sum+=temp;
+                i++;
+            }
+            
+            if(sum>=n) //atleast n
+            {
+                return true;
+            }
+            return false;
+        }
+    
+    
+    
+        int findNum(int n)
+        {
+        //complete the function here
+        
+        int ans=0;
+        
+        int low=0;
+        int high=5*n; //min value whose factorial contains atleast n 0s
+        
+        
+        while(low<=high)
+        {
+            int mid=low+(high-low)/2;
+            
+            if(solve(mid,n))
+            {
+                ans=mid;
+                high=mid-1; //check for lower as we need to find min 
+            }
+            else
+            {
+                low=mid +1;
+            }
+            
+            
+        }
+        
+        return ans;
+        
+        
+        
+        
+        
+        }
