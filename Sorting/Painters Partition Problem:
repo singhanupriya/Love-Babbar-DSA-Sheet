@@ -66,3 +66,97 @@ https://www.youtube.com/watch?v=2JSQIhPcHQg
         
     }
 };
+
+Method 2:
+
+Time:O(Nlog sum)
+
+ public:
+  
+    int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+    }
+  
+    bool solve(int arr[], int n, int k, long long mid)
+    {
+        int painters=1;
+        long long sum=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(arr[i]>mid)
+                {
+                    return false;
+                }
+            sum+=arr[i];
+            
+            if(sum>mid)
+            {
+                painters++;
+                sum=arr[i];
+                
+            }
+            
+            
+            
+            if(painters>k)
+            {
+                return false;
+            }
+        }
+        
+        
+        
+        return true;
+    
+    
+    }
+  
+  
+    long long minTime(int arr[], int n, int k)
+    {
+        // code here
+        // return minimum time
+        
+        int minElement=INT_MAX;
+        
+        long long sum=0;
+        for(int i=0;i<n;i++)
+        {
+            sum+=arr[i];
+            minElement=min(minElement,arr[i]);
+        }
+        
+        
+        
+        long long low=minElement; //min time taken
+        long long high=sum;
+        
+        long long ans=-1;
+        
+        
+        while(low<=high)
+        {
+            long long mid=low + (high-low)/2;
+            
+            if(solve(arr,n,k,mid))
+            {
+                ans=mid;
+                high=mid-1; //as we need min
+            }
+            else
+            {
+                low=mid+1;
+            }
+            
+        }
+        
+        return ans;
+        
+        
+    }
