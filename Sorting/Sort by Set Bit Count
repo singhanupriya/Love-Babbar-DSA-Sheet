@@ -1,0 +1,55 @@
+https://www.geeksforgeeks.org/sort-array-according-count-set-bits/
+
+1. Min no of count bits of an integer is 0 and max is 31.
+2. Create a vector of vector of size 32 which stores vector of array element with count bits i.
+
+Time:O(N* 32)
+Space:O(1)
+
+
+ int count(int n)
+    {
+        int ans=0;
+        while(n>0)
+        {
+            if(n & 1)
+            {
+                ans++;
+            }
+            
+            n=n >> 1;
+        }
+        
+        return ans;
+    }
+    
+    void sortBySetBitCount(int arr[], int n)
+    {
+        // Your code goes here
+        
+        vector<vector<int>> countBits(32);
+        
+        for(int i=0;i<n;i++)
+        {
+            int bitCount=count(arr[i]);
+            countBits[bitCount].push_back(arr[i]);
+        }
+        
+        int index=0;
+        
+        for(int i=31;i>=0;i--)
+        {
+            vector<int> temp=countBits[i];
+            
+            for(int j=0;j<temp.size();j++)
+            {
+                arr[index]=temp[j];
+                index++;
+            }
+        }
+        
+        
+        
+        
+        
+    }
