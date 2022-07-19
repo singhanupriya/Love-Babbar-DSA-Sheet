@@ -1,0 +1,82 @@
+https://www.youtube.com/watch?v=6z2HK4o8qcU
+
+Sqaure root of a number
+
+Time:O(log N)
+
+int mySqrt(int x) {
+        
+        
+        int low=0;
+        int high=x;
+        
+        long long ans=-1;
+        
+        while(low<=high)
+        {
+            long long mid=low + (high-low)/2;  //if mid is very large
+            
+            long long product=mid* mid; //interger overflow
+            
+            if(product==x)
+            {
+                return mid;
+            }
+            else if(product<x)
+            {
+                ans=mid; //if as we need interger ans, eg sqrt(5), 2*2<5 , 2 can be a possible ans
+                low=mid+1;
+            }
+            else
+            {
+                high=mid-1;
+            }
+            
+        }
+        
+        return ans;
+        
+        
+    }
+    
+    
+    Count sqaures
+    
+    https://practice.geeksforgeeks.org/problems/count-squares3649/1
+    
+    Time:O(log N)
+    
+    int countSquares(int N) {
+        // code here
+        
+        int low=0;
+        int high=N;
+        
+        
+        long long ans=-1;
+        
+        while(low<=high)
+        {
+            long long mid=low + (high-low)/2;
+            long long product=mid*mid;
+            
+            if(product==N)
+            {
+                return mid-1; //if perfect square
+            }
+            else if(product<N)
+            {
+                ans=mid;
+                low=mid+1;
+            }
+            else
+            {
+                high=mid-1;
+            }
+        }
+        
+        return ans;
+        
+        
+        
+    }
