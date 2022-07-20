@@ -81,3 +81,99 @@ public:
     }
     
 };
+
+
+Method 1: Backtracking O(N^m)
+
+#include <iostream>
+#include<vector>
+#include<climits>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int solve(int N,vector<int>& coins,int m,vector<int> temp,vector<int>& ans)
+    {
+        if(m==0 || N==0)
+        {
+            if(ans.size()>temp.size())
+            {
+                ans=temp;
+            }
+            
+            return 0;
+        }
+        
+        
+        
+        int result=1000000009;
+        
+        for(int index=0;index<m;index++)
+        {
+            int value=1000000009;
+            
+            if(coins[index]<=N)
+            {
+                temp.push_back(coins[index]);
+                value=1+ solve(N-coins[index],coins,m, temp,ans);
+                temp.pop_back();
+                
+                if(result > value)
+                {
+                    result=value;
+                    
+                }
+               
+            }
+        }
+        
+        return result;
+        
+        
+        
+        
+        
+        
+    }
+    
+    vector<int> minPartition(int N)
+    {
+        // code here
+        
+        vector<int> coins={ 2,3,4,10,5 };
+        int m=coins.size();
+        vector<int> ans(5,0);
+        vector<int> temp;
+        solve(N,coins,m,temp,ans);
+        
+        return ans;
+        
+       
+        
+        
+    }
+
+
+int main()
+{
+    
+    
+    vector<int> ans=minPartition(20);
+    
+    for(int i=0;i<ans.size();i++)
+    {
+        cout<<ans[i]<<" ";
+    }
+    
+    
+
+    return 0;
+}
