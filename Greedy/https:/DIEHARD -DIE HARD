@@ -1,0 +1,146 @@
+//Paint house, ninja and tasks DP question
+https://www.youtube.com/watch?v=KrXzcYTDn2s
+
+Method 1: Recursion
+
+Time:O(3^n)
+
+
+
+#include <iostream>
+
+using namespace std;
+
+int max(int a, int b,int c)
+{
+    if(a>=b && a>=c)
+    {
+        return a;
+    }
+    else if(b>=c && b>=a)
+    {
+        return b;
+    }
+    return c;
+}
+
+int solve(int h, int a, int last)
+{
+    if(h<=0 || a<=0)
+    {
+        return -1;
+    }
+    
+    
+    
+    int x=0,y=0,z=0;  //time u can survive
+    
+    int result=0;
+    
+    if(last!=0)
+    {
+        x=1+solve(h+3,a+2,0);  //air
+    }
+    
+    if(last!=1)
+    {
+        y=1+solve(h-5,a-10,1);  //water
+    }
+    
+    if(last!=2)
+    {
+        z=1+solve(h-20,a+5,2); //fire
+    }
+    
+    
+    return max(x,y,z);
+    
+    
+    
+    
+}
+
+int main()
+{
+    
+    int h=20;
+    int a=8;
+    
+    cout<<solve(h,a,3);
+
+    return 0;
+}
+
+Method 2: Memoization
+
+Time:O(H*A)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int max(int a, int b,int c)
+{
+    if(a>=b && a>=c)
+    {
+        return a;
+    }
+    else if(b>=c && b>=a)
+    {
+        return b;
+    }
+    return c;
+}
+
+int solve(int h, int a, int last,vector<vector<int>>& dp)
+{
+    if(h<=0 || a<=0)
+    {
+        return -1;
+    }
+    
+    
+    if(dp[h][a]!=-1)
+    {
+        return dp[h][a];
+    }
+    
+    int x=0,y=0,z=0;  //time u can survive
+    
+    
+    
+    if(last!=0)
+    {
+        x=1+solve(h+3,a+2,0,dp);  //air
+    }
+    
+    if(last!=1)
+    {
+        y=1+solve(h-5,a-10,1,dp);  //water
+    }
+    
+    if(last!=2)
+    {
+        z=1+solve(h-20,a+5,2,dp); //fire
+    }
+    //cout<<max(x,y,z)<<" ";
+    
+    return dp[h][a]=max(x,y,z);
+    
+    
+    
+    
+}
+
+int main()
+{
+    
+    int h=4;
+    int a=4;
+    vector<vector<int>> dp(1001,vector<int>(1001,-1)); //here h->h+5,h+5
+    
+    cout<<solve(h,a,3,dp);
+
+    return 0;
+}
