@@ -6,6 +6,52 @@ https://practice.geeksforgeeks.org/problems/smallest-subset-with-greater-sum/1/
 
 Time:O(nlogn), Space:O(1)
 
+
+Method 1:
+
+int minSubset(vector<int> &arr,int N){
+        
+        if(N<=1)
+        {
+            return N;
+        }
+        
+        int countZero=0;
+        sort(arr.begin(),arr.end());
+        long long sum=0;
+        for(int i=0;i<N;i++)
+        {
+            if(arr[i]==0)
+            {
+                countZero++;
+            }
+            sum+=arr[i];
+        }
+        
+        if(countZero==N)
+        {
+            return N;
+        }
+        
+        int count=0;
+        int high=N-1;
+        
+        long long subsetSum=0;
+        
+        while(subsetSum <= sum)
+        {
+            subsetSum+=arr[high];
+            sum=sum-arr[high];
+            count++;
+            high--;
+        }
+        
+        return count;
+        
+    }
+
+Method 2:
+
 int minSubset(vector<int> &Arr,int N){
         
         if(N==0)
