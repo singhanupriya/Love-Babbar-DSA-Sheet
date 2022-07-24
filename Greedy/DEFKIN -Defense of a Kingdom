@@ -1,0 +1,76 @@
+https://www.youtube.com/watch?v=fk1yIirivEo
+
+1. Towers are at positions: [3,8],[11,2],[8,6]->[x,y] 
+2. Undefened areas is areas bwteen them.
+
+for x undefended is 1,2,4,5,6,7,9,10-15.
+y-> 1,3-5,7
+
+Now if u take x=1, now for this x=1, width =1, y=1 (width =1) area=1
+                                              y=3-5 (width=3), aread=3
+                                              y=7 (width=1), area=1 is penalty
+We need to find tha mx undefended area
+
+sort both x and ys
+
+x-> 3,8,6
+y->2,6,8
+
+For every posibble set of pairs of x, u will have all pairs of y
+so u have to find max absolute diff of x pairs * max abosolute diff of y pairs and multiply
+
+Time:O(nlogn), Space:O(N)
+
+
+#include <iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+int solve(vector<vector<int>> position)
+{
+    int n=position.size();
+    vector<int> xpos(n); //x coordinates
+    vector<int> ypos(n);
+    
+    for(int i=0;i<n;i++)
+    {
+        xpos[i]=position[i][0];
+        ypos[i]=position[i][1];
+    }
+    
+    sort(xpos.begin(),xpos.end());
+    sort(ypos.begin(),ypos.end());
+    
+    int maxX=xpos[0]-1; //starting coord will be 0-that coord, eg: is start is 2, so row 1 is undefended.
+    int maxY=ypos[0]-1;
+    
+    for(int i=0;i<n-1;i++)
+    {
+        maxX=max(maxX,xpos[i+1]-xpos[i]-1);
+        maxY=max(maxY,ypos[i+1]-ypos[i]-1);
+    }
+    
+    return maxX*maxY;
+    
+    
+    //for every position set of x coorinates, u will have all y coordinate
+}
+
+int main()
+{
+    vector<vector<int>> position{{3,8},{11,2},{8,6}};
+    cout<<solve(position);
+
+    return 0;
+}
