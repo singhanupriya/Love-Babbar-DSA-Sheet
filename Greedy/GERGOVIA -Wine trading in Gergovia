@@ -1,0 +1,84 @@
+https://www.youtube.com/watch?v=PJdOUDWYstY
+
+1. Make a buy vector<value, index> ans sell vector.
+2. Sort in order of index as buyer will sell to closest index and seller will buy from nearest seller.
+
+#include <iostream>
+#include<vector>
+#include<algorithm>
+#include<cmath>
+
+using namespace std;
+
+bool comp(pair<int,int>& a, pair<int,int>& b)
+{
+    return a.second<b.second;
+}
+
+int solve(vector<int> sales)
+{
+    int n=sales.size();
+    vector<pair<int,int>> buy;
+    vector<pair<int,int>> sell;
+    
+    for(int i=0;i<n;i++)
+    {
+        if(sales[i]>0)
+        {
+            buy.push_back(make_pair(sales[i],i));
+        }
+        else
+        {
+            sell.push_back(make_pair(sales[i],i));
+        }
+    }
+    //buy will buy from nearest index so sort in order of index
+    sort(buy.begin(),buy.end(),comp);
+    sort(sell.begin(),sell.end(),comp);
+    
+    int i=0; //buy index
+    int j=0; //sell index
+    
+    int ans=0;
+    
+    //<arr[i],i>
+    while(i<buy.size() && j<sell.size())
+    {
+        if(buy[i].first>=abs(sell[j].first))
+        {
+            ans=ans + (abs(sell[j].first) * abs(buy[i].second-sell[j].second));
+            
+            buy[i].first=buy[i].first-abs(sell[j].first);
+            sell[j].first=0;
+        }
+        else
+        {
+            ans=ans + (buy[i].first*abs(buy[i].second-sell[j].second));
+            
+            sell[j].first=sell[j].first + buy[i].first;
+            buy[i].first=0;
+        }
+        
+        if(buy[i].first==0)
+        {
+            i++;
+        }
+        
+        if(sell[j].first==0)
+        {
+            j++;
+        }
+        
+    }
+    
+    return ans;
+    
+}
+
+int main()
+{
+    vector<int> sales{-1000, -1000, -1000, 1000, 1000, 1000};
+    cout<<solve(sales);
+
+    return 0;
+}
