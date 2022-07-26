@@ -70,3 +70,51 @@ public:
 	    return res;
 	}
 };
+
+
+Using DFS:
+https://takeuforward.org/data-structure/topological-sort-using-dfs/
+
+TIME:o(v+e), Space:O(V)
+
+	void dfs(int node, vector<bool>& vis, stack<int>& s, int V , vector<int> adj[])
+	{
+	    vis[node]=true;
+	    
+	    for(int i=0;i<adj[node].size();i++)
+	    {
+	        if(!vis[adj[node][i]])
+	        {
+	            dfs(adj[node][i],vis,s,V,adj);
+	        }
+	    }
+	    
+	    s.push(node);
+	}
+	
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    // code here
+	    
+	    stack<int> s;
+	    vector<bool> vis(V,false);
+	    
+	    for(int i=0;i<V;i++)
+	    {
+	        if(!vis[i])
+	        {
+	            dfs(i,vis,s,V,adj);
+	        }
+	    }
+	    
+	    vector<int> result;
+	    
+	    while(!s.empty())
+	    {
+	        int curr=s.top();
+	        result.push_back(curr);
+	        s.pop();
+	    }
+	    
+	    return result;
+	}
