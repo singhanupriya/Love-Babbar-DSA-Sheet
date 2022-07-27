@@ -18,6 +18,8 @@ Logic-
 Time:O(VE), Space:O(V)
 Dijs: time:O(ElogV), Space:O(V)
 
+If there are n vertices, there will be (n-1) eges, each time, one edge will be relaxed so u do (n-1) times
+
 int isNegativeWeightCycle(int n, vector<vector<int>>edges){
 	    // Code here
 	    
