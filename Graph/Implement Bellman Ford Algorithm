@@ -3,9 +3,12 @@ https://www.youtube.com/watch?v=FrLWd1tJ_Wc
 1. Dijikstra can't be used if there is a neg edge in the cycle
 
 Applications of bellman ford
-1. Find shortest distance of all node from src in a directed graph with neg edge
+1. U can't shortest distance of all node from src in a directed graph **with neg edge** as the more no of times u travel, 
+the dist keeps dec due to neg edge, hence, u use it to detect neg cycle.
 2. Find a negative weight cycle(a cycle where sum of cycle is a neg no, the more times u travel the cycle, the more negative sum u keep getting)
-3. Bellman dosnt work in undirected grp with neg edge bcoz in undirected graph u--(-2)--v means u-->v(-2) and v->u(-2) means cycle with 2 edges of wt -2, sum of cycle =-4, the more no of times u travel this cycle the lower value u will keep getting, this can go upto infinite times
+3. Bellman dosnt work in undirected grp with neg edge bcoz in undirected graph u--(-2)--v means u-->v(-2) and v->u(-2) means cycle with 2 edges of wt -2, 
+sum of cycle =-4, the more no of times u travel this cycle the lower value u will keep getting, this can go upto infinite times
+4. For undirected graph, u have to convert it into directed, 2---3, 2-->3 and 3--->2
 
 Logic-
 1. Create a dist vactor denoting the dist of node 'i' from src node. d[src]=0
@@ -23,7 +26,7 @@ int isNegativeWeightCycle(int n, vector<vector<int>>edges){
 	    
 	    int updated;
 	    
-	    for(int i=0;i<n-1;i++)
+	    for(int i=0;i<n-1;i++) //relax all edges n-1 times
 	    {
 	        updated=0;
 	        for(int j=0;j<edges.size();j++)
