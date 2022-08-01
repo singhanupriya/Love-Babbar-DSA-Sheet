@@ -32,6 +32,12 @@ public:
         }
         int wordLen=beginWord.length(); //all words of same length
         
+        
+        if(s.find(beginWord)!=s.end()) //as already inserted in the queue
+        {
+            st.erase(beginWord);
+        }
+        
         int len=0; //ans
         
         q.push(beginWord);
