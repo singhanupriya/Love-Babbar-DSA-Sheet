@@ -28,28 +28,23 @@ using namespace std;
 
 
     
-    void findCoordinates(int x, int n, int& row, int& col)
+     void findCoordinates(int x, int n, int& row, int& col)
     {
         
         
-        int r=n- (x-1)/n -1;
-        int c=(x-1) % n;
+        row=n- ((x-1)/n )-1;
+        col=(x-1) % n;
         
-        if(r%2==0 && n%2==0)
+        if((n % 2 == 1 && row%2 ==1) || (row%2==0 && n%2==0))
         {
-            row=r;
-            col=n-1-c;
+            
+            col=n-1-col;
         }
-        else
-        {
-            row=r;
-            col=c;
-        }
-        
-        //cout<<row<<" "<<col<<"\n";
+       
         
        
     }
+    
     
     int snakesAndLadders(vector<vector<int>>& board) {
         
