@@ -46,71 +46,74 @@ using namespace std;
     }
     
     
-    int snakesAndLadders(vector<vector<int>>& board) {
+   int snakesAndLadders(vector<vector<int>>& board) {
+        
         
         int n=board.size();
+        
         vector<vector<bool>> vis(n,vector<bool>(n,false));
+        queue<pair<int,int>> q;
         
-        queue<int> q;
-        q.push(1);
+        
+        q.push(make_pair(1,0));
+        
+        //<node,dist>
+        
         vis[n-1][0]=true;
-        
-        int steps=0;
         
         while(!q.empty())
         {
-            int qlen=q.size();
-            //cout<<qlen<<" ";
-            for(int i=0;i<qlen;i++)
+            pair<int,int> temp=q.front();
+            
+            int steps=temp.second;
+            int pos=temp.first;
+            q.pop();
+            
+            if(pos==n*n)
             {
-                int curr=q.front();
-                q.pop();
+                return steps;
+            }
+
+             
                 
-                //if dest reached
-                if(curr==n*n)
+            for(int i=1;i<=6;i++)
+            {
+                if(pos+i > n*n)
                 {
-                    return steps;
+                    break;
                 }
-                //if not reached dest, try the 6 positions
                 
-                for(int k=1;k<=6;k++)
-                {
-                    if(curr+k > n*n)
+                
+                int r=0;
+                    int c=0;
+                    findCoordinates(pos+i,n,r,c);
+                    
+                    if(!vis[r][c])
                     {
-                        break; //out of the board
-                    }
-                    
-                    //if in board, find the position in matrix
-                    
-                    int row=0;
-                    int col=0;
-                    findCoordinates(k+curr,n,row,col);
-                    //cout<<"aaa"<<row<<" "<<col<<"\n";
-                    
-                    
-                    
-                    if(!vis[row][col])
-                    {
-                        if(board[row][col]==-1)
+                        if(board[r][c]==-1)
                         {
-                            q.push(curr+k);
+                            q.push(make_pair(pos+i,steps+1));
                         }
                         else
                         {
-                            q.push(board[row][col]); //snake or ladder
+                            q.push(make_pair(board[r][c],steps+1));
                         }
+                        vis[r][c]=true;
+                        
                     }
-                    vis[row][col]=true;
-                }
+                    
+                    
+                    
+                    
+                
             }
-            steps++;
+            
+            
+            
+            
         }
-        
-        
         return -1;
-        
     }
-
 
 int main()
 {
