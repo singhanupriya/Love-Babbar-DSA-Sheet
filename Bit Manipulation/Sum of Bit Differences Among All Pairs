@@ -1,0 +1,41 @@
+https://www.youtube.com/watch?v=L_fIn5TM3mM
+https://practice.geeksforgeeks.org/problems/find-sum-of-different-corresponding-bits-for-all-pairs4652/1
+
+1. Every number can be expressed in 32 bits.
+2. Traverse from 0 to 31 and count nos having 1 in that bit and 0 in that bit, pairs for that bit will be (No of 1)*(No of 0)* 2
+3. Find this for all bits from 1 to 31.
+
+(1,2) and (2,1) are different pairs to be considered in the ans
+
+Time:O(N), SPace:O(1)
+
+ int countBits(int N, long long int nums[])
+    {
+        // code here
+        
+        long long countOn=0;
+        long long countOff=0;
+        
+        long long ans=0;
+        
+        for(int i=0;i<=31;i++)
+        {
+            countOn=0;
+            countOff=0;
+            
+            for(int j=0;j<N;j++)
+            {
+                if(nums[j] & (1<<i))
+                {
+                    countOn++;
+                }
+            }
+            
+            countOff=N-countOn;
+            
+            ans=((ans) + ((countOn*countOff*2)))%1000000007;
+        }
+        
+        return ans;
+        
+    }
