@@ -28,3 +28,30 @@ bool isPowerofTwo(long long x){
         
     }
 };
+
+
+Imp: https://leetcode.com/problems/power-of-two/submissions/
+
+Time:O(1), SPace:O(1)
+
+Negative nos are not power of 2
+
+ bool isPowerOfTwo(int n) {
+        
+        
+        if(n<=0)
+        {
+            return false;
+        }
+        
+        if((n & (n-1))==0)
+        {
+            return true;
+        }
+        
+        return false;
+        
+        
+        
+    }
+};
