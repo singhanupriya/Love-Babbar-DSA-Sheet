@@ -3,6 +3,7 @@ https://practice.geeksforgeeks.org/problems/finding-the-numbers0215/1#
 
 1. Take xor of all elements, u will get the two elements which are unique, in this xor, find the LSB.  
     int counter= res & ~(res-1);   //get the mask directlt with LSB
+    LSB will be 1 means one number in xor had 1 in LSB and other had 0, xor of all numbers with 1 in LSB and xor of all numbers with 0 in LSB.
 2. Separate the array into two grps with matching LSB and with no.
 3. Xor the two grps, u will get 2 nos.
 
