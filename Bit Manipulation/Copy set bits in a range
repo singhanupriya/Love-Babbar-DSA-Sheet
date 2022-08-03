@@ -1,0 +1,25 @@
+https://www.geeksforgeeks.org/copy-set-bits-in-a-range/
+
+1. Traverse from l to r and find if that bit in y is 1, if it is do x | that bit
+
+Time:O(R-L), Space:O(1)
+
+
+
+int setSetBit(int x, int y, int l, int r){
+        // code here
+        
+        
+        for(int i=l;i<=r;i++)
+        {
+            int mask= y & (1 << (i-1)); //find set bits in 1
+            
+            if(y & mask) //if y bit is 1
+            {
+                x= x | mask;
+            }
+        }
+        
+        return x;
+        
+    }
