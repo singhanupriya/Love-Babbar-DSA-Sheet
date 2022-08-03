@@ -1,0 +1,41 @@
+https://leetcode.com/problems/bitwise-and-of-numbers-range/discuss/2295983/c%2B%2B-bit-manipulation-O(1)-time-O(1)-space-with-explaination
+
+1. To find and of all numbers from [left,right], we only need to find MSBs in both left and right which are same.
+2. The moment we get a MSB which is different, we stop.
+
+Example: left = 26; right = 30
+11001
+11010
+11011
+11100
+11101
+The 2 MSB bits are the same, until the third bits has been flip between 26 and 30, we stop there, the 2 LSB bits 
+always has 0 in the range.
+
+Time:O(1), Space:O(1)
+
+int rangeBitwiseAnd(int left, int right) {
+        
+        
+        int ans=0;
+        
+        for(int i=31;i>=0;i--)
+        {
+            int l=(left >> i) & 1;  //starting from MSB
+            int r=(right >> i) & 1;
+            
+            if(l==r)
+            {
+                ans= ans | (l << i); //adding to result, even if l==r==0 add 0 to ans makes no change, OR means adding bits
+            }
+            else
+            {
+                break; //moment different MSB stop
+            }
+        }
+        
+        return ans;
+        
+        
+        
+    }
