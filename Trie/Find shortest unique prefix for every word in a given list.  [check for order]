@@ -1,6 +1,96 @@
 https://www.youtube.com/watch?v=fpjfjNh658c&t=654s
 
-LEARN- how to maintain the order
+1. Traverse array and insert into trie
+2. Traverse array and travserse trie for every element picked from array and find prefix
+
+Time:O(M*N), SPace:O(M*N), M-> no of words, N-> max length
+
+
+class TrieNode{
+    public:
+    int frequency;
+    TrieNode* children[26];
+    
+    TrieNode()
+    {
+        frequency=0;
+        for(int i=0;i<26;i++)
+        {
+            children[i]=nullptr;
+        }
+    }
+};
+
+
+
+class Solution
+{
+    public:
+    
+    void insert(TrieNode* root, string word)
+    {
+        
+        TrieNode* p=root;
+        int len=word.length();
+        
+        for(int i=0;i<len;i++)
+        {
+            int index=word[i]-'a';
+            if(p->children[index]==nullptr)
+            {
+                p->children[index]=new TrieNode();
+            }
+            p=p->children[index];
+            p->frequency++;
+        }
+        
+        
+    }
+    
+    void findPrefix(TrieNode* root, string word, int indexArray, vector<string>& result)
+    {
+        TrieNode* p=root;
+        int len=word.length();
+        string temp="";
+        
+        for(int i=0;i<len;i++)
+        {
+            int index=word[i]-'a';
+            temp=temp + word[i];
+            p=p->children[index];
+            if(p->frequency==1)
+            {
+                break;
+            }
+        }
+        
+        result[indexArray]=temp;
+        
+    }
+    
+    
+    vector<string> findPrefixes(string arr[], int n)
+    {
+        //code 
+        
+        TrieNode* root=new TrieNode();
+        
+        for(int i=0;i<n;i++)
+        {
+            insert(root,arr[i]);
+        }
+        
+        vector<string> result(n);
+        
+        for(int i=0;i<n;i++)
+        {
+            findPrefix(root,arr[i],i,result);
+        }
+        return result;
+    }
+    
+
+
 
 1. Modify the trie to store child array and freq, keep incrementing freq, if that letter has occured.
 2. Traverse the trie again, if the freq is 1 stop and add from root till here in the ans.
