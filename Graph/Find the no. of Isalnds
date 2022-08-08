@@ -1,5 +1,61 @@
 https://practice.geeksforgeeks.org/problems/find-the-number-of-islands/1
 
+
+M1-
+
+
+If we dont want to use visisted array and do in O(1) space, we can modify the actual grid once that coord has been visisted
+
+
+ void dfs(int i, int j, int row, int col, int dirx[], int diry[], vector<vector<char>>& grid)
+    {
+        grid[i][j]='0';  //THIS STEP----------
+        
+        for(int x=0;x<4;x++)
+        {
+            if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col  && grid[i+dirx[x]][j+diry[x]]=='1')
+            {
+                dfs(i+dirx[x],j+diry[x],row,col,dirx,diry,grid);
+            }
+        }
+        
+        
+        
+        
+    }
+    
+    int numIslands(vector<vector<char>>& grid) {
+        
+        int row=grid.size();
+        int col=grid[0].size();
+        
+        int dirx[]={1,-1,0,0};
+        int diry[]={0,0,1,-1};
+        
+        
+        
+        int islands=0;
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if( grid[i][j]=='1')
+                {
+                    islands++;
+                    dfs(i,j,row,col,dirx,diry,grid);
+                }
+            }
+        }
+        
+        return islands;
+        
+    }
+};
+
+M2-
+
+
 Use DFS or BFS
 
 Time:O(N*M) -> worst case visit all cells
