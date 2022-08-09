@@ -15,96 +15,87 @@ M2-
 Time:O(min(logn,log m)) as we are working on the smaller array
 Space:O(1)
 
-#include <iostream>
-
-using namespace std;
-
-int min(int a, int b)
-{
-    if(a<=b)
+ double max(int a, int b)
     {
-        return a;
-    }
-    return b;
-}
-
-int max(int a, int b)
-{
-    if(a<=b)
-    {
+        if(a>=b)
+        {
+            return a;
+        }
         return b;
     }
-    return a;
-}
-
-
-int getMedian(int arr1[], int arr2[], int n1, int n2)
-{
-    if(n1>n2)
+    
+    double min(int a, int b)
     {
-        return getMedian(arr2,arr1,n2,n1);
-    }
-    
-    
-    int low=0;
-    int high=n1-1;
-    
-    int total=n1+n2;
-    
-    int cut1=(low+high)/2;
-    int cut2;
-    
-    if(total%2==0)
-    {
-        cut2=total/2 - cut1;
-        
-    }
-    else
-    {
-        cut2= total/2 - cut1 +1;
-    }
-    
-    int l1=cut1==0? INT_MIN:arr1[cut1-1];
-    int h1=cut1==n1 ? INT_MAX: arr1[cut1];
-    int l2=cut2==0 ? INT_MIN:arr2[cut2-1];
-    int h2=cut2==n2 ? INT_MAX: arr2[cut2];
-    
-    while(l1<=h1)
-    {
-        if(l1<=h2 && l2<=h1)
+        if(a<=b)
         {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        
+        
+        
+        if(nums1.size()>nums2.size())
+        {
+            return findMedianSortedArrays(nums2,nums1);
+        }
+        
+        int n1=nums1.size();
+        int n2=nums2.size();
+        
+        int total=(n1+n2);
+        
+        int low=0;  //cut can start before the start of the array
+        int high=n1; //cut at end after the array
+        
+        
+        while(low<=high) //range of cut
+        {
+            
+            int cut1=low+((high-low)/2);
+            int cut2;
+            
             if(total%2==0)
             {
-                return (max(l1,l2)+min(h1,h2))/2;
+                cut2=(total/2) - cut1;
             }
             else
             {
-                return max(l1,l2);
+                cut2=(total/2) - cut1 +1;
             }
+            
+            int l1= (cut1==0)?-1000000009:nums1[cut1-1];
+            int r1= (cut1==n1)?1000000009: nums1[cut1];
+            int l2= (cut2==0)?-1000000009:nums2[cut2-1];
+            int r2= (cut2==n2)?1000000009: nums2[cut2];
+        
+            
+            if(l1<=r2 && l2<=r1)
+            {
+                if(total%2==0)
+                {
+                    return (double)(max(l1,l2)+min(r1,r2))/2.0;
+                }
+                else
+                {
+                    return max(l1,l2);
+                }
+            }
+            else if(l1>r2)
+            {
+                high=cut1-1; //move the cut to left
+            }
+            else
+            {
+                low=cut1+1; //move the cut to right
+            }
+            
+            
         }
-        else if(l1>h2)
-        {
-            high=cut1-1;
-        }
-        else
-        {
-            low=cut1+1;
-        }
+        return 0.0;
+        
+        
     }
-    
-    return 0;
-    
-    
-}
-
-int main()
-{
-    int arr1[] = { -5, 3, 6, 12, 15 };
-    int arr2[] = { -12, -10, -6, -3, 4, 10 };
-    int n1=5;
-    int n2=7;
-    
-    cout<<getMedian(arr1,arr2,n1,n2);
-
-    return 0;
-}
