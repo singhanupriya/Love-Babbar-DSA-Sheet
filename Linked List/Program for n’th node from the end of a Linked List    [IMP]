@@ -1,48 +1,38 @@
 https://practice.geeksforgeeks.org/problems/nth-node-from-end-of-linked-list/1#
+https://www.youtube.com/watch?v=Lhu3MsXZy-Q&t=384s
 
 Time:O(N), Space:O(1)
 
-1. Take p,q->poitning to head.
-2. move q n steps, rem dist of q from end (len-n).
-3. Now move both p and q till q reaches end, p covers len-n.
+1. Create a dummy node and dummy->next=head, q,p=dummy, move q 'n' steps from dummy, it will point to the nth node from start.
+2. Now move both p and q till q reaches end, p will be at (n+1)th node from end, p->next=p->next->next
 
-Corner case: n>len and n=len
 
-int getNthFromLast(Node *head, int n)
-{
-       // Your code here
-       
-    if(head==NULL)
-    {
-        return -1;
-    }
-       
-    Node* p=head;
-    Node* q=head;
-    
-    int i=0;
-    
-    while(i<n-1)   //if n is greater than length
-    {
+ ListNode* removeNthFromEnd(ListNode* head, int n) {
         
-        q=q->next;
-        if(q==NULL)
+        ListNode* dummy=new ListNode(-1);
+        dummy->next=head;
+        
+        ListNode* slow=dummy;
+        ListNode* fast=dummy;
+        
+        for(int i=1;i<=n;i++)
         {
-            return -1;
+            fast=fast->next;
         }
-        i++;
+        
+        while(fast->next)
+        {
+            fast=fast->next;
+            slow=slow->next;
+        }
+        
+        ListNode* temp=slow->next;
+        slow->next=slow->next->next;
+        
+        delete(temp);
+        return dummy->next;
+        
+        
     }
-    
-    if(q==NULL)  //if n is equal to length
-    {
-        return head->data;
-    }
-    
-    while(q->next!=NULL)
-    {
-        p=p->next;
-        q=q->next;
-    }
-    
-    return p->data;
-}
+};
+
