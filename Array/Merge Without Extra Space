@@ -1,0 +1,73 @@
+
+
+https://www.youtube.com/watch?v=hVl2b3bLzBw
+https://takeuforward.org/data-structure/merge-two-sorted-arrays-without-extra-space/
+
+Time:O(N+M)log(N+M)
+Space:O(1)
+
+ void swap(long long& a, long long& b)
+        {
+            int temp=a;
+            a=b;
+            b=temp;
+        }
+        
+        void merge(long long arr1[], long long arr2[], int n, int m) 
+        { 
+            // code here 
+            
+            long long gap = ceil((float)(n + m) / 2);
+            
+            
+            
+            while(gap>0)
+            {
+                long long i=0;
+                long long j=gap;
+                while(j<(m+n))
+                {
+                    
+                    if(i<n && j<n)
+                    {
+                        if(arr1[i]>arr1[j])
+                        {
+                            swap(arr1[i],arr1[j]);
+                            
+                        }
+                       
+                    }
+                    else if(i<n && j>=n )
+                    {
+                        if(arr1[i]>arr2[j-n])
+                        {
+                            swap(arr1[i],arr2[j-n]);
+                        }
+                        
+                    }
+                    else if(i>=n && j>=n )
+                    {
+                        if(arr2[i-n]>arr2[j-n])
+                        {
+                            swap(arr2[i-n],arr2[j-n]);
+                        }
+                        
+                    }
+                        
+                  i++;
+                        j++;       
+                    
+                }
+                if(gap==1)
+                {
+                    gap=0;
+                }
+                
+                gap=ceil(float(gap)/2);
+                
+                
+            }
+            
+            
+            
+        } 
