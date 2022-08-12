@@ -8,119 +8,109 @@ ORDER NOT MAINTAINED
 Time:O(N*S*log(S)), S- length of each word, N-> no of words
 
 
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
-#include <iostream>
-#include<vector>
-#include<algorithm>
-
-using namespace std;
-
 class TrieNode{
     
     public:
-        bool EndOfWord;
-        vector<string> index;
-        TrieNode* child[256];
+    vector<pair<int,string>> indexMap;
+    bool isLeaf;
+    TrieNode* children[26];
     
     TrieNode()
     {
-        EndOfWord=false;
-        vector<string> index;
-        for(int i=0;i<256;i++)
+        isLeaf=false;
+        for(int i=0;i<26;i++)
         {
-            child[i]=NULL;
+            children[i]=nullptr;
         }
     }
+
     
 };
 
-void insert(TrieNode* root, string key, int idx,vector<string> arr)
-{
-    TrieNode* p=root;
-    for(int i=0;i<key.length();i++)
+
+class Solution{
+  public:
+  
+  
+    void insert(TrieNode* root, string key, int index, vector<string>& string_list)
     {
-        if(! p->child[key[i]-'a'])
+        int len=key.length();
+        TrieNode* p=root;
+        
+        for(int i=0;i<len;i++)
         {
-            p->child[key[i]-'a']=new TrieNode();
+            int index=key[i]-'a';
+            if(p->children[index]==nullptr)
+            {
+                p->children[index]=new TrieNode();
+            }
+            p=p->children[index];
         }
-        p=p->child[key[i]-'a'];
+        p->isLeaf=true;
+        p->indexMap.push_back(make_pair(index,string_list[index]));
+        
+        
     }
     
-    p->EndOfWord=true;
-    (p->index).push_back(arr[idx]);
-    
-}
-
-void traverse(TrieNode* root, vector<vector<string>>& temp)
-{
-    if(root)
+    void traverse(TrieNode* root, vector<vector<pair<int,string>>>& temp)
     {
-        for(int i=0;i<256;i++)
+        if(root)
         {
-            if(root->child[i])
+            for(int i=0;i<26;i++)
             {
-                if(root->child[i]->EndOfWord)
+                if(root->children[i])
                 {
-                    //cout<<"Size "<<(root->child[i]->index).size()<<"\n";
-                    temp.push_back(root->child[i]->index);
+                    
+                    if(root->children[i]->isLeaf)
+                    {
+                        temp.push_back(root->children[i]->indexMap);
+                    }
+                    else
+                    {
+                        traverse(root->children[i],temp);
+                    }
+                    
                 }
-                else
-                {
-                    traverse(root->child[i],temp);
-                }
+                
+                
             }
         }
     }
-}
-
-bool sortcol(const vector<string>& v1, const vector<string>& v2)
-{
-    return v1[1] < v2[1];
-}
-
-void anagram(vector<string> arr)
-{
-    int n=arr.size();
-    TrieNode* root=new TrieNode();
-    for(int i=0;i<n;i++)
-    {
-        //sort(arr[i].begin(),arr[i].end());
-        //cout<<"Inserted "<<arr[i]<<" ";
-        string buffer=arr[i];  //dont modify the actual word
-        sort(buffer.begin(),buffer.end());
-        insert(root,buffer,i,arr);
-    }
-    vector<vector<string>> temp;
-    traverse(root,temp);
-    sort(temp.begin(), temp.end(), sortcol);
-    
-    vector<vector<string>> ans;
-    
-    for(int i=0;i<temp.size();i++)
-    {
-        for(int j=0;j<temp[i].size();j++)
+  
+   static bool comp(vector<pair<int,string>>& a,vector<pair<int,string>>& b)
+   {
+       return a[0].first<b[0].first;
+   }
+  
+    vector<vector<string> > Anagrams(vector<string>& string_list) {
+        //code here
+        
+        TrieNode* root=new TrieNode();
+        
+        int len=string_list.size();
+        
+        for(int i=0;i<len;i++)
         {
-            //temp[i][j];
-            cout<<temp[i][j]<<" ";
+            string temp=string_list[i];
+            sort(temp.begin(),temp.end());
+            insert(root,temp,i,string_list);
         }
-        cout<<"\n";
+        
+        vector<vector<pair<int,string>>> temp;
+        traverse(root,temp);
+        sort(temp.begin(),temp.end(),comp);
+        
+        vector<vector<string>> result;
+        
+        for(int i=0;i<temp.size();i++)
+        {
+            vector<string> ans;
+            for(int j=0;j<temp[i].size();j++)
+            {
+                ans.push_back(temp[i][j].second);
+            }
+            result.push_back(ans);
+        }
+        
+        return result;
     }
-    
-    
-    
-}
-
-int main()
-{
-    vector<string> arr {"act","god","cat","dog","tac"};
-    anagram(arr);
-
-    return 0;
-}
