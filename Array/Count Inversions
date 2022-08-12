@@ -1,0 +1,87 @@
+https://www.youtube.com/watch?v=kQ1mJlwW-c0&t=606s
+
+1. While merging array in merge sort, if arr[i] > arr[j]. all indexes after i in the first array from i to mid will also be greater so that count=mid-i+1. 
+2. j++, check for the next j.
+
+Time:O(N log n), Space:O(N)
+
+
+ long long merge(long long arr[], long long low, long long mid, long long high)
+    {
+        
+        long long i=low,j=mid+1,k=0;
+        long long* b=new long long[high-low+1];
+        
+        long long count=0;
+        
+        while(i<=mid && j<=high)
+        {
+            if(arr[i]<=arr[j])
+            {
+                b[k]=arr[i];
+                i++;
+                k++;
+            }
+            else
+            {
+                b[k]=arr[j];
+                count=count + (mid-i+1);
+                j++;
+                k++;
+            }
+        }
+        
+        while(i<=mid)
+        {
+            b[k]=arr[i];
+                i++;
+                k++;
+        }
+        
+        while(j<=high)
+        {
+             b[k]=arr[j];
+                
+                j++;
+                k++;
+        }
+        
+        
+        long long x=0;
+        j=low;
+        while(x<=k && j<=high)
+        {
+            arr[j]=b[x];
+            x++;
+            j++;
+        }
+        
+        return count;
+        
+    }
+    
+    long long mergeSort(long long arr[], long long low, long long high)
+    {
+        long long inv=0;
+        long long mid;
+        if(low<high)
+        {
+            mid=low + (high-low)/2;
+            inv = inv + mergeSort(arr,low,mid);
+            inv=inv + mergeSort(arr,mid+1,high);
+            inv=inv+ merge(arr,low,mid,high);
+            
+            
+            
+            
+        }
+        return inv;
+    }
+    
+    
+    long long int inversionCount(long long arr[], long long N)
+    {
+        // Your Code Here
+        
+        return mergeSort(arr,0,N-1);
+    }
