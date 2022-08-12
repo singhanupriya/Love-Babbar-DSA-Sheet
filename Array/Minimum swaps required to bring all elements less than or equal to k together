@@ -1,0 +1,66 @@
+https://www.geeksforgeeks.org/minimum-swaps-required-bring-elements-less-equal-k-together/
+
+1. Count the no of elements <=k (good element), slide with this window size
+2. first window from 0 to count, check element >k, (bad elements), this will be the initial ans.
+3. Keep sliding the window, remove ith element and add jith elemennt and check count of bad elemenst in every window
+4. The window with min bad elements will be the ans
+
+Time:O(N), Space:O(1)
+
+
+
+ int minSwap(int arr[], int n, int k) {
+        // Complet the function
+        
+        
+        int windowSize=0; //all elements <=k
+        
+        for(int i=0;i<n;i++)
+        {
+            if(arr[i]<=k)
+            {
+                windowSize++;
+            }
+        }
+        
+        //count bad elements in the first window
+        
+        int bad=0;
+        for(int i=0;i<windowSize;i++)
+        {
+            if(arr[i]>k)
+            {
+                bad++;
+            }
+        }
+        
+        // keep the same window size and keep sliding, the window which will have min no of 
+        //bad elements will be the ans
+        int ans=bad; //initially this will be the ans
+        
+        int i=0,j=windowSize; //j will be at the start of next window
+        
+        
+        while(j<n)
+        {
+            //remove ith element from window
+            if(arr[i]>k)
+            {
+                bad--;
+            }
+            
+            //slide the window by adding jth element
+            if(arr[j]>k)
+            {
+                bad++;
+            }
+            
+            //compare bad elements of this window with ans
+            
+            ans=min(ans,bad);
+            i++;
+            j++;
+        }
+        
+        return ans;
+    }
