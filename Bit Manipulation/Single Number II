@@ -1,0 +1,41 @@
+https://leetcode.com/problems/single-number-ii/discuss/2370639/C%2B%2Boror-with-explanation-oror-bit
+
+
+1. Since every number except the ans occurs three times, if we exclude the ans and keep remaining nos, all bits will have set bits as multiple of 3 as every
+no occurs thrice.
+2. Now if we add the number and count set bits at every posistion, the bit where set bit count%3!=0 means this has a set bit there, else means this ans
+has 0 there.
+3. Keep traversing all bits and adding set bit of ans.
+
+time:O(N), Space:O(1)
+
+ int singleNumber(vector<int>& nums) {
+        
+        int n=nums.size();
+        int ans=0;
+        
+        for(int i=0;i<=31;i++)
+        {
+            
+            int countOne=0;
+            int temp=1<<i;
+            
+            for(int j=0;j<n;j++)
+            {
+                if(nums[j] & temp)
+                {
+                    countOne++;
+                }
+            }
+            
+            if(countOne%3!=0)
+            {
+                ans=ans | temp;
+            }
+            
+            
+        }
+        return ans;
+        
+    }
+};
