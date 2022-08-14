@@ -7,7 +7,6 @@ Time:O(K^n)
 
 #include <iostream>
 #include<vector>
-#include<climits>
 
 using namespace std;
 
@@ -17,40 +16,46 @@ int min(int a, int b)
     {
         return a;
     }
-    
     return b;
 }
 
-//n->total number of stairs
-int solve(int n, vector<int> arr, int k)
+int solve(int n, int k, vector<int>& heights) //n->index
 {
-    if(n<=1)
+    if(n==0)
     {
         return 0;
     }
+    int ans=1000000009;
     
-    int temp=INT_MAX;
     for(int i=1;i<=k;i++)
     {
-        int energy=solve(n-i,arr,k)+ abs(arr[n-1]-arr[n-i-1]);
-        temp=min(temp,energy);
+        int temp=1000000009;
+        
+        if(n-i>=0)
+        {
+            temp=abs(heights[n]-heights[n-i])+solve(n-i,k,heights);
+        }
+        
+        ans=min(ans,temp);
+        
     }
-    return temp;
-    
+    return ans;
+}
+
+int find(int n, int k, vector<int> heights)
+{
+    return solve(n,k,heights);
 }
 
 int main()
 {
-    vector<int> arr={30,10,60 , 10 , 60 , 50};
-    int n=6;
-    int k=2;
     
+    int n=5 ,k=3;
+    vector<int> heights{10, 30, 40, 50, 20};
     
-    cout<<solve(n,arr,k);
-
+    cout<<find(n-1,k,heights);
     return 0;
 }
-
 
 Top down:
 
