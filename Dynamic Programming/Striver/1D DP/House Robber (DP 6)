@@ -6,6 +6,62 @@ https://leetcode.com/problems/house-robber-ii/submissions/
 3. Take two arrays arr1=0 to index n-2 and arr2=1 to n-1
 4. Return max of two
 
+
+Memoisation:
+
+1. As there are 2 arrays, there will be 2 dps
+
+  int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    int solve(int index, int n, vector<int>& nums,vector<int>& dp)
+    {
+        if(index>=n)
+        {
+            return 0;
+        }
+        
+        if(dp[index]!=-1)
+        {
+            return dp[index];
+        }
+        
+        int take=nums[index]+solve(index+2,n,nums,dp);
+        int notTake=solve(index+1,n,nums,dp);
+        
+        return dp[index]=max(take,notTake);
+        
+    }
+    
+    
+    int rob(vector<int>& nums) {
+        
+        
+        
+        int n=nums.size();
+        
+        if(n==1) //IMP
+        {
+            return nums[0];
+        }
+        vector<int> dp(n+1,-1);
+        vector<int> dp1(n+1,-1);
+        
+        return max(solve(0,n-1,nums,dp),solve(1,n,nums,dp1));
+        
+    }
+};
+
+
+
+Mtheod2:
+
 Time:O(N), Space:O(N)
 
  int max(int a, int b)
