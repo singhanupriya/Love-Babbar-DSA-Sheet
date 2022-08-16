@@ -1,0 +1,64 @@
+https://www.youtube.com/watch?v=63fPPOdIr2c&t=1409s
+
+1. check for limits in this question 1<= matrix[i][j] <=2000 and  R and C are always odd, means total no of elements will be odd, so median will be n/2+1 
+  element in sorted matrix
+2. Find mid which is a potential median, find elements smaller  or equal than median in each row, this will give total no of elements in the matrxi <=mid
+3. As R*C is odd, if elements smalled = than mid is (m*n)/2, it can be a possible ans, else decrease median
+
+And since the numbers will be max of 32 bit, so binary search of numbers from min to max will be performed in at most 32 ( log2(2^32) = 32 ) operations. 
+Time:O(32*R*logC), Space:O(1)
+
+
+ int countSmaller(int row, vector<vector<int>> &matrix, int target)
+    {
+        int low=0;
+        int high=matrix[0].size()-1;
+        
+        while(low<=high)
+        {
+            int mid=low + (high-low)/2;
+            
+            if(matrix[row][mid]<=target) //check on right side
+            {
+                low=mid+1;
+            }
+            else
+            {
+                high=mid-1;
+            }
+        }
+        
+        return low;
+    }
+
+    int median(vector<vector<int>> &matrix, int r, int c){
+        // code here 
+        
+        int low=1;
+        int high=2000;
+        int row=matrix.size();
+        int col=matrix[0].size();
+        
+        while(low<=high)
+        {
+            int mid=low + (high-low)/2; //possible median
+            int count=0;
+            
+            for(int i=0;i<row;i++)
+            {
+                count=count+countSmaller(i,matrix,mid);
+            }
+            
+            if(count<=(row*col)/2)
+            {
+                low=mid+1;
+            }
+            else
+            {
+                high=mid-1;
+            }
+        }
+        return low;
+        
+    }
+};
