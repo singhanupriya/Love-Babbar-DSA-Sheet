@@ -1,0 +1,121 @@
+https://leetcode.com/problems/sort-list/submissions/
+
+Method 1:
+
+Time:O(nlogn), Space:O(N)
+
+ ListNode* sortList(ListNode* head) {
+        
+        vector<int> v;
+        
+        ListNode* p=head;
+        
+        while(p)
+        {
+            v.push_back(p->val);
+            p=p->next;
+        }
+        
+        sort(v.begin(),v.end());
+        
+        p=head;
+        
+        for(int i=0;i<v.size();i++)
+        {
+            p->val=v[i];
+            p=p->next;
+        }
+        
+        
+        return head;
+    }
+};
+
+
+Method 2:
+
+Using merge sort
+
+Time:O(nlogn), Space:O(1)
+
+ ListNode* merge(ListNode* start1,ListNode* start2)
+    {
+        ListNode* dummy=new ListNode(-1);
+        ListNode* d=dummy;
+        
+        ListNode* p=start1;
+        ListNode* q=start2;
+        
+        while(p && q)
+        {
+            if(p->val <= q->val)
+            {
+                d->next=p;
+                p=p->next;
+                d=d->next;
+            }
+            else
+            {
+                d->next=q;
+                q=q->next;
+                d=d->next;
+            }
+        }
+        
+        while(p)
+        {
+            d->next=p;
+            p=p->next;
+            d=d->next;
+        
+        }
+        
+        while(q)
+        {
+            d->next=q;
+            q=q->next;
+            d=d->next;
+        }
+        
+        return dummy->next;
+        
+    }
+    
+    
+    ListNode* sortList(ListNode* head) {
+        
+        if(head && head->next)
+        {
+            
+            ListNode* slow=head;
+            ListNode* fast=head;
+            
+    
+            
+            while(fast->next && fast->next->next)
+            {
+                fast=fast->next->next;
+                slow=slow->next;
+                
+            }
+            
+        ListNode* temp=slow->next;
+        slow->next=nullptr; //end first list
+            
+            ListNode* start1=sortList(head);
+            ListNode* start2=sortList(temp);
+            
+           
+            
+            
+            return merge(start1,start2);
+            
+        }
+        return head;
+            
+            
+        
+        
+        
+        
+    }
