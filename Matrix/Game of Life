@@ -1,0 +1,183 @@
+https://leetcode.com/problems/game-of-life/discuss/2437574/0(1)-space-complexity(in-place)-solution-with-easy-explanation-oror-C%2B%2B
+https://www.youtube.com/watch?v=fei4bJQdBUQ&t=481
+
+
+Mtheod 1:
+
+1. Create a copy of the orignal board, make changes in it and then copy back to orignal board
+
+Time:O(M*N), Space:O(M*N)
+
+void gameOfLife(vector<vector<int>>& board) {
+        
+        int row=board.size();
+        int col=board[0].size();
+        
+        vector<vector<int>> newBoard(row,vector<int>(col,0));
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                newBoard[i][j]=board[i][j];
+            }
+        }
+        
+        int dirx[]={1,1,0,-1,-1,-1,0,1,};
+        int diry[]={0,1,1,1,0,-1,-1,-1};
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                int live=0;
+                int dead=0;
+                
+                for(int x=0;x<8;x++)
+                {
+                    if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col)
+                    {
+                        if(board[i+dirx[x]][j+diry[x]]==1)
+                        {
+                            live++;
+                        }
+                        else
+                        {
+                            dead++;
+                        }
+                    }
+                }
+                
+                
+                if(board[i][j]==0 && live==3)
+                {
+                    newBoard[i][j]=1;
+                }
+                else if(board[i][j]==1)
+                {
+                    if(live<2)
+                    {
+                        newBoard[i][j]=0;
+                    }
+                    else if(live==2 || live==3)
+                    {
+                        newBoard[i][j]=1;
+                    }
+                    else if(live>3)
+                    {
+                        newBoard[i][j]=0;
+                    }
+                }
+                
+                
+            }
+        }
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                board[i][j]=newBoard[i][j];
+            }
+        }
+        
+        
+        
+    }
+    
+    
+ Mthod 2:
+ 
+ There can be 4 possibility
+ 
+  Original | New | mapped value
+       0     |  0  |   0.   //old 0 converted to 0 in ans
+       1     |  0  |   1.   //old 1 converted to 0 in ans
+       0     |  1  |   2.  ////old 0 converted to 1 in ans
+       1     |  1  |   3   ////old 1 converted to 1 in ans
+       
+       This is reverted binary truth table, puth the mappings in the board after changes, and finally, replace the mappings with the new value
+       
+       
+       Time:O(M*N), Space:O(1)
+       
+       
+       
+    void gameOfLife(vector<vector<int>>& board) {
+        
+        int row=board.size();
+        int col=board[0].size();
+        
+       
+        
+        int dirx[]={1,1,0,-1,-1,-1,0,1,};
+        int diry[]={0,1,1,1,0,-1,-1,-1};
+        
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                int live=0;
+                
+                for(int x=0;x<8;x++)
+                {
+                    if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col)
+                    {
+                        if(board[i+dirx[x]][j+diry[x]]==1 || board[i+dirx[x]][j+diry[x]]==3)
+                        {
+                            live++;
+                        }
+                        
+                    }
+                }
+                
+                
+                //replace with its mapping
+                if(board[i][j]==1)
+                {
+                    if(live==2 || live==3)
+                    {
+                        board[i][j]=3; //1->1
+                    }
+                    
+                    
+                }
+                else
+                {
+                    if(live==3)
+                    {
+                        board[i][j]=2; //0->1
+                    }
+                }
+                
+                
+                
+                
+            }
+        }
+        
+        
+        //now replace those with actual values
+        
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                if(board[i][j]==2)
+                {
+                    board[i][j]=1;
+                }
+                else if(board[i][j]==3)
+                {
+                    board[i][j]=1;
+                }
+                else
+                {
+                    board[i][j]=0;
+                }
+            }
+        }
+        
+    }
