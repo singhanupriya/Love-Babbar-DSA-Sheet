@@ -9,58 +9,66 @@ Time:O(n^2*n) #subs*checkpal, Space:O(1)
 Method 2:
 DP Time:O(N^2), Space:O(N^2)
 
-public:
-    string longestPalin (string s) {
-        // code here
+ string longestPalindrome(string s) {
         
         int n=s.length();
         
-        int k=0;
-        int start=-1;
-        
-        vector<vector<int>> dp(n,vector<int>(n,0));  //all are indexes
-        
-        //for len 1
-        
-        for(int i=0;i<n;i++)
+        if(n==0)
         {
-            dp[i][i]=1;
-            if(k<1)
-            {
-                k=1;
-                start=i;  //store 1st occurence
-            }
+            return "";
         }
         
-        //len 2
-        for(int i=0;i<n-1;i++)
+        vector<vector<bool>> dp(n,vector<bool>(n,false));
+        
+        int start=-1;
+        int ans=0;
+        
+        
+        //length 1
+        for(int i=0;i<n;i++)
+        {
+            dp[i][i]=true;
+            ans=1;
+            start=i;
+        }
+        
+        //length 2
+        for(int i=0;i<=n-2;i++)
         {
             if(s[i]==s[i+1])
             {
-                dp[i][i+1]=1;
-                if(k<2)
-                {
-                    k=2;
-                    start=i;
-                }
+                dp[i][i+1]=true;
+                ans=2;
+                start=i;
+                    
             }
         }
         
-        for(int j=2;j<n;j++)
+        //length 3 to n
+        for(int len=3;len<=n;len++)
         {
-            for(int i=j-2;i>=0;i--)
+            //index ranges
+            for(int startIndex=0;startIndex<=n-len;startIndex++)
             {
-                if(s[i]==s[j] && dp[i+1][j-1]==1)
+                int endIndex=startIndex+len-1;
+                if(s[startIndex]==s[endIndex] && dp[startIndex+1][endIndex-1])
                 {
-                    dp[i][j]=1;
-                    if(k<(j-i+1))
+                    dp[startIndex][endIndex]=true;
+                    if(ans < endIndex-startIndex+1)
                     {
-                        k=j-i+1;
-                        start=i;
+                        ans=endIndex-startIndex+1;
+                        start=startIndex;
                     }
                 }
+                else
+                {
+                    dp[startIndex][endIndex]=false;
+                }
             }
         }
         
-        return s.substr(start,k);
+        string result=s.substr(start,ans);
+        return result;
+        
     }
+};
