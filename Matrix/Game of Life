@@ -98,6 +98,16 @@ void gameOfLife(vector<vector<int>>& board) {
        
        This is reverted binary truth table, puth the mappings in the board after changes, and finally, replace the mappings with the new value
        
+       U have reverse mapping here bcoz if we map 
+       
+       0    0.   0
+       0    1.   1
+       1    0.   2
+       1    1.   3
+       
+       
+       now 0 -> 1 gives mapping of 1, we wont be able to differentiate this 1 with 1 on the board as everything happens simultaneously, so this change 
+       would't have happened till now and we count it, so we take it as 2.
        
        Time:O(M*N), Space:O(1)
        
