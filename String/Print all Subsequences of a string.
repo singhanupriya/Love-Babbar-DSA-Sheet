@@ -12,28 +12,41 @@ Time:(2^N)
 
 
 #include <iostream>
+#include<vector>
 
 using namespace std;
 
-void solve(string input, string output)
+void solve(int index, string input, string output, vector<string>& result, int n)
 {
-    if(input.length()==0)
+    if(index==n)
     {
-        cout<<output<<" ";
+        result.push_back(output);
         return;
     }
     
-    //dont include the starting char
-    solve(input.substr(1),output); //start from index 1 
+    //not take
+    solve(index+1,input,output,result,n);
     
-    //include starting char and add in output
-    solve(input.substr(1),output+input[0]);
+    //take
+    
+    solve(index+1,input,output+input[index],result,n);
+    
 }
 
 int main()
 {
-   string input="abc";
-   solve(input,"");
+    string input="abc";
+    string output="";
+    vector<string> result;
+    int n=input.length();
+    
+    solve(0,input,output,result,n);
+    
+    for(int i=0;i<result.size();i++)
+    {
+        cout<<result[i]<<" ";
+    }
+    
 
     return 0;
 }
