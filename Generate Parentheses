@@ -1,0 +1,43 @@
+https://www.youtube.com/watch?v=eyCj_u3PoJE
+
+1. If u have n pairs, means u have n open and n close brackets.
+2. Start with an empty string, is the number of open brackets are left add it.
+3. U can use close only when the resulting string will be valid means an extra open bracket must be there so count of open > count of close.
+
+Time:O(2*N), every position 2 options
+
+
+ void solve(string output, int open, int close,vector<string>& result, int n )
+    {
+        if(open==n && close==n)
+        {
+            result.push_back(output);
+            return;
+        }
+        if(open!=n) 
+        {
+            
+            solve(output + '(',open+1,close,result,n);
+        }
+        
+        if(close < open) //then only u select close, means u have an extra open bracket before this
+        {
+            
+            solve(output + ')',open,close+1,result,n);
+            
+            
+        }
+    }
+    
+
+    
+    vector<string> generateParenthesis(int n) {
+        
+        
+        vector<string> result;
+        solve("",0,0,result,n);
+        
+        return result;
+        
+    }
+};
