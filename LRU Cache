@@ -1,0 +1,87 @@
+https://leetcode.com/problems/lru-cache/
+https://practice.geeksforgeeks.org/problems/lru-cache/1
+
+
+
+Method 1:
+
+1. U create a variable count which will be like a indexing variable which keeps increasing whenever an action is performed, create a map which stores
+  <key, <value,count>>, this key which will have the lowest value of count will be LRU and flushed out if u have to insert a new element and capacity
+  is reached.
+  
+  Time:O(cap), Space:O(CAP)
+
+
+class LRUCache {
+private:
+    int size;
+    unordered_map<int,pair<int,int>> m;
+    //<key,<value,count>>
+    int count;
+
+public:
+    LRUCache(int capacity) {
+         size=capacity;
+        count=1;
+    }
+    
+    int get(int key) {
+        
+        if(m.find(key)!=m.end())
+        {
+            int value=m[key].first;
+            m[key].second=count;
+            count++;
+            return value;
+        }
+        return -1;
+        
+    }
+    
+    void put(int key, int value) {
+        
+        if(m.find(key)!=m.end()) //if key exists just update
+           {
+               m[key].first=value;
+               m[key].second=count;
+               count++;
+           }
+        else
+        {
+            
+            if(m.size()<size)
+            {
+                m[key]=make_pair(value,count);
+               count++;
+            }
+            else
+            {
+                int least=INT_MAX;
+                int element=0;
+                for(auto it:m)
+                {
+                    if(least>it.second.second)
+                    {
+                        least=it.second.second;
+                        element=it.first;
+                    }
+                }
+
+                m.erase(element);
+                m[key]=make_pair(value,count);
+                   count++;
+            }
+            
+            
+        }
+        
+        
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
