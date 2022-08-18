@@ -85,3 +85,188 @@ public:
  * int param_1 = obj->get(key);
  * obj->put(key,value);
  */
+
+https://www.youtube.com/watch?v=xDEuM5qa0zg
+
+Method 2:
+
+1. Since all operations need to be done in O(1) time, we need to check cache in O(1), so u DLL.
+2. Create a node that stores key, value, next and prev. This DLL will be ur cache, create a head-><-tail node, all recent nodes will be next to head
+  LRU will be tail->prev
+3. Create a map that will have key and its node as value to search in DLL in O(1)
+4. When u do a get, u need to delete its existing node and add a new node with that key and value next to head as it is most recent
+
+Time:O(1), Space:O(N)
+
+
+
+class Node{
+    public:
+    
+    int key;
+    int value;
+    Node* next;
+    Node* prev;
+    
+    Node(int x, int y)
+    {
+        key=x;
+        value=y;
+        next=nullptr;
+        prev=nullptr;
+    }
+    
+};
+
+
+class LRUCache {
+    
+    private:
+    
+    int size;
+    Node* head;
+    Node* tail;
+    unordered_map<int,Node*> m;
+    
+    
+    
+public:
+    LRUCache(int capacity) {
+        
+        size=capacity;
+        head=new Node(0,0);
+        tail=new Node(0,0);
+        head->next=tail;
+        tail->prev=head;
+        
+    }
+    
+    int get(int key) {
+        
+        if(m.find(key)==m.end())
+        {
+            return -1;
+        }
+        
+        //when u do a get, u also have to put it next to head and update node in map
+        
+        Node* curr=m[key];
+        
+        int val=curr->value;
+        
+        //remove it
+        curr->prev->next=curr->next;
+        curr->next->prev=curr->prev;
+        curr->next=nullptr;
+        curr->prev=nullptr;
+        delete(curr);
+        
+        
+        Node* copy=new Node(key,val);
+        
+        //add it next to head
+        copy->next=head->next;
+        head->next->prev=copy;
+        copy->prev=head;
+        head->next=copy;
+        
+        m[key]=copy; //update in map;
+        
+        
+        return val;
+            
+        
+        
+    }
+    
+    void put(int key, int value) {
+        
+        //if key is present, dont have to check for size as we have maintained it
+        if(m.find(key)!=m.end())
+        {
+            
+            Node* curr=m[key];
+            //remove this
+            
+            curr->prev->next=curr->next;
+            curr->next->prev=curr->prev;
+            curr->next=nullptr;
+            curr->prev=nullptr;
+            delete(curr);
+            
+            
+            //add a new node
+            Node* newNode=new Node(key,value);
+            m[key]=newNode;
+            
+            newNode->next=head->next;
+            head->next->prev=newNode;
+            head->next=newNode;
+            newNode->prev=head;
+            
+            
+            
+            
+        }
+        else //if not present check for size
+        {
+            if(m.size()<size)
+            {
+                //just add a new node next to head
+                
+                Node* newNode=new Node(key,value);
+                m[key]=newNode;
+
+                newNode->next=head->next;
+                head->next->prev=newNode;
+                head->next=newNode;
+                newNode->prev=head;
+                
+                
+            }
+            else
+            {
+                //remove the LRU, node before tail and delete from map
+                
+                Node* temp=tail->prev;
+                
+                int mapKey=temp->key;
+                m.erase(mapKey);
+                
+                temp->prev->next=temp->next;
+                tail->prev=temp->prev;
+                temp->next=nullptr;
+                temp->prev=nullptr;
+                
+                
+                
+                //just add a new node next to head
+                
+                Node* newNode=new Node(key,value);
+                m[key]=newNode;
+
+                newNode->next=head->next;
+                head->next->prev=newNode;
+                head->next=newNode;
+                newNode->prev=head;
+                
+                
+                
+            }
+            
+            
+            
+            
+        }
+        
+        
+        
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
