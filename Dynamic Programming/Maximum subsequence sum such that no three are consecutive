@@ -6,6 +6,178 @@ https://www.geeksforgeeks.org/maximum-subsequence-sum-such-that-no-three-are-con
 3. Exclude i-1 dp[i]=sum[i-2]+arr[i]
 4. Exclude i-2 dp[i]=sum[i-3]+arr[i-1]+arr[i], dp[0]=arr[0], dp[1]=arr[0]+arr[1], dp[2]=max(arr[0]+arr[1] {exlude index 2} , arr[0]+arr[2] {exclude index 1} , arr[1]+arr[2] {exclude index 0} 
 
+
+Method 1:
+
+Time:O(2^N)
+
+#include <iostream>
+
+using namespace std;
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+
+int solve(int index, int arr[] )
+{
+    if(index<0)
+    {
+        return 0;
+    }
+    
+    if(index==0)
+    {
+        return arr[index]; //stop here
+    }
+    
+    //now u have three cases
+    
+    //u take current element and prev, u will not include the element at index-2
+    int first=arr[index]+arr[index-1]+solve(index-3,arr);
+    
+    //skip index-1 element
+    int second=arr[index]+solve(index-2,arr);
+    
+    //skip index element
+    int third=solve(index-1,arr);
+    
+    int result=max(first,max(second,third));
+    
+    return result;
+}
+
+
+
+Method 2:
+
+Time:O:(n), Space:O(N)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+
+int solve(int index, int arr[],vector<int>& dp )
+{
+    if(index<0)
+    {
+        return 0;
+    }
+    
+    if(index==0)
+    {
+        return arr[index]; //stop here
+    }
+    
+    if(dp[index]!=-1)
+    {
+        return dp[index];
+    }
+    
+    //now u have three cases
+    
+    //u take current element and prev, u will not include the element at index-2
+    int first=arr[index]+arr[index-1]+solve(index-3,arr,dp);
+    
+    //skip index-1 element
+    int second=arr[index]+solve(index-2,arr,dp);
+    
+    //skip index element
+    int third=solve(index-1,arr,dp);
+    
+    int result=max(first,max(second,third));
+    
+    return dp[index]=result;
+}
+
+
+int main()
+{
+    int arr[] = {100, 1000, 100, 1000, 1};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    //index goes from n-1 to 0
+    vector<int> dp(n,-1);
+    
+    cout<<solve(n-1,arr,dp);
+
+    return 0;
+}
+
+
+
+Method 3:
+
+int main()
+{
+    int arr[] = {100, 1000, 100, 1000, 1};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    //index goes from n-1 to 0
+    vector<int> dp(n+1,0); //len
+    
+    //storing sum of this length
+    
+    if(n==1)
+    {
+        return arr[0];
+    }
+    if(n==2)
+    {
+        return arr[0]+arr[1];
+    }
+    
+    dp[1]=arr[0];
+    dp[2]=arr[0]+arr[1];
+    
+    for(int len=3;len<=n;len++)
+    {
+        int notFirst=dp[len-1];
+        int notSecond=arr[len-1]+dp[len-2];
+        int notThird=arr[len-1]+arr[len-2]+dp[len-3];
+        
+        dp[len]=max(notFirst,max(notSecond,notThird));
+    }
+    
+    cout<<dp[n];
+
+   ;
+}
+
+
+
+
+int main()
+{
+    int arr[] = {100, 1000, 100, 1000, 1};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    
+    cout<<solve(n-1,arr);
+
+    return 0;
+}
+
+
+Method 2:
+
+
 Time:O(N), Space:O(n)
 
 
