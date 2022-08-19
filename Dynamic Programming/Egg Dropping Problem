@@ -76,6 +76,7 @@ Overlapping- memoisation
 
 Method:'
 
+Time:O(Kn^2)
 
 vector<vector<int>> dp(k+1,vector<int>(n+1,1000000007));
         
@@ -143,7 +144,8 @@ vector<vector<int>> dp(k+1,vector<int>(n+1,1000000007));
 
 Method:
 
-
+Time:O(knlogn), Space:O(kn)
+https://leetcode.com/problems/super-egg-drop/discuss/2332606/C%2B%2B-or-Memoization-or-Binary-Search-or-Tabulation-or-O(knlogn)-or-Notes-or-Resources
 
 
 Instead of checkng on all floors from 1 to n, we use binary search and reduce search space by half sp we check log(n) floors
