@@ -1,0 +1,43 @@
+https://practice.geeksforgeeks.org/problems/max-length-chain/1
+
+//to get the longest chain, u need to start with the pair which has lowest second value
+        //greedy
+        
+        
+Time:O(nlogn), Space:O(1)        
+
+
+ bool static comp(struct val& a, struct val& b)
+    {
+        return a.second < b.second;
+    }
+    
+    int maxChainLen(struct val p[],int n){
+        //Your code here
+        
+        
+        //to get the longest chain, u need to start with the pair which has lowest second value
+        //greedy
+        
+        //sort in order of second value
+        
+        sort(p,p+n,comp);
+        
+        //take the lowest one and set count as 1
+        
+        int count=1;
+        
+        int prevEnd=p[0].second;
+        
+        for(int i=1;i<n;i++)
+        {
+            if(p[i].first > prevEnd)
+            {
+                count++;
+                prevEnd=p[i].second;
+            }
+        }
+        
+        return count;
+        
+    }
