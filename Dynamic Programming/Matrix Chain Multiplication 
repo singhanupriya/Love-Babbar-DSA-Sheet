@@ -120,7 +120,50 @@ public:
 };
 
 
+Method 3:
 
+ int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        
+        vector<vector<int>> dp(N,vector<int>(N,INT_MAX ));
+        
+        //i and j are indexes, we need to go length wise
+        //i and j go from 1 to n-1
+        
+        //return solve(1,N-1,arr,dp);
+        
+        //if len is 1, means start and end index same, 0 cost
+        
+        for(int i=1;i<N;i++)
+        {
+            dp[i][i]=0;
+            
+        }
+        
+        //start from len=2 till end
+        
+        int k;
+        for(int len=2;len<N;len++) //len is no of matrix
+        {
+            for(int startIndex=1; startIndex<N-len+1; startIndex++)
+            {
+                int endIndex=startIndex+len-1;
+                
+                int result=INT_MAX;
+                for(k=startIndex;k<endIndex;k++)
+                {
+                    int temp=dp[startIndex][k]+dp[k+1][endIndex]+arr[startIndex-1]*arr[k]*arr[endIndex];
+                    result=min(result,temp);
+                }
+                
+                dp[startIndex][endIndex]=result;
+            }
+        }
+        
+        return dp[1][N-1];
+        
+    }
 
 
 
