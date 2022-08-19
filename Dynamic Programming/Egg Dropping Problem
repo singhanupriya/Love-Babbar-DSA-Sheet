@@ -74,6 +74,76 @@ Overlapping- memoisation
 };
 
 
+Method:'
+
+
+vector<vector<int>> dp(k+1,vector<int>(n+1,1000000007));
+        
+        //0 floor
+        for(int i=0;i<=k;i++)
+        {
+            dp[i][0]=0;
+        }
+        
+        //1 floor
+        for(int i=1;i<=k;i++)
+        {
+            dp[i][1]=1;
+        }
+        
+        //1 egg
+        for(int i=1;i<=n;i++)
+        {
+            dp[1][i]=i;
+        }
+        
+        
+        for(int egg=2;egg<=k;egg++)
+        {
+            for(int floor=2;floor<=n;floor++)
+            {
+                
+                
+                for(int droppingFloor=1;droppingFloor<=floor;droppingFloor++)
+                {
+                    
+                    int breakEgg=dp[egg-1][droppingFloor-1];
+
+                    //if the egg doesnt break u will check on the remainig floors= (n-floor) floors
+                    int notBreak=dp[egg][floor-droppingFloor];
+
+                    //as every floor has two choices and we need to find min, we return the
+                    //worst ans from every floor, the floor which returns the min worst ans will be the ans
+
+
+                    //one move done for this
+                    int temp=1+ max(breakEgg, notBreak);
+
+                    dp[egg][floor]=min(dp[egg][floor],temp);
+
+
+
+                }
+                
+                
+                
+                
+                
+            }
+        }
+        
+        
+        
+        
+        
+       return dp[k][n];
+        
+
+
+
+Method:
+
+
 public:
     //Function to find minimum number of attempts needed in 
     //order to find the critical floor.
