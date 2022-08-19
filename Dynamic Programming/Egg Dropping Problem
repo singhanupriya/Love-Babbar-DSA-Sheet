@@ -22,6 +22,58 @@ Overlapping- memoisation
 
 
 
+ int superEggDrop(int k, int n) {
+        
+        if(n==0 || n==1)
+        {
+            return n;
+        }
+        
+        //if u have only 1 egg, u will start dropping from floor 1 and move upwards
+        //the floor on which it breaks will be my floor, so worst case
+        //min moves needed for this will be equal to the number of floor
+        
+        if(k==1)
+        {
+            return n;
+        }
+        
+        //this is MCM pattern, u have to drop from each floor and find from which floor u get the min movements
+        
+        int result=INT_MAX;
+        for(int floor=1;floor<=n;floor++)
+        {
+            //every floor will have two choices
+            
+            //if egg breaks at a floor x, then u will check on the below floors, 
+            //no of floors to be checked now will be from 1 to floor-1 i.e
+            //floor-1 floors
+            int breakEgg=superEggDrop(k-1,floor-1);
+            
+            //if the egg doesnt break u will check on the remainig floors= (n-floor) floors
+            int notBreak=superEggDrop(k,n-floor);
+            
+            //as every floor has two choices and we need to find min, we return the
+            //worst ans from every floor, the floor which returns the min worst ans will be the ans
+            
+            
+            //one move done for this
+            int temp=1+ max(breakEgg, notBreak);
+            
+            result=min(result,temp);
+            
+            
+            
+        }
+        
+        
+        return result;
+        
+        
+    }
+};
+
+
 public:
     //Function to find minimum number of attempts needed in 
     //order to find the critical floor.
