@@ -144,173 +144,70 @@ vector<vector<int>> dp(k+1,vector<int>(n+1,1000000007));
 Method:
 
 
-public:
-    //Function to find minimum number of attempts needed in 
-    //order to find the critical floor.
-    
-    int max(int a,int b)
+
+
+Instead of checkng on all floors from 1 to n, we use binary search and reduce search space by half sp we check log(n) floors
+
+ int solve(int k, int n,vector<vector<int>>& dp)
     {
-        if(a>=b)
+         if(n==0 || n==1)
         {
-            return a;
-        }
-        return b;
-    }
-    
-    int min(int a,int b)
-    {
-        if(a<=b)
-        {
-            return a;
-        }
-        return b;
-    }
-    
-    int eggDrop(int n, int f) 
-    {
-        // your code here
-        
-        if(n==1)
-        {
-            return f;
+            return n;
         }
         
-        if(f==0 || f==1)
+        //if u have only 1 egg, u will start dropping from floor 1 and move upwards
+        //the floor on which it breaks will be my floor, so worst case
+        //min moves needed for this will be equal to the number of floor
+        
+        if(k==1)
         {
-            return f;
+            return n;
         }
         
-        int ans=INT_MAX;
-        
-        for(int k=1;k<=f;k++)
+        if(dp[k][n]!=-1)
         {
-            int temp=1 + max(eggDrop(n-1,k-1),eggDrop(n,f-k));
-            ans=min(ans,temp);
-        }
-        return ans;
-        
-    }
-    
-    Memoisation-
-    
-    int max(int a,int b)
-    {
-        if(a>=b)
-        {
-            return a;
-        }
-        return b;
-    }
-    
-    int min(int a,int b)
-    {
-        if(a<=b)
-        {
-            return a;
-        }
-        return b;
-    }
-    
-    int solve(int n, int f, vector<vector<int>>& dp)
-    {
-        
-        if(dp[n][f]!=-1)
-        {
-            return dp[n][f];
+            return dp[k][n];
         }
         
-        if(n==1)
+        //instead of checking from every floor from 1 to n, we use binary search
+        
+        
+        int result=INT_MAX;
+        
+        int low=1;
+        int high=n;
+        
+        while(low<=high)
         {
-            return f;
-        }
-        
-        if(f==0 || f==1)
-        {
-            return f;
-        }
-        
-        int ans=INT_MAX;
-        
-        for(int k=1;k<=f;k++)
-        {
-            int temp=1 + max(eggDrop(n-1,k-1),eggDrop(n,f-k));
-            ans=min(ans,temp);
-        }
-        return dp[n][f]=ans;
-        
-        
-    }
-    
-    
-    int eggDrop(int n, int f) 
-    {
-        // your code here
-        
-        vector<vector<int>> dp(n+1,vector<int>(f+1,-1));
-        return solve(n,f,dp);
-        
-        
-        
-    }
-    
-    
-    Top dow- O(n^3), Space:O(n*f)
-    
-    public:
-    //Function to find minimum number of attempts needed in 
-    //order to find the critical floor.
-    
-    int max(int a,int b)
-    {
-        if(a>=b)
-        {
-            return a;
-        }
-        return b;
-    }
-    
-    int min(int a,int b)
-    {
-        if(a<=b)
-        {
-            return a;
-        }
-        return b;
-    }
-    
-    
-    int eggDrop(int n, int f) 
-    {
-        // your code here
-        
-        vector<vector<int>> dp(n+1,vector<int>(f+1,0));
-        
-        for(int i=1;i<=f;i++)
-        {
-            dp[1][i]=i;
-        }
-        
-        for(int i=1;i<=n;i++)
-        {
-            dp[i][1]=1;
-        }
-        
-        for(int i=2;i<=n;i++)
-        {
-            for(int j=2;j<=f;j++)
+            int mid=low + (high-low)/2;
+            
+            int breakEgg=solve(k-1,mid-1,dp);
+            int notBreak=solve(k,n-mid,dp);
+            
+            int temp=1+max(breakEgg,notBreak);
+            
+            if(breakEgg>notBreak) //if max times egg is broken, u move down
             {
-                dp[i][j]=INT_MAX;
-                
-                for(int k=1;k<=j;k++)
-                {
-                    int temp=1 + max(dp[i-1][k-1],dp[i][j-k]);
-                    dp[i][j]=min(dp[i][j],temp);
-                }
+                high=mid-1;
             }
+            else
+            {
+                low=mid+1;
+            }
+            
+            result=min(result,temp);
+            
         }
-        return dp[n][f];
-        
-        
+        return dp[k][n]= result;
         
     }
-};
+    
+    int superEggDrop(int k, int n) {
+        
+        vector<vector<int>> dp(k+1,vector<int>(n+1,-1));
+        return solve(k,n,dp);
+        
+    }
+
+
+
