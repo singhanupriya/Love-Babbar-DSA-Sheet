@@ -1,0 +1,122 @@
+https://www.geeksforgeeks.org/optimal-strategy-for-a-game-dp-31/
+https://www.youtube.com/watch?v=ww4V7vRIzSk
+
+
+1. U are given even length array.
+2. start=i, end=j, u have to pick first
+
+3. U can pick first index or last index.
+ If u pick first, opp will have to pick from start+1 to end, now he also has two options
+  
+    if he picks start+1, u will get to pick from start+2 to end
+    if he pick end, u will get to pick from start+1 to end-1,     every player plays optimally, so opponent will select such a no such that u get min for the next round
+    
+    
+    ur option if u pick start= arr[start]+ min(f(start+2,end),f(start+1,end-1))
+    
+    Similarly if u pick last index= arr[last]+ min(f(start+1,end-1),f(start,end-2))
+    
+    ur ans will be max(start,last)
+    
+    
+    
+    Time:O(2^N)
+
+
+ long long solve(int start, int end, int n, int arr[])
+    {
+       if(start>end || start>=n || end<0)
+       {
+           return 0;
+       }
+        
+        long long pickStart= arr[start] + min(solve(start+2,end,n,arr),solve(start+1,end-1,n,arr));
+        long long pickLast=arr[end]+ min(solve(start+1,end-1,n,arr),solve(start,end-2,n,arr));
+        
+        return max(pickStart,pickLast);
+        
+    }
+    
+    long long maximumAmount(int arr[], int n){
+        // Your code here
+        
+        return solve(0,n-1,n,arr);
+        
+    }
+    
+    
+    
+    Method 2:
+    
+     long long solve(int start, int end, int n, int arr[],vector<vector<int>>& dp)
+    {
+       if(start>end || start>=n || end<0)
+       {
+           return 0;
+       }
+       
+       if(dp[start][end]!=-1)
+       {
+           return dp[start][end];
+       }
+        
+        long long pickStart= arr[start] + min(solve(start+2,end,n,arr,dp),solve(start+1,end-1,n,arr,dp));
+        long long pickLast=arr[end]+ min(solve(start+1,end-1,n,arr,dp),solve(start,end-2,n,arr,dp));
+        
+        return dp[start][end]=max(pickStart,pickLast);
+        
+    }
+    
+    long long maximumAmount(int arr[], int n){
+        // Your code here
+        
+        
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        return solve(0,n-1,n,arr,dp);
+        
+    }
+    
+    
+    Method 3:
+    
+    Here i and j are on the same array, so u will have to use length logic while in LPS
+    in rec, u are using start+2 or end-2, so u will need min 3 len, so enter for len=1 and 2
+    
+     long long maximumAmount(int arr[], int n){
+        // Your code here
+        
+        
+        vector<vector<long long>> dp(n,vector<long long>(n,0)); 
+        
+        
+        //if only 1 element u pick that element
+        for(int i=0;i<n;i++)
+        {
+            dp[i][i]=arr[i];
+        }
+        
+        //if len=2, u pick the larger element
+        for(int i=0;i<n-1;i++)
+        {
+            dp[i][i+1]=max(arr[i],arr[i+1]);
+        }
+        
+        for(int len=3;len<=n;len++)
+        {
+            for(int startIndex=0;startIndex<=n-len;startIndex++)
+            {
+                int endIndex=startIndex+len-1;
+                
+                long long pickStart= arr[startIndex] + min(dp[startIndex+2][endIndex],dp[startIndex+1][endIndex-1]);
+                long long pickLast=arr[endIndex]+ min(dp[startIndex+1][endIndex-1],dp[startIndex][endIndex-2]);
+        
+                dp[startIndex][endIndex]=max(pickStart,pickLast);
+                
+                
+            }
+        }
+        
+        return dp[0][n-1];
+        
+        
+    }
