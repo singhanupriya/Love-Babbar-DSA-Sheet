@@ -1,0 +1,121 @@
+
+
+1. IN BBT, height of left-right<=1
+//Height of tree, h = 1 + max(left height, right height)
+        //hence max(left,right)=h-1;
+
+so (h-1) has to be one of the ans
+
+Possible combinations:
+(h-1), (h-2)
+(h-2), (h-1)
+(h-1), (h-1)
+
+
+long long int countBT(int h) { 
+        // code here
+        
+        //Height of tree, h = 1 + max(left height, right height)
+        //hence max(left,right)=h-1;
+        
+        if(h==0)
+        {
+            return 1;
+        }
+        
+        if(h==1) //1 node
+        {
+            return 1;
+        }
+        
+        
+        return ((countBT(h-1)*countBT(h-2))%1000000007 + (countBT(h-1)*countBT(h-1))%1000000007 + (countBT(h-2)*countBT(h-1))%1000000007)%1000000007;
+        
+    }
+    
+    
+    
+    Method 2:
+    
+     long long solve(int h,vector<long long>& dp)
+    {
+        
+         //Height of tree, h = 1 + max(left height, right height)
+        //hence max(left,right)=h-1;
+        
+        if(h==0)
+        {
+            return 1;
+        }
+        
+        if(h==1) //1 node
+        {
+            return 1;
+        }
+        
+        if(dp[h]!=-1)
+        {
+            return dp[h];
+        }
+        
+        return dp[h]=(2*(solve(h-1,dp)*solve(h-2,dp))%1000000007 + (solve(h-1,dp)*solve(h-1,dp))%1000000007 )%1000000007;
+        
+        
+    }
+  
+    long long int countBT(int h) { 
+        // code here
+        
+       vector<long long> dp(h+1,-1);
+       return solve(h,dp);
+    }
+    
+    
+    
+    
+    Method 3:
+    
+    Time:O(n), Space:O(N)
+    
+     long long int countBT(int h) { 
+        // code here
+        
+       vector<long long> dp(h+1,0);
+       
+       dp[0]=1;
+       dp[1]=1;
+       
+       for(int i=2;i<=h;i++)
+       {
+           dp[i]=(2*(dp[i-1]*dp[i-2])%1000000007 + (dp[i-1]*dp[i-1])%1000000007 )%1000000007;
+       }
+       
+       return dp[h];
+    }
+    
+    Method 4:
+    
+    Time:O(N), Space:O(1)
+    
+    long long int countBT(int h) { 
+        // code here
+        
+       
+       
+       long long first=1; //h-2
+       long long second=1; //h-1
+       
+       if(h<=1)
+       {
+           return 1;
+       }
+       
+       for(int i=2;i<=h;i++)
+       {
+           long long third=(2*(second*first)%1000000007 + (second*second)%1000000007 )%1000000007;
+           first=second;
+           second=third;
+       }
+       
+       return second;
+    }
