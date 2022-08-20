@@ -1,0 +1,139 @@
+https://practice.geeksforgeeks.org/problems/maximum-sum-rectangle2948/1
+
+1. Same as max area sum rectangle, just instead of kadane find largest subarray with sum=0.
+
+Time:O(C*C*R), Space:o(r)
+
+bool largestZeroSum(vector<int>& temp, int row, int& startRow, int& endRow)
+  {
+      
+      unordered_map<int,int> m;
+      //stores prefix sum and index till where sum is calculated
+      
+      int maxLen=0;
+      bool exists=false;
+      
+      
+      int presum=0;
+      
+      for(int i=0;i<row;i++)
+      {
+          presum=presum+temp[i];
+          
+          if(presum==0 && maxLen<i+1)
+          {
+              maxLen=i+1;
+              startRow=0;
+              endRow=i;
+              exists=true;
+          }
+          
+          if(temp[i]==0 && maxLen==0)
+          {
+              maxLen=1;
+              startRow=i;
+              endRow=i;
+              exists=true;
+          }
+          
+          if(m.find(presum)==m.end())
+          {
+              m[presum]=i;
+          }
+          else
+          {
+              int nextIndex=m[presum]+1;
+              
+              if(maxLen<i-nextIndex+1)
+              {
+                  maxLen=nextIndex-i+1;
+                  startRow=nextIndex;
+                  endRow=i;
+                  exists=true;
+              }
+          }
+          
+          
+      }
+      
+      return exists;
+      
+  }
+  
+  
+  vector<vector<int>> sumZeroMatrix(vector<vector<int>> a){
+      //Code Here
+      
+      
+      int row=a.size();
+      int col=a[0].size();
+      
+      vector<int> temp(row,0);
+      
+      int startRow=-1,endRow=-1;
+      int startCol,endCol;
+      int colBegin,colEnd;
+      int maxArea=INT_MIN;
+      
+      for(startCol=0;startCol<col;startCol++)
+      {
+          for(int i=0;i<row;i++)
+          {
+               temp[i]=0;
+          }
+          
+          for(int endCol=startCol;endCol<col;endCol++)
+          {
+              //sum of colums
+              for(int i=0;i<row;i++)
+              {
+                  temp[i]=temp[i]+a[i][endCol];
+              }
+              
+              int rowBegin=0;
+              int rowEnd=row-1;
+              bool exists=largestZeroSum(temp,row, rowBegin, rowEnd);
+              if(!exists)
+              {
+                  continue;
+              }
+              //calculate this area returned
+              int tempArea=(rowEnd-rowBegin+1)*(endCol-startCol+1);
+              
+              if(maxArea<tempArea)
+              {
+                  maxArea=tempArea;
+                  colBegin=startCol;
+                  colEnd=endCol;
+                  startRow=rowBegin;
+                  endRow=rowEnd;
+              }
+              
+              
+              
+              
+          }
+      }
+      
+      
+      vector<vector<int>> result;
+      
+      //no solution exists
+      if(startRow==-1)
+      {
+          return result;
+      }
+      
+      for(int i=startRow;i<=endRow;i++)
+      {
+          vector<int> curr;
+          for(int j=colBegin;j<=colEnd;j++)
+          {
+              curr.push_back(a[i][j]);
+          }
+          result.push_back(curr);
+      }
+      
+      return result;
+  }
+};
