@@ -213,6 +213,8 @@ public:
 
 method 3:
 
+Time:O(N^3), Space:O(N^2)
+
  bool isPallindrome(int i, int j, string str)
     {
         int start=i;
@@ -281,3 +283,5 @@ method 3:
         return dp[0][n-1];
         
     }
+    
+    
