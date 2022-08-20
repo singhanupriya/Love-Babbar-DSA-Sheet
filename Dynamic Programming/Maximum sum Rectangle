@@ -1,0 +1,69 @@
+https://www.youtube.com/watch?v=mKluyW4YFvs
+
+READ THIS IMP****: https://www.geeksforgeeks.org/maximum-sum-rectangle-in-a-2d-matrix-dp-27/
+
+Method 1:
+
+Brute force, startRow,endRow,startCol,endCol -> traversal O(N^4) and sum:O(N^2), total : O(N^6)
+
+Method 2: Using kadane
+
+1. Keep adding columns by traversing colums, all possible starts and end colums
+2. Using kadane, store the sum from start till end column in a vector and find max sum  -> this given the row boundaries for this start till end colums
+4. return the largest sum
+
+Time:O(C^2*R), Space:O(R)
+
+ int kadane(vector<int>& temp,int row )
+    {
+        
+        
+        int prev=temp[0];
+        int ans=temp[0];
+        
+        for(int i=1;i<row;i++)
+        {
+            int curr=max(temp[i],temp[i]+prev);
+            prev=curr;
+            ans=max(ans,curr);
+        }
+        
+        return ans;
+    }
+  
+    int maximumSumRectangle(int R, int C, vector<vector<int>> M) {
+        // code here
+        
+        int maxSum=INT_MIN;
+        vector<int> temp(R,0);
+        
+        for(int startCol=0;startCol<C;startCol++)
+        {
+            for(int i=0;i<R;i++)
+            {
+                temp[i]=0;
+            }
+            
+            for(int endCol=startCol;endCol<C;endCol++)
+            {
+                
+                
+                //add columns
+                for(int i=0;i<R;i++)
+                {
+                    temp[i]=temp[i]+M[i][endCol];
+                }
+                
+                //perform kadane
+                int sum=kadane(temp,R);
+                
+                maxSum=max(maxSum,sum);
+                
+                
+            }
+        }
+        
+        return maxSum;
+        
+        
+    }
