@@ -1,0 +1,131 @@
+https://www.youtube.com/watch?v=YHSjvswCXC8
+
+Method 1:
+
+long long int solve(int start, int end, string str)
+    {
+        if(start>end)
+        {
+            return 0;
+        }
+        
+        if(start==end)
+        {
+            return 1;
+        }
+        
+        if(str[start]==str[end])
+        {
+            return (1%1000000007+ solve(start+1,end,str)%1000000007 + solve(start,end-1,str)%1000000007)%1000000007;
+        }
+        else
+        {
+            return (solve(start+1,end,str)%1000000007 + solve(start,end-1,str)%1000000007-solve(start+1,end-1,str)%1000000007)%1000000007;
+        }
+    }
+    
+    
+    long long int  countPS(string str)
+    {
+       //Your code here
+       
+       int n=str.length();
+       return solve(0,n-1,str);
+       
+       
+    }
+    
+    
+    Method 2:
+    
+    long long int solve(int start, int end, string str,vector<vector<int>>& dp)
+    {
+        if(start>end)
+        {
+            return 0;
+        }
+        
+        if(start==end)
+        {
+            return 1;
+        }
+        
+        if(dp[start][end]!=-1)
+        {
+            return dp[start][end];
+        }
+        
+        if(str[start]==str[end])
+        {
+            return dp[start][end]=(1%1000000007+ solve(start+1,end,str,dp)%1000000007 + solve(start,end-1,str,dp)%1000000007)%1000000007;
+        }
+        else
+        {
+            return dp[start][end]=(solve(start+1,end,str,dp)%1000000007 + solve(start,end-1,str,dp)%1000000007-solve(start+1,end-1,str,dp)%1000000007)%1000000007;
+        }
+    }
+    
+    
+    long long int  countPS(string str)
+    {
+       //Your code here
+       
+       int n=str.length();
+       
+       vector<vector<int>> dp(n,vector<int>(n,-1));
+       return solve(0,n-1,str,dp);
+       
+       
+    }
+    
+    
+    Method 3:
+    
+     long long int  countPS(string str)
+    {
+       //Your code here
+       
+       int n=str.length();
+       
+       vector<vector<long long>> dp(n,vector<long long>(n,0));
+       
+       //as i and j are on the same strings, we use len
+       
+       //len 1
+       
+       //start and end are indexs
+       
+       for(long long i=0;i<n;i++)
+       {
+           dp[i][i]=1;
+       }
+       
+       for(long long len=2;len<=n;len++)
+       {
+           for(long long start=0;start<=n-len;start++)
+           {
+               long long end=start+len-1;
+               
+               if(str[start]==str[end])
+               {
+                   dp[start][end]=(1%1000000007+ dp[start+1][end]%1000000007 + dp[start][end-1]%1000000007)%1000000007;
+               }
+               else
+               {
+                   dp[start][end]=(dp[start+1][end]%1000000007 + dp[start][end-1]%1000000007-dp[start+1][end-1]%1000000007)%1000000007;
+               }
+               
+               
+           }
+       }
+       
+       if(dp[0][n-1]<0)
+       {
+           dp[0][n-1]+=1000000007;
+       }
+       
+       
+       return dp[0][n-1];
+       
+       
+    }
