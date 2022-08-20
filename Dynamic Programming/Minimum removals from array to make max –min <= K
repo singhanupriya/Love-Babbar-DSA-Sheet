@@ -8,177 +8,94 @@ https://www.geeksforgeeks.org/minimum-removals-array-make-max-min-k/
    i=0 and j=n-1
 
 
-#include <iostream>
-#include<algorithm>
-
-using namespace std;
-
-int min(int a, int b)
-{
-    if(a<=b)
+int solve(int i, int j, int k, vector<int>& a,vector<vector<int>>& dp)
     {
-        return a;
-    }
-    return b;
-}
-
-int solve(int arr[], int i, int j, int k)
-{
-    if(i>j || i==j)
-    {
-        return 0;
-    }
-    
-    if(arr[j]-arr[i]<=k)
-    {
-        return 0;
-    }
-    else
-    {
-        return 1 + min(solve(arr,i+1,j,k),solve(arr,i,j-1,k));
-    }
-}
-
-int main()
-{
-    int arr[]={1, 3, 4, 9, 10, 11, 12, 17, 20} ,  k=4;
-    int n=sizeof(arr)/sizeof(arr[0]);
-    
-    sort(arr,arr+n);
-    cout<<solve(arr,0,n-1,k);
-
-    return 0;
-}
-
-Memoisation-
-
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
-#include <iostream>
-#include<algorithm>
-#include<vector>
-
-using namespace std;
-
-int min(int a, int b)
-{
-    if(a<=b)
-    {
-        return a;
-    }
-    return b;
-}
-
-int solve(int arr[], int i, int j, int k,vector<vector<int>>& dp)
-{
-    if(i>j || i==j)
-    {
-        return 0;
-    }
-    
-    if(dp[i][j]!=-1)
-    {
-        return dp[i][j];
-    }
-    
-    if(arr[j]-arr[i]<=k)
-    {
-        return 0;
-    }
-    else
-    {
-        return dp[i][j]=1 + min(solve(arr,i+1,j,k,dp),solve(arr,i,j-1,k,dp));
-    }
-}
-
-int main()
-{
-    int arr[]={1, 5, 6, 2, 8},  k=2;
-    int n=sizeof(arr)/sizeof(arr[0]);
-    vector<vector<int>> dp(n,vector<int>(n,-1));
-    
-    for(int i=0;i<n;i++)
-    {
-        dp[i][0]=0;
-    }
-    
-    sort(arr,arr+n);
-    cout<<solve(arr,0,n-1,k,dp);
-
-    return 0;
-}
-
-Top down-
-
-/******************************************************************************
-
-Welcome to GDB Online.
-GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
-C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
-Code, Compile, Run and Debug online from anywhere in world.
-
-*******************************************************************************/
-#include <iostream>
-#include<algorithm>
-#include<vector>
-
-using namespace std;
-
-int min(int a, int b)
-{
-    if(a<=b)
-    {
-        return a;
-    }
-    return b;
-}
-
-int solve(int arr[], int i, int j, int k, int n)
-{
-    
-    vector<vector<int>> dp(n,vector<int>(n,-1));
-    
-    
-    
-    for(int i=0;i<n;i++)
-    {
-        dp[i][0]=0;
-    }
-    
-    for(int j=1;j<n;j++)
-    {
-        for(int i=n-1;i>=0;i--)
+        if(i>=j)
         {
-            if(arr[j]-arr[i]<=k)
-            {
-                dp[i][j]=0;
-            }
-            else
-            {
-                dp[i][j]=1 + min(dp[i+1][j],dp[i][j-1]);
-            }
-            
+            return 0; //if one element, diff=0, no removal
         }
+        
+        if(a[j]-a[i]<=k)
+        {
+            return 0;
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int removeStart=solve(i+1,j,k,a,dp);
+        int removeEnd=solve(i,j-1,k,a,dp);
+        
+        return dp[i][j]=1+min(removeStart,removeEnd);
     }
     
-    return dp[0][n-1];
+        
     
-}
+    int removals(vector<int>& a, int k){
+        //Code here
+        
+        sort(a.begin(),a.end());
+        int n=a.size();
+        vector<vector<int>> dp(n,vector<int>(n,-1));
+        
+        
+        return solve(0,n-1,k,a,dp);
+        
+    }
+};
 
-int main()
-{
-    int arr[]={1, 3, 4, 9, 10, 11, 12, 17, 20} ,  k=4;
-    int n=sizeof(arr)/sizeof(arr[0]);
-    sort(arr,arr+n);
-    
-    cout<<solve(arr,0,n-1,k,n);
-    
 
-    return 0;
-}
+
+Method 2:
+
+Time:O(N^2), Space:O(N^2)
+
+int removals(vector<int>& a, int k){
+        //Code here
+        
+        sort(a.begin(),a.end());
+        int n=a.size();
+        
+        //since here, i and j are on the same string, we have to use len like in
+        //pallindromic sustring
+        
+        //len goes from 0 to n
+        
+        //i,j ->index goes from 0 to n-1
+        
+        //i->startIndex,j->endINdex
+        
+        vector<vector<int>> dp(n,vector<int>(n,0));
+        
+        
+        for(int i=0;i<n;i++)
+        {
+            dp[i][i]=0; //length 1 ans is 0 removals
+        }
+        
+        for(int len=2;len<=n;len++)
+        {
+            for(int startIndex=0;startIndex<=n-len;startIndex++)
+            {
+                int endIndex=startIndex+len-1;
+                
+                if(a[endIndex]-a[startIndex]<=k)
+                {
+                    dp[startIndex][endIndex]=0;
+                }
+                else
+                {
+                    dp[startIndex][endIndex]=1 + min(dp[startIndex+1][endIndex],dp[startIndex][endIndex-1]);
+                    
+                }
+                
+                
+            }
+        }
+        
+        
+        return dp[0][n-1];
+        
+    }
