@@ -1,0 +1,184 @@
+https://www.youtube.com/watch?v=PhWWJmaKfMc
+
+
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    int solve(int i, int j,  int n, int k,vector<int>& arr )
+    {
+        if(i>j)
+        {
+            return 0;
+        }
+        
+        int len=0;
+        int maxElement=INT_MIN;
+        int ans=INT_MIN;
+        for(int x=i;x<min(n,i+k);x++)
+        {
+            maxElement=max(maxElement,arr[x]);
+            len++;
+            int sum=len*maxElement + solve(x+1,j,n,k,arr);
+            ans=max(ans,sum);
+                
+        }
+        return ans;
+    }
+    
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        
+        int n=arr.size();
+        return solve(0,n-1,n,k,arr);
+        
+    }
+    
+    If u see here only i is changing, no role of j. So we can modify and remove j.
+    
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    int solve(int start, int n, int k,vector<int>& arr )
+    {
+        if(start==n)
+        {
+            return 0;
+        }
+        
+        int len=0;
+        int maxElement=INT_MIN;
+        int ans=INT_MIN;
+        for(int x=start;x<min(n,start+k);x++)
+        {
+            maxElement=max(maxElement,arr[x]);
+            len++;
+            int sum=len*maxElement + solve(x+1,n,k,arr);
+            ans=max(ans,sum);
+                
+        }
+        return ans;
+    }
+    
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        
+        int n=arr.size();
+        return solve(0,n,k,arr);
+        
+    }
+};
+
+
+Method 2:
+
+Time:O(N^2)
+
+ int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    int solve(int start, int n, int k,vector<int>& arr ,vector<int>& dp)
+    {
+        if(start==n)
+        {
+            return 0;
+        }
+        
+        if(dp[start]!=-1)
+        {
+            return dp[start];
+        }
+        
+        int len=0;
+        int maxElement=INT_MIN;
+        int ans=INT_MIN;
+        for(int x=start;x<min(n,start+k);x++)
+        {
+            maxElement=max(maxElement,arr[x]);
+            len++;
+            int sum=len*maxElement + solve(x+1,n,k,arr,dp);
+            ans=max(ans,sum);
+                
+        }
+        return dp[start]=ans;
+    }
+    
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        
+        int n=arr.size();
+        vector<int> dp(n,-1);
+        return solve(0,n,k,arr,dp);
+        
+    }
+    
+    Method 3: 
+    
+    Time:O(N^2), Space:O(N)
+    
+    int max(int a, int b)
+    {
+        if(a>=b)
+        {
+            return a;
+        }
+        return b;
+    }
+    
+    
+    
+    
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        
+        int n=arr.size();
+        vector<int> dp(n+1,INT_MIN);
+        
+        dp[n]=0;
+        
+        //in memoization, u need the next index so in top down u move from n to 0
+        //we need to return dp[0] means when starting from index 0
+        
+        
+        for(int start=n-1;start>=0;start--)
+        {
+            
+            
+            int len=0;
+            int maxElement=INT_MIN;
+            int ans=INT_MIN;
+            for(int x=start;x<min(n,start+k);x++)
+            {
+                maxElement=max(maxElement,arr[x]);
+                len++;
+                int sum=len*maxElement + dp[x+1];
+                ans=max(ans,sum);
+                
+            }
+            dp[start]=ans;
+            
+        }
+        
+        
+        return dp[0];
+        
+    }
+    
+    
