@@ -1,0 +1,110 @@
+https://www.youtube.com/watch?v=xwomavsC86c&t=698s
+
+len=7
+1. Suppose cuts allowed arer 3,5,2  , u make a cut at 3 so now the rodis divided into (0,3) and (3,7)
+now u make a cut at 5
+
+(3,7)-> (3,5) and (5,7), now u can't make a cut at 2 bcoz u are in the right subtree of recursion and 2 len rod is in the left
+so u have to sort the cuts array so that the two subchilds are inpendent.
+
+Add 0 and len at start and end of the cost array so that u can get len at each cut
+
+0 [2 3 5] 7
+
+
+Method 1:
+
+ int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+            
+    }
+    
+    int solve(int i, int j,vector<int>& cuts )
+    {
+        if(i>j)
+        {
+            return 0;
+        }
+        
+        int ans=1000000007;
+        for(int k=i;k<=j;k++)
+        {
+            int temp=(cuts[j+1]-cuts[i-1]) + solve(i,k-1,cuts)+solve(k+1,j,cuts);
+            ans=min(ans,temp);
+        }
+        return ans;
+    }
+    
+    
+    int minCost(int n, vector<int>& cuts) {
+        
+        int j=cuts.size();
+        cuts.push_back(n);
+        cuts.insert(cuts.begin(),0);
+        
+        sort(cuts.begin(),cuts.end());
+        return solve(1,j,cuts);
+    }
+    
+    Method 2:
+    
+    Time:O(N^3), Space:O(N^2)
+    
+    
+    
+    
+     int min(int a, int b)
+    {
+        if(a<=b)
+        {
+            return a;
+        }
+        return b;
+            
+    }
+    
+    int solve(int i, int j,vector<int>& cuts,vector<vector<int>>& dp )
+    {
+        if(i>j)
+        {
+            return 0;
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int ans=1000000007;
+        for(int k=i;k<=j;k++)
+        {
+            int temp=(cuts[j+1]-cuts[i-1]) + solve(i,k-1,cuts,dp)+solve(k+1,j,cuts,dp);
+            ans=min(ans,temp);
+        }
+        return dp[i][j]=ans;
+    }
+    
+    
+    int minCost(int n, vector<int>& cuts) {
+        
+        int j=cuts.size();
+        cuts.push_back(n);
+        cuts.insert(cuts.begin(),0);
+        
+        //i from 1 to n
+        //j from 1 to n
+        
+        sort(cuts.begin(),cuts.end());
+        
+        vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
+        
+        return solve(1,j,cuts,dp);
+    }
+    
+    
+    Tabulation no
