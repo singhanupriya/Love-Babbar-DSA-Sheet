@@ -1,0 +1,149 @@
+
+
+https://www.youtube.com/watch?v=Yz4LlDSlkns
+
+1. If u go from length n to 1, the partitions will be dependent on each other.
+2. So start from length 1 ie. at last this balloon is bursted, second last balloon can be anthing, so this second last balloon is only dependent on this last
+balloon
+
+
+Method 1:
+
+long long int solve(int i, int j, int a[])
+    {
+        if(i>j)
+        {
+            return 0;
+        }
+        
+        long long int result=INT_MIN;
+        
+        for(int k=i;k<=j;k++)
+        {
+            long long int temp=a[i-1]*a[k]*a[j+1] + solve(i,k-1,a) + solve(k+1,j,a);
+            result=max(result,temp);
+        }
+        
+        return result;
+    }
+
+
+    long long int maxProductSum(int N, int arr[])
+    {
+        // code here
+        
+        //create an array of size n+2, add 1 on both sides
+        int a[N+2];
+        a[0]=1;
+        
+        for(int i=1;i<=N;i++)
+        {
+            a[i]=arr[i-1];
+        }
+        
+        a[N+1]=1;
+        
+        solve(1,N,a);
+        
+        
+    }
+    
+    
+    Method 2:
+    Memoization
+    Time:O(N^3), Space:O(N^2)
+    
+     long long int solve(int i, int j, vector<long long int>& a,vector<vector<long long int>>& dp)
+    {
+        if(i>j)
+        {
+            return 0;
+        }
+        
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        long long int result=INT_MIN;
+        
+        for(int k=i;k<=j;k++)
+        {
+            long long int temp=a[i-1]*a[k]*a[j+1] + solve(i,k-1,a,dp) + solve(k+1,j,a,dp);
+            result=max(result,temp);
+        }
+        
+        return dp[i][j]=result;
+    }
+
+
+    long long int maxProductSum(int N, int arr[])
+    {
+        // code here
+        
+        //create an array of size n+2, add 1 on both sides
+        vector<long long int> a; 
+      a.push_back(1);
+      for(int i=0; i<N; i++)
+      a.push_back(arr[i]);
+      a.push_back(1);
+        
+        //i goes from 1 to N
+        //j goes from 1 to n
+        
+        vector<vector<long long int>> dp(N+1,vector<long long int>(N+1,-1));
+        
+        return solve(1,N,a,dp);
+        
+        
+    }
+    
+    Method 3:
+    
+    Time:O(N^3), Space:o(n^2)
+    
+    long long int maxProductSum(int N, int arr[])
+    {
+        // code here
+        
+        //create an array of size n+2, add 1 on both sides
+        vector<long long int> a; 
+      a.push_back(1);
+      for(int i=0; i<N; i++)
+      a.push_back(arr[i]);
+      a.push_back(1);
+        
+        //i goes from 1 to N
+        //j goes from 1 to n
+        
+        //here i and j on the same array so u have to use length method like 
+        //in LPS
+        
+        vector<vector<long long int>> dp(N+2,vector<long long int>(N+2,0));
+        
+        
+        
+        for(long long int len=1;len<=N;len++)
+        {
+            for(long long int start=1;start<=N-len+1;start++)
+            {
+                long long end=start+len-1;
+                
+                long long int result=INT_MIN;
+                for(int k=start;k<=end;k++)
+                {
+                    long long int temp=a[start-1]*a[k]*a[end+1] + dp[start][k-1] + dp[k+1][end];
+                    result=max(result,temp);
+                }
+                
+                dp[start][end]=result;
+                
+                
+            }
+        }
+        
+        
+        return dp[1][N];
+        
+        
+    }
