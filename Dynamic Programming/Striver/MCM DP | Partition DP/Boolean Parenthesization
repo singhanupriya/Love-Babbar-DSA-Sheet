@@ -1,0 +1,215 @@
+https://www.youtube.com/watch?v=MM7fXopgyjw
+
+
+1. U have to find the number of ways to make the expression true.
+2. k-> from i+1 to j-1, partitions will be left=(i to k-1) & right=(k+1 to j)
+
+No of ways of left true LT=x1, no of ways of right true=y1
+No of ways of left false LF=x2, no of ways of right false= y2
+
+Using OR, u can get true if T|T, T|F, F|T =x1y1+x1y2 + x2y1
+Using &, u can get true if T&T  = x1y1
+Using ^, u can get true if T^F, F^T= x1y2+x2y1
+
+So u have to check how many no of times, the expression evaluates to both true and false.
+
+
+So u will one more variable, to identify whether u are looking for a true or false, here isTrue is doing that. 
+isTrue=1, no of ways the expression can be true
+isTrue=0, no of ways the expression can be false
+
+U are solving from f(0,n-1,1), no of ways from 0 to n-1 can be true.
+
+
+Method 1:
+
+Time: exp
+
+int solve(int i, int j, string str, bool isTrue)
+    {
+        if(i>j)
+        {
+            return 0;
+        }
+        
+        if(i==j)
+        {
+            //u need to check whether u are looking for a true or false
+            
+            if(isTrue)
+            {
+                //looking for a true
+                return str[i]=='T';
+            }
+            else
+            {
+                //looking for false
+                return str[i]=='F';
+            }
+        }
+        
+        
+        int ways=0;
+        
+        for(int k=i+1;k<=j-1;k=k+2)
+        {
+            int leftTrue=solve(i,k-1,str,1);
+            int rightTrue=solve(k+1,j,str,1);
+            int leftFalse=solve(i,k-1,str,0);
+            int rightFalse=solve(k+1,j,str,0);
+            
+            if(str[k]=='&')
+            {
+                if(isTrue)
+                {
+                    //looking for a true
+                    ways=ways+ (leftTrue*rightTrue);
+                }
+                else
+                {
+                    ways=ways+(leftTrue*rightFalse) + (leftFalse* rightTrue) + (leftFalse*rightFalse);
+                }
+        
+            }
+            else if(str[k]=='|')
+            {
+                if(isTrue)
+                {
+                    //looking for a true
+                    ways=ways + leftTrue*rightFalse + leftFalse* rightTrue + leftTrue*rightTrue;
+                }
+                else
+                {
+                    ways=ways+ leftFalse*rightFalse;
+                }
+            }
+            else
+            {
+                //xor
+                if(isTrue)
+                {
+                    //looking for a true
+                    ways=ways+ leftTrue*rightFalse + leftFalse* rightTrue ;
+                }
+                else
+                {
+                    ways=ways+leftFalse*rightFalse+ leftTrue*rightTrue;
+                }
+                
+            }
+            
+            
+        }
+        return ways;
+        
+        
+    }
+
+    int countWays(int N, string S){
+        // code here
+        
+        int i=0;
+        int j=N-1;
+        return solve(i,j,S,1);
+        
+    }
+    
+    Method 2:
+    
+    Time:O(n^3), Space:O(N^2)
+    
+    int solve(int i, int j, string str, bool isTrue,vector<vector<vector<int>>>& dp)
+    {
+        if(i>j)
+        {
+            return 0;
+        }
+        
+        if(i==j)
+        {
+            //u need to check whether u are looking for a true or false
+            
+            if(isTrue)
+            {
+                //looking for a true
+                return str[i]=='T';
+            }
+            else
+            {
+                //looking for false
+                return str[i]=='F';
+            }
+        }
+        
+        
+        if(dp[i][j][isTrue]!=-1)
+        {
+            return dp[i][j][isTrue];
+        }
+        
+        int ways=0;
+        
+        for(int k=i+1;k<=j-1;k=k+2)
+        {
+            int leftTrue=solve(i,k-1,str,1,dp);
+            int rightTrue=solve(k+1,j,str,1,dp);
+            int leftFalse=solve(i,k-1,str,0,dp);
+            int rightFalse=solve(k+1,j,str,0,dp);
+            
+            if(str[k]=='&')
+            {
+                if(isTrue)
+                {
+                    //looking for a true
+                    ways=(ways%1003+ (leftTrue*rightTrue)%1003)%1003;
+                }
+                else
+                {
+                    ways=(ways%1003+(leftTrue*rightFalse)%1003 + (leftFalse* rightTrue)%1003 + (leftFalse*rightFalse)%1003)%1003;
+                }
+        
+            }
+            else if(str[k]=='|')
+            {
+                if(isTrue)
+                {
+                    //looking for a true
+                    ways=(ways%1003 + (leftTrue*rightFalse)%1003 + (leftFalse* rightTrue)%1003 + (leftTrue*rightTrue)%1003)%1003;
+                }
+                else
+                {
+                    ways=(ways%1003+ (leftFalse*rightFalse)%1003)%1003;
+                }
+            }
+            else
+            {
+                //xor
+                if(isTrue)
+                {
+                    //looking for a true
+                    ways=(ways%1003+ (leftTrue*rightFalse)%1003 + (leftFalse* rightTrue)%1003)%1003 ;
+                }
+                else
+                {
+                    ways=(ways%1003+(leftFalse*rightFalse)%1003+ (leftTrue*rightTrue)%1003)%1003;
+                }
+                
+            }
+            
+            
+        }
+        return dp[i][j][isTrue]=ways;
+        
+        
+    }
+
+    int countWays(int N, string S){
+        // code here
+        
+        int i=0;
+        int j=N-1;
+        
+        vector<vector<vector<int>>> dp(N,vector<vector<int>>(N,vector<int>(2,-1)));
+        return solve(i,j,S,1,dp);
+        
+    }
