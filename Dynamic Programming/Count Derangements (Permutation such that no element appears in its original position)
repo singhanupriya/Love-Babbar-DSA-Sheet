@@ -1,0 +1,124 @@
+
+
+
+1.There are n elements that neet to be placed such that none of them are at its orginal place. Find total number of ways pf doing it.
+2. suppose u have to place the 1st element, u can place it at (n-1) remaining positions
+      (n-1)* [ans of subproblem]
+3. Suppose 0th element is placed at ith position, now there can be 2 possibilities, ith element can be placed at 0th index so now solve for (n-2) elements
+and u dont place i at 0th element so now (n-1) possibilities.
+
+Total : (n-1)[f(n-1)+f(n-2)]
+
+
+Method 1:
+
+Time:O(2^N)
+
+#include <iostream>
+
+using namespace std;
+
+int solve(int n)
+{
+    if(n==1)
+    {
+        return 0;
+    }
+    
+    if(n==2)
+    {
+        return 1;
+    }
+    
+    return (n-1)*(solve(n-1)+solve(n-2));
+    
+}
+
+int main()
+{
+    cout<<solve(4);
+
+    return 0;
+}
+
+
+Method 2: Memoization
+
+Time:O(N), Space:O(N+N)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int solve(int n,vector<int>& dp)
+{
+    if(n==1)
+    {
+        return 0;
+    }
+    
+    if(n==2)
+    {
+        return 1;
+    }
+    
+    if(dp[n]!=-1)
+    {
+        return dp[n];
+    }
+    
+    return dp[n]=(n-1)*(solve(n-1,dp)+solve(n-2,dp));
+    
+}
+
+int main()
+{
+    int n=4;
+    vector<int> dp(n+1,-1);
+    cout<<solve(n,dp);
+
+    return 0;
+}
+
+Method 3:
+
+Top down
+Time:O(N), Space:O(N)
+
+int main()
+{
+    int n=4;
+    vector<int> dp(n+1,0);
+    
+    dp[1]=0;
+    dp[2]=1;
+    
+    for(int i=3;i<=n;i++)
+    {
+        dp[i]=(i-1)*(dp[i-1]+dp[i-2]);
+    }
+
+    cout<< dp[n];
+}
+
+Method 4:
+
+Time:O(N), SPace:O(1)
+
+int main()
+{
+    int n=4;
+    
+    int first=0; //n-2
+    int second=1; //n-1
+    
+    for(int i=3;i<=n;i++)
+    {
+        int temp=(i-1)*(first+second);
+        first=second;
+        second=temp;    }
+
+    cout<< second;
+}
+
