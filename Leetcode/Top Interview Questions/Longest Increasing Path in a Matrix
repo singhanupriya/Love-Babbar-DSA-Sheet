@@ -1,0 +1,211 @@
+https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+
+Method 1: Backtracking
+
+Time:o(4^(m*n))
+
+ void solve(int i, int j, int row, int col, int length, int& ans, vector<vector<bool>>& vis, vector<vector<int>>& matrix, int dirx[], int diry[])
+    {
+        
+        if(i<0 || j<0 || i>=row || j>=col)
+        {
+            return;
+        }
+        
+        ans=max(ans,length);
+        
+        for(int x=0;x<4;x++)
+        {
+            if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col && !vis[i+dirx[x]][j+diry[x]] && matrix[i+dirx[x]][j+diry[x]]>matrix[i][j])
+            {
+                vis[i][j]=true;
+                solve(i+dirx[x],j+diry[x],row,col,length+1,ans,vis,matrix,dirx,diry);
+                vis[i][j]=false;
+            }
+        }
+        
+    }
+    
+    
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        
+        int row=matrix.size();
+        int col=matrix[0].size();
+        
+        if(row==0 && col==0)
+        {
+            return 0;
+        }
+        
+        
+        
+        int ans=1;
+        //initially length is 1
+        int dirx[]={0,-1,0,1};
+        int diry[]={1,0,-1,0};
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                vector<vector<bool>> vis(row,vector<bool>(col,false));
+                solve(i,j,row,col,1,ans,vis,matrix,dirx,diry);
+            }
+        }
+        
+        return ans;
+        
+    }
+    
+    This approach is DFS
+    
+    Method 1: Recursion
+    
+     int solve(int i, int j, int row, int col, vector<vector<int>>& matrix, int dirx[], int diry[])
+    {
+        
+        if(i<0 || j<0 || i>=row || j>=col)
+        {
+            return 0;
+        }
+       
+        
+        int ans=0;
+        
+         //base case if no path possible
+        
+        for(int x=0;x<4;x++)
+        {
+            if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col  && matrix[i+dirx[x]][j+diry[x]] > matrix[i][j])
+            {
+                
+                
+                
+                int temp= solve(i+dirx[x],j+diry[x],row,col,matrix,dirx,diry);
+                
+                ans=max(ans,temp);
+                
+                
+            }
+            
+        }
+        
+        return 1+ans;
+        
+        
+        
+    }
+    
+    
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        
+        int row=matrix.size();
+        int col=matrix[0].size();
+        
+        if(row==0 && col==0)
+        {
+            return 0;
+        }
+        
+        //u dont need a visited array bcoz from i,j u are going to u,v only if u,v>i,j from u,v, since i,j is smaller u will not go there
+        
+        int ans=1;
+        //initially length is 1
+        int dirx[]={0,-1,0,1};
+        int diry[]={1,0,-1,0};
+        
+        vector<vector<int>> dp(row,vector<int>(col,-1));
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                
+                ans=max(ans,solve(i,j,row,col,matrix,dirx,diry));
+            }
+        }
+        
+        return ans;
+        
+    }
+    
+    Method 3:
+    
+    Memoisation
+    Time:O(M*N), Space:O(M*N)
+    
+     int solve(int i, int j, int row, int col, vector<vector<int>>& matrix, int dirx[], int diry[],vector<vector<int>>& dp)
+    {
+        
+        if(i<0 || j<0 || i>=row || j>=col)
+        {
+            return 0;
+        }
+       
+        if(dp[i][j]!=-1)
+        {
+            return dp[i][j];
+        }
+        
+        int ans=0;
+        
+         //base case if no path possible
+        
+        for(int x=0;x<4;x++)
+        {
+            if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col  && matrix[i+dirx[x]][j+diry[x]] > matrix[i][j])
+            {
+                
+                
+                
+                int temp= solve(i+dirx[x],j+diry[x],row,col,matrix,dirx,diry,dp);
+                
+                ans=max(ans,temp);
+                
+                
+            }
+            
+        }
+        
+        return dp[i][j]=1+ans;
+        
+        
+        
+    }
+    
+    
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        
+        int row=matrix.size();
+        int col=matrix[0].size();
+        
+        if(row==0 && col==0)
+        {
+            return 0;
+        }
+        
+        //u dont need a visited array bcoz from i,j u are going to u,v only if u,v>i,j from u,v, since i,j is smaller u will not go there
+        
+        int ans=1;
+        //initially length is 1
+        int dirx[]={0,-1,0,1};
+        int diry[]={1,0,-1,0};
+        
+        vector<vector<int>> dp(row,vector<int>(col,-1));
+        
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                
+                dp[i][j]=solve(i,j,row,col,matrix,dirx,diry,dp);
+                ans=max(ans,dp[i][j]);
+            }
+        }
+        
+        return ans;
+        
+    }
+    
+    
+    Note- U can't do top down as for a i,j u need LRUD, not possible
