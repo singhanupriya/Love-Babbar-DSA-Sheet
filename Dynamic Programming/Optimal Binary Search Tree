@@ -1,0 +1,232 @@
+
+https://www.youtube.com/watch?v=HnslzEs8dbY&t=537s
+
+1. Here the array is given in sorted order, inorder traversal of the BST is given so u can't change the tree structure.
+2. Logic, u keep every node as a root and find the min cost, every time u keep adding depth, its freq * depth will keep increasing.
+
+
+Method 1:
+
+#include <iostream>
+#include<climits>
+
+using namespace std;
+
+int fsum(int i, int j, int freq[])
+{
+    int sum=0;
+    
+    for(int x=i;x<=j;x++)
+    {
+        sum=sum+freq[x];
+    }
+    return sum;
+}
+
+int solve(int i, int j, int freq[])
+{
+    if(i>j)
+    {
+        return 0;
+    }
+    
+    if(i==j)
+    {
+        return freq[i];
+    }
+    
+    int freqSum=fsum(i,j,freq); //this is bcoz every time the depth increases the freq changes
+    
+    
+    int result=INT_MAX;
+    for(int k=i;k<=j;k++)
+    {
+        int temp=solve(i,k-1,freq)+solve(k+1,j,freq);
+        result=min(result,temp);
+    }
+    
+    return result+freqSum;
+    
+}
+
+int optimalSearchTree(int keys[],
+                      int freq[], int n)
+{
+    // Here array keys[] is assumed to be
+    // sorted in increasing order. If keys[]
+    // is not sorted, then add code to sort
+    // keys, and rearrange freq[] accordingly.
+    return solve(0, n - 1,freq);
+}
+
+int main()
+{
+    int keys[] = {10, 12, 20};
+    int freq[] = {34, 8, 50};
+    int n = sizeof(keys) / sizeof(keys[0]);
+    cout << "Cost of Optimal BST is "
+         << optimalSearchTree(keys, freq, n);
+    
+
+    return 0;
+}
+
+
+Method 2: Memoization
+
+Time:O(N^3), Space:O(N^2)
+
+#include <iostream>
+#include<climits>
+#include<vector>
+
+using namespace std;
+
+int fsum(int i, int j, int freq[])
+{
+    int sum=0;
+    
+    for(int x=i;x<=j;x++)
+    {
+        sum=sum+freq[x];
+    }
+    return sum;
+}
+
+int solve(int i, int j, int freq[],vector<vector<int>>& dp)
+{
+    if(i>j)
+    {
+        return 0;
+    }
+    
+    if(i==j)
+    {
+        return freq[i];
+    }
+    
+    if(dp[i][j]!=-1)
+    {
+        return dp[i][j];
+    }
+    
+    int freqSum=fsum(i,j,freq); //this is bcoz every time the depth increases the freq changes
+    
+    
+    int result=INT_MAX;
+    for(int k=i;k<=j;k++)
+    {
+        int temp=solve(i,k-1,freq,dp)+solve(k+1,j,freq,dp);
+        result=min(result,temp);
+    }
+    
+    return dp[i][j]=result+freqSum;
+    
+}
+
+int optimalSearchTree(int keys[],
+                      int freq[], int n)
+{
+    // Here array keys[] is assumed to be
+    // sorted in increasing order. If keys[]
+    // is not sorted, then add code to sort
+    // keys, and rearrange freq[] accordingly.
+    
+    //i goes to 0 to n-1 and j goes from 0 to n-1
+    vector<vector<int>> dp(n,vector<int>(n,-1));
+    return solve(0, n - 1,freq,dp);
+}
+
+int main()
+{
+    int keys[] = {10, 12, 20};
+    int freq[] = {34, 8, 50};
+    int n = sizeof(keys) / sizeof(keys[0]);
+    cout << "Cost of Optimal BST is "
+         << optimalSearchTree(keys, freq, n);
+    
+
+    return 0;
+}
+
+Method 3: Top down
+
+Time:O(N^3), Space:O(N^2)
+
+#include <iostream>
+#include<climits>
+#include<vector>
+
+using namespace std;
+
+int fsum(int i, int j, int freq[])
+{
+    int sum=0;
+    
+    for(int x=i;x<=j;x++)
+    {
+        sum=sum+freq[x];
+    }
+    return sum;
+}
+
+
+int optimalSearchTree(int keys[],
+                      int freq[], int n)
+{
+    // Here array keys[] is assumed to be
+    // sorted in increasing order. If keys[]
+    // is not sorted, then add code to sort
+    // keys, and rearrange freq[] accordingly.
+    
+    //i goes to 0 to n-1 and j goes from 0 to n-1
+    vector<vector<int>> dp(n+1,vector<int>(n+1,0));
+    
+    
+    //as i and j are on same array, we use len method like in LPS
+    
+    for(int i=0;i<n;i++)
+    {
+        dp[i][i]=freq[i];
+    }
+    
+    
+    for(int len=2;len<=n;len++)
+    {
+        for(int start=0;start<=n-len;start++)
+        {
+            int end=start+len-1;
+            
+            
+            int freqSum=fsum(start,end,freq); //this is bcoz every time the depth increases the freq changes
+    
+    
+            int result=INT_MAX;
+            for(int k=start;k<=end;k++)
+            {
+                int temp=dp[start][k-1]+dp[k+1][end];
+                result=min(result,temp);
+            }
+            
+            dp[start][end]=result+freqSum;
+            
+            
+        }
+    }
+    
+    
+    
+    return dp[0][n-1];
+}
+
+int main()
+{
+    int keys[] = {10, 12};
+    int freq[] = {34, 50};
+    int n = sizeof(keys) / sizeof(keys[0]);
+    cout << "Cost of Optimal BST is "
+         << optimalSearchTree(keys, freq, n);
+    
+
+    return 0;
+}
