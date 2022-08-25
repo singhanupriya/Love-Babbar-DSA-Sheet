@@ -6,6 +6,92 @@ https://www.youtube.com/watch?v=oTfPJKGEHcc&t=416s
    - pivot will be on left of mid if, arr[mid]<arr[mid+1] && arr[mid]<arr[low]
    -else pivot will be on right
    
+   
+   
+    int binarySearch(vector<int>& arr, int target, int low, int high)
+    {
+        while(low<=high)
+        {
+            int mid=low+(high-low)/2;
+            
+            if(arr[mid]==target)
+            {
+                return mid;
+            }
+            else if(arr[mid]>target)
+            {
+                high=mid-1;
+            }
+            else
+            {
+                low=mid+1;
+            }
+            
+            
+        }
+        
+        return -1;
+        
+    }
+    
+    int search(vector<int>& nums, int target) {
+        
+        int n=nums.size();
+        int low=0;
+        int high=nums.size()-1;
+        
+        
+        //no rotation
+        if(nums[low]<=nums[high])
+        {
+            return binarySearch(nums,target,low,high);
+        }
+        
+        //find pivot element
+        
+        int pivot=-1;
+        
+        while(low<=high)
+        {
+            
+            int mid=low+(high-low)/2;
+            
+            if(mid<n-1 && nums[mid]>=nums[low] && nums[mid]>nums[mid+1])
+            {
+                pivot=mid;
+                break;
+            }
+            else if(mid<n-1 && nums[mid]>=nums[low] && nums[mid]<nums[mid+1])
+            {
+                low=mid+1; //strictly inc
+            }
+            else
+            {
+                high=mid-1;
+            }
+            
+            
+            
+        }
+        
+        
+        low=0;
+        high=nums.size()-1;
+        
+        if(target>=nums[low] && target<=nums[pivot])
+        {
+            return binarySearch(nums,target,low,pivot);
+        }
+        else
+        {
+            return binarySearch(nums,target,pivot+1,high);
+        }
+        
+        return -1;
+        
+    }
+   
+   
   2 iterations needed
 Time:O(log n), Space:O(1)
 
