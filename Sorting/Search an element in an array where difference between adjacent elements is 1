@@ -1,0 +1,37 @@
+Time:O(N), Space:O(1)
+https://www.geeksforgeeks.org/search-an-element-in-an-array-where-difference-between-adjacent-elements-is-1/
+
+1. The closest possible position of target will be abs(arr[i]-target),
+
+int solve(int arr[], int n, int target)
+{
+    
+    int index=0;
+    
+    while(index<n)
+    {
+        int diff=abs(arr[index]-target); //closest possible position
+        int nextIndex=index+diff;
+        if(arr[nextIndex]==target)
+        {
+            return nextIndex;
+        }
+        index=nextIndex;
+        
+    }
+    
+    return -1;
+    
+}
+
+int main()
+{
+    int arr[] = {8, 7, 6, 7, 6, 5, 4, 3, 2, 3, 4, 3}   ;
+    int n=sizeof(arr)/sizeof(arr[0]);
+    int x = 3;
+    cout<<solve(arr,n,x);
+
+
+
+    return 0;
+}
