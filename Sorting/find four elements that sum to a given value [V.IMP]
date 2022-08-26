@@ -2,6 +2,86 @@ https://leetcode.com/problems/4sum/submissions/
 https://www.geeksforgeeks.org/find-four-numbers-with-sum-equal-to-given-sum/
 
 
+Without set
+
+vector<vector<int> > fourSum(vector<int> &arr, int k) {
+        // Your code goes here
+        
+        vector<vector<int>> result;
+        
+        int n=arr.size();
+        sort(arr.begin(),arr.end());
+        for(int first=0;first<=n-4;first++)
+        {
+            
+            while(first>0 && arr[first]==arr[first-1] && first<n)
+            {
+                first++;
+            }
+            
+            for(int second=first+1;second<=n-3;second++)
+            {
+                while(second>first+1 && arr[second]==arr[second-1] && second<n)
+                {
+                    second++;
+                }
+                
+                int low=second+1;
+                int high=n-1;
+                
+                while(low<high)
+                {
+                    
+                    int sum=arr[first]+arr[second]+arr[low]+arr[high];
+                
+                    if(sum==k)
+                    {
+                        vector<int> temp;
+                        temp.push_back(arr[first]);
+                        temp.push_back(arr[second]);
+                        temp.push_back(arr[low]);
+                        temp.push_back(arr[high]);
+                        result.push_back(temp);
+                        low++;
+                        high--;
+                        while(arr[low]==arr[low-1] )
+                        {
+                            low++;
+                        }
+                        
+                        while(arr[high]==arr[high+1])
+                        {
+                            high--;
+                        }
+                        
+                        
+                    }
+                    else if(sum>k)
+                    {
+                        high--;
+                    }
+                    else
+                    {
+                        low++;
+                    }
+                
+                    
+                    
+                }
+                
+                
+                
+                
+            }
+            
+                
+        }
+        
+        return result;
+        
+    }
+
+
 
  vector<vector<int>> fourSum(vector<int>& arr, int target) {
         
