@@ -8,10 +8,6 @@ V.V.V.IMP If you do this, u are only swapping the values stored in varibales lef
 	
 Method 1:
 
-
-
-Medtho 2:
-
 class Node{
     public:
     int val;
@@ -95,7 +91,10 @@ int main()
 
     return 0;
 }
-	
+
+Medtho 2:
+
+
    
    Time:O(N), Space:O(h)
    
