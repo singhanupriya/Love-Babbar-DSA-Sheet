@@ -3,6 +3,45 @@ https://practice.geeksforgeeks.org/problems/right-view-of-binary-tree/1#
 
 Time:O(N), Space:O(H)
 
+
+Using DFS:
+
+void dfs(Node* root, int& maxLevel, int level, vector<int>& ans)
+    {
+        if(!root)
+        {
+            return;
+        }
+        if(maxLevel < level)
+        {
+            ans.push_back(root->data);
+            maxLevel=level;
+        }
+        
+        dfs(root->right,maxLevel,level+1,ans);
+        dfs(root->left,maxLevel,level+1,ans);
+    }
+    
+    vector<int> rightView(Node *root)
+    {
+       // Your Code here
+       
+       vector<int> result;
+       
+       if(!root)
+       {
+           return result;
+       }
+       
+       int maxLevel=0;
+       
+       dfs(root,maxLevel,1,result);
+       return result;
+    }
+
+
+Using BFS:
+
 class Solution
 {
     public:
