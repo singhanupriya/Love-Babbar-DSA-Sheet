@@ -4,6 +4,98 @@ V.V.V.IMP If you do this, u are only swapping the values stored in varibales lef
 	Node* right=mirror(root->right);
 	
 	swap(left,right);  ------> swap(root->left,root->right)
+	
+	
+Method 1:
+
+
+
+Medtho 2:
+
+class Node{
+    public:
+    int val;
+    Node* left;
+    Node* right;
+    
+    Node(int data)
+    {
+        val=data;
+        left=nullptr;
+        right=nullptr;
+    }
+    
+};
+
+void inorder(Node* root)
+{
+    if(root)
+    {
+        inorder(root->left);
+        cout<<root->val<<" ";
+        inorder(root->right);
+    }
+}
+
+
+Node* solve(Node* root)
+{
+    
+    if(!root)
+    {
+        return nullptr;
+    }
+    
+    Node* root1=new Node(root->val);
+    
+    if(root->left)
+    {
+        root1->right=solve(root->left);
+    }
+    
+    if(root->right)
+    {
+        root1->left=solve(root->right);
+    }
+    return root1;
+    
+}
+
+Node* mirror(Node* root)
+{
+    if(!root)
+    {
+        return nullptr;
+    }
+    
+    Node* root1=solve(root);
+    
+    return root1;
+}
+
+
+int main()
+{
+    Node* root=new Node(5);
+    Node* three=new Node(3);
+    Node* two=new Node(2);
+    Node* four=new Node(4);
+    Node* six=new Node(6);
+    
+    root->left=three;
+    root->right=six;
+    three->left=two;
+    three->right=four;
+    
+    inorder(root);
+    cout<<endl;
+    
+    Node* root1=mirror(root);
+    inorder(root1);
+
+    return 0;
+}
+	
    
    Time:O(N), Space:O(h)
    
