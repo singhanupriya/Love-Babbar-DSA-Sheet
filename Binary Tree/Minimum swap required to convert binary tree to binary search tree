@@ -1,0 +1,103 @@
+https://practice.geeksforgeeks.org/problems/minimum-swap-required-to-convert-binary-tree-to-binary-search-tree/0?page=1&sortBy=newest&query=page1sortBynewest
+
+Logic: minimum swaps required to sort an array question graph approach
+
+1. Build tree, get inorder, min swaps required to sort it
+
+Time:o(n), SPACE:o(n)
+
+class Node{
+    
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int val)
+    {
+        data=val;
+        left=nullptr;
+        right=nullptr;
+    }
+    
+};
+
+class Solution{
+  public:
+  
+  
+  
+    Node* build(vector<int>& A, int n, int index)
+    {
+        if(index>=n)
+        {
+            return nullptr;
+        }
+        
+        Node* root=new Node(A[index]);
+        
+        root->left=build(A,n,2*index+1);
+        root->right=build(A,n,2*index+2);
+        
+        return root;
+    }
+    
+    void inorder(Node* root, vector<int>& inorderArray)
+    {
+        if(root)
+        {
+            inorder(root->left,inorderArray);
+            inorderArray.push_back(root->data);
+            inorder(root->right,inorderArray);
+        }
+    }
+    
+    
+  
+    int minSwaps(vector<int>&A, int n){
+        //Write your code here
+        
+        Node* root=build(A,n,0);
+        vector<int> inorderArray;
+        inorder(root,inorderArray);
+        
+        vector<pair<int,int>> sortedArray;
+        
+        for(int i=0;i<n;i++)
+        {
+            sortedArray.push_back(make_pair(inorderArray[i],i));
+        }
+        
+        sort(sortedArray.begin(),sortedArray.end());
+        
+        int ans=0;
+        vector<bool> vis(n,false);
+        
+        
+        for(int i=0;i<n;i++)
+        {
+            if(sortedArray[i].second==i || vis[i])
+            {
+                continue;
+            }
+            
+            int j=i;
+            int cycle=0;
+            
+            while(!vis[j])
+            {
+                vis[j]=true;
+                
+                j=sortedArray[j].second;
+                cycle++;
+            }
+            
+            ans=ans+(cycle-1);
+        }
+        
+        return ans;
+        
+    }
+    
+    
+};
