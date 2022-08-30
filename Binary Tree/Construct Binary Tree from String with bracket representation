@@ -1,0 +1,94 @@
+https://www.geeksforgeeks.org/construct-binary-tree-string-bracket-representation/
+
+
+
+#include <iostream>
+#include<stack>
+
+
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int val)
+    {
+        data=val;
+        left=nullptr;
+        right=nullptr;
+    }
+    
+};
+
+int findIndex(string input, int start, int end)
+{
+    stack<char> s;
+    
+    for(int i=start;i<=end;i++)
+    {
+        if(input[i]=='(')
+        {
+            s.push('(');
+        }
+        else if(input[i]==')')
+        {
+            if(s.top()=='(')
+            {
+                s.pop();
+            }
+            
+            if(s.empty())
+            {
+                return i;
+            }
+        }
+    }
+    
+    return -1;
+}
+
+Node* construct(string input, int start, int end)
+{
+    if(start>end)
+    {
+        return nullptr;
+    }
+    
+    Node* root=new Node(input[start]-'0');
+    int index=-1;
+    
+    if(start+1<=end && input[start+1]=='(')
+    {
+        index=findIndex(input,start+1,end);
+    }
+    
+    if(index!=-1)
+    {
+        root->left=construct(input,start+2,index-1);
+        root->right=construct(input,index+2,end-1);
+    }
+    
+    return root;
+}
+
+void inorder(Node* root)
+{
+    if(root)
+    {
+        inorder(root->left);
+        cout<<root->data<<" ";
+        inorder(root->right);
+    }
+}
+
+int main()
+{
+    string input="4(2(3)(1))(6(5))";
+    Node* root=construct(input,0,input.length()-1);
+    inorder(root);
+
+    return 0;
+}
