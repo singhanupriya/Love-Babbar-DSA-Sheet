@@ -2,6 +2,157 @@ https://practice.geeksforgeeks.org/problems/median-of-bst/1#
 
 Morris traversal
 
+
+1. Count nodes using morris traversal
+2. Find median using morris
+
+int countNode(Node* root)
+{
+    int count=0;
+    
+    Node* curr=root;
+    Node* prev=nullptr;
+    
+    while(curr)
+    {
+        if(curr->left==nullptr)
+        {
+            count++;
+            curr=curr->right;
+        }
+        else
+        {
+            prev=curr->left;
+            
+            while(prev->right!=nullptr && prev->right!=curr)
+            {
+                prev=prev->right;
+            }
+            
+            if(prev->right==nullptr)
+            {
+                prev->right=curr;
+                curr=curr->left;
+            }
+            else
+            {
+                prev->right=nullptr;
+                count++;
+                curr=curr->right;
+            }
+        }
+    }
+    
+    return count;
+}
+
+void findNode(Node* root, int n, int& sum, int& counter)
+{
+    
+    
+    Node* curr=root;
+    Node* prev=nullptr;
+    
+    while(curr)
+    {
+        if(curr->left==nullptr)
+        {
+            //count++;
+            counter++;
+            if(n%2==0)
+            {
+                if(counter==(n/2) || counter==(n/2)+1)
+                {
+                    sum=sum+curr->data;
+                }
+            }
+            else
+            {
+                if(counter==(n/2)+1 )
+                {
+                    sum=sum+curr->data;
+                }
+            }
+            
+            
+            
+            curr=curr->right;
+        }
+        else
+        {
+            prev=curr->left;
+            
+            while(prev->right!=nullptr && prev->right!=curr)
+            {
+                prev=prev->right;
+            }
+            
+            if(prev->right==nullptr)
+            {
+                prev->right=curr;
+                curr=curr->left;
+            }
+            else
+            {
+                prev->right=nullptr;
+                
+                counter++;
+                 if(n%2==0)
+                {
+                    if(counter==(n/2) || counter==(n/2)+1)
+                    {
+                        sum=sum+curr->data;
+                    }
+                }
+                else
+                {
+                    if(counter==(n/2)+1 )
+                    {
+                        sum=sum+curr->data;
+                    }
+                }
+            
+            
+            
+                
+                //count++;
+                curr=curr->right;
+            }
+        }
+    }
+    
+    
+}
+
+
+
+float findMedian(struct Node *root)
+{
+      //Code here
+      
+      
+      
+      int n=countNode(root);
+      
+      int counter=0;
+      int sum=0;
+      findNode(root,n,sum,counter);
+      
+      if(n%2==0)
+      {
+          return float(sum)/2.0;
+      }
+      else
+      {
+          return float(sum);
+      }
+      
+      return 0.0;
+      
+      
+      
+}
+
 Time:O(N), Space:O(1)
 
 
