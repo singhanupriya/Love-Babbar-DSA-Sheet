@@ -1,0 +1,148 @@
+https://www.geeksforgeeks.org/maximum-sum-nodes-binary-tree-no-two-adjacent/
+https://www.youtube.com/watch?v=ZdIrKO7gqok
+
+Time:O(2^N)
+
+
+#include <iostream>
+
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int data)
+    {
+        this->data=data;
+        left=nullptr;
+        right=nullptr;
+    }
+    
+};
+
+int solve(Node* root)
+{
+    if(!root)
+    {
+        return 0;
+    }
+    
+    //include
+    int include=root->data;
+    
+    //move to children of its left
+    if(root->left)
+    {
+        include+=solve(root->left->left);
+        include+=solve(root->left->right);
+        
+    }
+    
+    if(root->right)
+    {
+        include+=solve(root->right->left);
+        include+=solve(root->right->right);
+        
+    }
+    
+    //exclude
+    int exclude=solve(root->left)+solve(root->right);
+    
+    return max(include,exclude);
+    
+    
+}
+
+
+    int main()
+{
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->right->left = new Node(4);
+    root->right->right = new Node(5);
+    root->left->left = new Node(1);
+ 
+    cout << solve(root) << endl;
+    return 0;
+}
+
+Time:O(N)
+
+#include <iostream>
+#include<unordered_map>
+
+using namespace std;
+
+class Node{
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int data)
+    {
+        this->data=data;
+        left=nullptr;
+        right=nullptr;
+    }
+    
+};
+
+int solve(Node* root,unordered_map<Node*,int>& m)
+{
+    if(!root)
+    {
+        return 0;
+    }
+    
+    if(m.find(root)!=m.end())
+    {
+        return m[root];
+    }
+    
+    //include
+    int include=root->data;
+    
+    //move to children of its left
+    if(root->left)
+    {
+        include+=solve(root->left->left,m);
+        include+=solve(root->left->right,m);
+        
+    }
+    
+    if(root->right)
+    {
+        include+=solve(root->right->left,m);
+        include+=solve(root->right->right,m);
+        
+    }
+    
+    //exclude
+    int exclude=solve(root->left,m)+solve(root->right,m);
+    
+    return m[root]=max(include,exclude);
+    
+    
+}
+
+
+    int main()
+{
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->right->left = new Node(4);
+    root->right->right = new Node(5);
+    root->left->left = new Node(1);
+ 
+    unordered_map<Node*,int> m; //node,sum
+    cout << solve(root,m) << endl;
+    return 0;
+}
+
+   
