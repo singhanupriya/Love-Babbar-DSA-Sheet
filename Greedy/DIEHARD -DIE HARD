@@ -1,0 +1,124 @@
+https://www.youtube.com/watch?v=KrXzcYTDn2s&t=906s
+
+If your health or armor becomes <=0, you will die instantly, no time counted for this hence returning -1.
+
+Time:O(3^N)
+
+#include <iostream>
+
+using namespace std;
+
+int max(int a, int b, int c)
+{
+    if(a>=b && a>=c)
+    {
+        return a;
+    }
+    else if(b>=c && b>=a)
+    {
+        return b;
+    }
+    return c;
+}
+
+int solve(int H, int A, int prev)
+{
+    if(H<=0 ||A<=0 )
+    {
+        return -1;
+    }
+    
+    int fire=0,water=0,air=0;
+    
+    if(prev!=1)
+    {
+        fire=1+solve(H-20,A+5,1);
+    }
+    
+    if(prev!=2)
+    {
+        air=1+solve(H+3,A+2,2);
+    }
+    
+    if(prev!=3)
+    {
+        water=1+solve(H-5,A-10,3);
+    }
+    
+    return max(fire,air,water);
+    
+    
+    
+}
+
+int main()
+{
+    cout<<solve(20,8,0);
+
+    return 0;
+}
+
+Method 2:
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int max(int a, int b, int c)
+{
+    if(a>=b && a>=c)
+    {
+        return a;
+    }
+    else if(b>=c && b>=a)
+    {
+        return b;
+    }
+    return c;
+}
+
+int solve(int H, int A, int prev,vector<vector<int>>& dp)
+{
+    if(H<=0 ||A<=0 )
+    {
+        return -1;
+    }
+    
+    if(dp[H][A]!=-1)
+    {
+        return dp[H][A];
+    }
+    
+    int fire=0,water=0,air=0;
+    
+    if(prev!=1)
+    {
+        fire=1+solve(H-20,A+5,1,dp);
+    }
+    
+    if(prev!=2)
+    {
+        air=1+solve(H+3,A+2,2,dp);
+    }
+    
+    if(prev!=3)
+    {
+        water=1+solve(H-5,A-10,3,dp);
+    }
+    
+    return dp[H][A]=max(fire,air,water);
+    
+    
+    
+}
+
+int main()
+{
+    int H=20;
+    int A=8;
+    vector<vector<int>> dp(1000,vector<int>(1000,-1));
+    cout<<solve(H,A,0,dp);
+
+    return 0;
+}
