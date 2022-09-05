@@ -1,0 +1,74 @@
+https://www.youtube.com/watch?v=EcNbRjEcb14
+
+
+1. To find median u need to array in sorted form.
+2. We need smaller elements on left and largest elements on right.
+3. If num of elements=odd, we need the largest of smaller no if smallercount>larger count or smallest of largest elements.
+4. Left elements, we can keep in max heap and right elements we can keep in min heap
+5. If n if even, ans = (maxHeap.top()+minHeap.top())/2.
+6. If n is odd, ans will be top of whoever has larger size
+7. We need to maintain the diff of size between the heaps as 1 when we insert elements.
+
+Time:O(n logn), Space:O(N)
+
+
+public:
+    //Function to insert heap.
+    
+    
+    priority_queue<int> maxHeap; //of smaller elements
+    priority_queue<int,vector<int>, greater<int>> minHeap; //of smaller elements
+    
+    
+    
+    
+    
+    //Function to balance heaps.
+    void balanceHeaps()
+    {
+        if(maxHeap.size()>minHeap.size()+1)
+        {
+            minHeap.push(maxHeap.top());
+            maxHeap.pop();
+        }
+        else if(minHeap.size()> maxHeap.size()+1)
+        {
+            maxHeap.push(minHeap.top());
+            minHeap.pop();
+        }
+        
+    }
+    
+    void insertHeap(int &x)
+    {
+        
+        
+        if(maxHeap.empty() || maxHeap.top()>x)
+        {
+            maxHeap.push(x);
+        }
+        else
+        {
+            minHeap.push(x);
+        }
+        balanceHeaps(); //maintain size diff after every insertion
+        
+    }
+    
+    //Function to return Median.
+    double getMedian()
+    {
+        if(minHeap.size()==maxHeap.size())
+        {
+            return double(minHeap.top()+maxHeap.top())/2.0;
+        }
+        else if(minHeap.size()>maxHeap.size())
+        {
+            return double(minHeap.top());
+        }
+        else
+        {
+            return double(maxHeap.top());
+        }
+        
+    }
