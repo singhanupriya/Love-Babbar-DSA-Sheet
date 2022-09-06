@@ -1,0 +1,71 @@
+
+https://www.geeksforgeeks.org/find-if-there-is-a-path-of-more-than-k-length-from-a-source/
+
+Time:O(N^N)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+bool solve(int node, int n,vector<vector<int>> graph, int weight, int k ,vector<bool>& vis,vector<int> temp)
+{
+    if(weight>=k)
+    {
+        temp.push_back(node);
+        for(int i=0;i<temp.size();i++)
+        {
+            cout<<temp[i]<<" ";
+        }
+        cout<<endl;
+        return true;
+    }
+    
+    for(int i=0;i<n;i++)
+    {
+        if(i!=node && !vis[i] && graph[node][i]>0)
+        {
+            vis[node]=true;
+            temp.push_back(node);
+            if(solve(i,n,graph,weight+graph[node][i],k,vis,temp))
+            {
+                return true;
+            }
+            vis[node]=false;
+            temp.pop_back();
+        }
+    }
+    
+    return false;
+}
+
+
+
+int main()
+{
+    vector<vector<int>> graph{
+    //   0 1 2 3 4 5 6 7 8 9
+        {0,4,0,0,0,0,0,8,0,0}, //0
+        {4,0,8,0,0,0,0,11,0,0}, //1
+        {0,8,0,7,0,4,0,0,2,0},  //2
+        {0,0,7,0,9,14,0,0,0,0},  //3
+        {0,0,0,9,0,10,0,0,0,0},
+        {0,0,4,14,10,0,2,0,0,0}, //5
+        {0,0,0,0,0,2,0,1,6,0},
+        {8,11,0,0,0,0,1,0,7,0}, //7
+        {0,0,2,0,0,0,6,7,0,0},
+        
+        
+        
+        
+    };
+    int n=9;
+    int src=0;
+    int k=58;
+    vector<bool> vis(n,false);
+    vector<int> temp;
+    
+    cout<<solve(0,n,graph,0,k,vis,temp);
+
+    return 0;
+}
