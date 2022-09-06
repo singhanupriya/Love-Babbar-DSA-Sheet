@@ -1,0 +1,48 @@
+
+Time:O(M^N), Space:O(N)
+
+bool isSafe(int node, int col,int n,vector<int>& color,bool graph[101][101]  )
+    {
+        for(int i=0;i<n;i++)
+        {
+            if(i!=node && graph[node][i] && color[i]==col)
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    bool dfs(int node, int n, vector<int>& color,bool graph[101][101], int m)
+    {
+        
+        if(node==n)
+        {
+            return true;
+        }
+        
+        for(int col=0;col<m;col++)
+        {
+            if(isSafe(node,col,n,color,graph))
+            {
+                color[node]=col;
+                if(dfs(node+1,n,color,graph,m))
+                {
+                    return true;
+                }
+                color[node]=-1;
+            }
+        }
+        
+        return false;
+        
+    }
+    
+    
+    bool graphColoring(bool graph[101][101], int m, int n) {
+        // your code here
+        
+        vector<int> color(n,-1);
+        return dfs(0,n,color,graph,m);
+    }
