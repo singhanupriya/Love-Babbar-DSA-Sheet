@@ -1,0 +1,56 @@
+https://www.geeksforgeeks.org/tug-of-war/
+
+
+1. every number has two choices to go in set1 or set2, but u can insert in a set only if set.size()<(n+1)/2 works for both odd and even
+
+Time:O(2^N), Space:O(N)
+
+
+
+void solve(int index,vector<int> &arr, int n, vector<int> set1,vector<int> set2, int sumSet1,int sumSet2, int& diff )
+{
+    
+    if(index==n)
+    {
+        diff=min(diff,abs(sumSet1-sumSet2));
+        return;
+    }
+    
+    //add to set1
+    
+    if(set1.size()<(n+1)/2)
+    {
+        set1.push_back(arr[index]);        solve(index+1,arr,n,set1,set2,sumSet1+arr[index],sumSet2,diff);
+    set1.pop_back();
+    }
+    
+    
+    
+    //add to set2;
+    
+    if(set2.size()<(n+1)/2)
+    {
+        set2.push_back(arr[index]);
+    solve(index+1,arr,n,set1,set2,sumSet1,sumSet2+arr[index],diff);
+    set2.pop_back();
+        
+    }
+    
+    
+    
+}
+
+int tugOfWar(vector<int> &arr, int n)
+{
+    // write your code here
+    
+    vector<int> set1;
+    vector<int> set2;
+    int sumSet1=0;
+    int sumSet2=0;
+    int diff=INT_MAX;
+    solve(0,arr,n,set1,set2,sumSet1,sumSet2,diff);
+    return diff;
+    
+    
+}
