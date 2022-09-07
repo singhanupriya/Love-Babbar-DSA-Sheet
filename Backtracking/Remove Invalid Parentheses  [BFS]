@@ -1,0 +1,159 @@
+https://www.geeksforgeeks.org/remove-invalid-parentheses/
+https://www.youtube.com/watch?v=MXWV2W0wIFE
+
+
+Backtracking:
+
+1. Find min brackets to be removed, using backtracking remove all possible brackets till not more needed to be removed and add if it is valid
+
+Time:o(2^n)
+
+  unordered_map<string,int> m; //no duplicates
+  vector<string> ans;
+  
+   int minRemoval(string s)
+   {
+       stack<char> st;
+       
+       
+       for(int i=0;i<s.length();i++)
+       {
+           if(s[i]=='(')
+           {
+               st.push(s[i]);
+           }
+           else if(s[i]==')') //as alphabets also in the ans
+           {
+               if(!st.empty() && st.top()=='(')
+               {
+                   st.pop();
+               }
+               else
+               {
+                   st.push(s[i]);
+               }
+           }
+       }
+       
+       return st.size();
+       
+   }
+  
+    void solve(string s, int minRemoved)
+    {
+        if(minRemoved<0)
+        {
+            return;
+        }
+        
+        if(minRemoved==0)
+        {
+            int diff=minRemoval(s);
+            if(diff==0 && m[s]==0)
+            {
+                ans.push_back(s);
+                m[s]++;
+            }
+            return;
+        }
+        
+        for(int i=0;i<s.length();i++)
+        {
+            string left=s.substr(0,i);
+            string right=s.substr(i+1);
+            solve(left+right,minRemoved-1);
+        }
+        return;
+    }
+  
+  
+    vector<string> removeInvalidParentheses(string s) {
+        // code here
+        solve(s,minRemoval(s));
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+    
+    
+    BFS
+    
+    bool isValid(string s)
+    {
+        stack<char> st;
+        
+        for(int i=0;i<s.length();i++)
+        {
+            if(s[i]=='(')
+            {
+                st.push(s[i]);
+            }
+            else if(s[i]==')')
+            {
+                if(!st.empty() && st.top()=='(')
+                {
+                    st.pop();
+                }
+                else
+                {
+                    st.push(s[i]);
+                }
+            }
+            
+        }
+        
+        if(st.size()==0)
+        {
+            return true;
+        }
+        return false;
+    }
+  
+    vector<string> removeInvalidParentheses(string str) {
+        // code here
+        
+        vector<string> ans;
+         unordered_set<string> visit;
+ 
+    //  queue to maintain BFS
+    queue<string> q;
+    string temp;
+    bool level=false;
+ 
+    //  pushing given string as starting node into queue
+    q.push(str);
+    visit.insert(str);
+    while (!q.empty())
+    {
+        str = q.front();  q.pop();
+        if (isValid(str))
+        {
+            ans.push_back(str);
+ 
+            // If answer is found, make level true
+            // so that valid string of only that level
+            // are processed.
+            level = true;
+        }
+        if (level)
+            continue;
+        for (int i = 0; i < str.length(); i++)
+        {
+            if (str[i]=='(' || str[i]==')')//u have to remove parenthesis and not letters
+            {
+ 
+                // Removing parenthesis from str and
+                // pushing into queue,if not visited already
+                temp = str.substr(0, i) + str.substr(i + 1);
+                if (visit.find(temp) == visit.end())
+                {
+                    q.push(temp);
+                    visit.insert(temp);
+                }
+            }
+        }
+    }
+    
+    sort(ans.begin(),ans.end());
+    return ans;
+        
+    }
