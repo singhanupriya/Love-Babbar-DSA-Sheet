@@ -1,0 +1,318 @@
+https://www.geeksforgeeks.org/find-shortest-safe-route-in-a-path-with-landmines/
+
+Very imp: Imp- here since u are allowed to move in all directions, u need to have a vis array else u will be in inifite loop, 
+even for dp,hence backtracking is used here and not dp approach
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+//starting from every row of last col
+int solve(int i, int j, vector<vector<int>>& mat, int row, int col, int dirx[], int diry[],vector<vector<bool>>& vis)
+{
+    //cout<<i <<" "<<j<<"\n";
+    
+    
+    
+    if(j==0)  //reached first col
+    {
+        return 0;
+    }
+    
+    int result=1000000009;
+    
+    for(int x=0;x<4;x++)
+    {
+        int temp=1000000009;
+        
+        
+        if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col && mat[i+dirx[x]][j+diry[x]]==1 && !vis[i+dirx[x]][j+diry[x]])
+        {
+            vis[i][j]=true;
+            temp=1+solve(i+dirx[x],j+diry[x],mat,row,col,dirx,diry,vis);
+            vis[i][j]=false;
+        }
+        
+        result=min(result,temp);
+    }
+    return result;
+    
+}
+
+
+int main()
+{
+    vector<vector<int>> mat 
+    {
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 0, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+        { 1, 0, 1, 1, 1, 1, 1, 1, 0, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 0, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 0, 1, 1, 1, 1, 1, 1 }
+    };
+    
+    int row=mat.size();
+    int col=mat[0].size();
+    
+    vector<vector<bool>> vis(row,vector<bool>(col,false));
+    
+    int dirx[]={0,-1,0,1}; //RULD
+    int diry[]={1,0,-1,0};
+    
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            cout<<mat[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    cout<<"-----------\n";
+    
+    //check all unsafe
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            if(mat[i][j]==0)
+            {
+                for(int x=0;x<4;x++)
+                {
+                    if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col)
+                    {
+                        mat[i+dirx[x]][j+diry[x]]=-1;
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            if(mat[i][j]==-1)
+            {
+                mat[i][j]=0;
+            }
+        }
+    }
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            cout<<mat[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    cout<<"-----------\n";
+    
+    
+    //check dist 
+    int ans=1000000009;
+    
+    //check for every row in last col
+    
+    for(int i=0;i<row;i++)
+    {
+        int temp=solve(i,col-1,mat,row,col,dirx,diry,vis);
+        //cout<<temp<<" ";
+        ans=min(ans,temp);
+    }
+    
+    
+    cout<<ans;
+    
+    
+
+
+
+    return 0;
+}
+
+Memoization:
+
+Time:O(N^2), Space:O(N^2)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int min(int a, int b)
+{
+    if(a<=b)
+    {
+        return a;
+    }
+    return b;
+}
+
+//starting from every row of last col
+int solve(int i, int j, vector<vector<int>>& mat, int row, int col, int dirx[], int diry[],vector<vector<bool>>& vis,vector<vector<int>>& dp)
+{
+    //cout<<i <<" "<<j<<"\n";
+    
+    
+    
+    if(j==0)  //reached first col
+    {
+        return 0;
+    }
+    
+    if(dp[i][j]!=-1)
+    {
+        return dp[i][j];
+    }
+    
+    int result=1000000009;
+    
+    for(int x=0;x<4;x++)
+    {
+        int temp=1000000009;
+        
+        
+        if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col && mat[i+dirx[x]][j+diry[x]]==1 && !vis[i+dirx[x]][j+diry[x]])
+        {
+            vis[i][j]=true;
+            temp=1+solve(i+dirx[x],j+diry[x],mat,row,col,dirx,diry,vis,dp);
+            vis[i][j]=false;
+        }
+        
+        result=min(result,temp);
+    }
+    return dp[i][j]=result;
+    
+}
+
+
+int main()
+{
+    vector<vector<int>> mat 
+    {
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 0, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+        { 1, 0, 1, 1, 1, 1, 1, 1, 0, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 0, 1, 1, 1, 1, 0, 1, 1, 1, 1 },
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 1, 1, 0, 1, 1, 1, 1, 1, 1 }
+    };
+    
+    int row=mat.size();
+    int col=mat[0].size();
+    
+    vector<vector<bool>> vis(row,vector<bool>(col,false));
+    
+    int dirx[]={0,-1,0,1}; //RULD
+    int diry[]={1,0,-1,0};
+    
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            cout<<mat[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    cout<<"-----------\n";
+    
+    //check all unsafe
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            if(mat[i][j]==0)
+            {
+                for(int x=0;x<4;x++)
+                {
+                    if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col)
+                    {
+                        mat[i+dirx[x]][j+diry[x]]=-1;
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            if(mat[i][j]==-1)
+            {
+                mat[i][j]=0;
+            }
+        }
+    }
+    
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            cout<<mat[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    
+    cout<<"-----------\n";
+    
+    vector<vector<int>> dp(row,vector<int>(col,-1));
+    
+    //check dist 
+    int ans=1000000009;
+    
+    //check for every row in last col
+    
+    for(int i=0;i<row;i++)
+    {
+        int temp=solve(i,col-1,mat,row,col,dirx,diry,vis,dp);
+        //cout<<temp<<" ";
+        ans=min(ans,temp);
+    }
+    
+    
+    cout<<ans;
+    
+    
+
+
+
+    return 0;
+}
