@@ -1,0 +1,44 @@
+
+
+DP approach??
+
+Just like trie, do using recursion, here u will observe overlapping subtsrings do memoization.
+
+void solve(string s, vector<string>& ans, string temp,unordered_map<string,int> m)
+    {
+        if(s.length()==0)
+        {
+            temp.pop_back();
+            ans.push_back(temp);
+            return;
+        }
+        
+        int size=s.length();
+        
+        for(int i=1;i<=size;i++)
+        {
+            if(m[s.substr(0,i)])
+            {
+               // temp.push_back(s.substr(0,i));
+                solve(s.substr(i,size-i),ans,temp+s.substr(0,i)+" ",m);
+               // temp.pop_back();
+            }
+        }
+        
+    }
+
+    vector<string> wordBreak(int n, vector<string>& dict, string s)
+    {
+        // code here
+        
+        unordered_map<string,int> m;
+        for(int i=0;i<n;i++)
+        {
+            m[dict[i]]++;
+        }
+        
+        vector<string> ans;
+        solve(s,ans,"",m);
+        return ans;
+        
+    }
