@@ -132,7 +132,7 @@ Time:o(2^n)
             // If answer is found, make level true
             // so that valid string of only that level
             // are processed.
-            level = true;
+            level = true; //since we are doing BFS, we are going level wise, when we have reached the level when minRemoval==0, we dont need to break further
         }
         if (level)
             continue;
