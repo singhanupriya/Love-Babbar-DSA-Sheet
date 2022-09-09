@@ -1,0 +1,172 @@
+https://practice.geeksforgeeks.org/problems/first-non-repeating-character-in-a-stream1216/1
+
+1. Create a freq array, if freq of element is 1, push to q, everytime check if freq(q.front()>1, keep popping, if queue is empty add # else add q.front()
+2. Queue will have non-repeating chars in order
+
+
+Time:O(N), Space:O(N)
+
+	string FirstNonRepeating(string A){
+		    // Code here
+		    
+		    //we need to maintain a freq array and also some DS to maintain the order in which chars are occuring
+		    
+		    
+		    int len=A.length();
+		    
+		    string ans="";
+		    
+		    int freq[26];
+		    memset(freq,0,sizeof(freq));
+		    
+		    queue<char> q;
+		    
+		    for(int i=0;i<len;i++)
+		    {
+		        freq[A[i]-'a']++;
+		        if(freq[A[i]-'a']==1) //push all unique chars to queue
+		        {
+		            q.push(A[i]);
+		        }
+		            
+		            while(!q.empty() && freq[q.front()-'a']>1)
+		            {
+		                q.pop();
+		            }
+		            
+		            if(q.empty())
+		            {
+		                ans+="#";
+		            }
+		            else
+		            {
+		                ans+=q.front();
+		            }
+		            
+		        
+		    }
+		    
+		    return ans;
+		    
+		    
+		}
+    
+    Time:O(N), Space:o(n)
+    
+    1. Use DLL, create a head and tail, head-><-tail.
+    2. DLL will contain only non-repeating chars in order.
+    3. Create another array repeated and inDLL which will store the node refernce of that char
+    4. If that char occurs for thr first time, insert before tail, update in DLL.
+    2. If char is repeated for 2nd time, delete its node and set repeated as true, for 3 or more occ, node ref will already be deleted
+    6. All non-repeating will be head->next, if head->next=tail add #
+    
+    class Node{
+    public:
+    char data;
+    Node* next;
+    Node* prev;
+    
+    Node(char x)
+    {
+        data=x;
+        next=nullptr;
+        prev=nullptr;
+    }
+    
+};
+
+class Solution {
+    
+    
+    
+	public:
+		string FirstNonRepeating(string A){
+		    // Code here
+		    
+		    Node* head=new Node('-1');
+		    Node* tail=new Node('-1');
+		    head->next=tail;
+		    tail->prev=head;
+		    
+		    
+		    vector<Node*> inDLL(26,nullptr); //to store node of every char
+		    vector<bool> repeated(26,false);
+		    
+		    //DLL will only contain non-repeated chars in order
+		    
+		    string ans="";
+		    
+		    for(int i=0;i<A.length();i++)
+		    {
+		        Node* curr=inDLL[A[i]-'a'];
+		        
+		        if(curr==nullptr && !repeated[A[i]-'a'])
+		        {
+		            //non-repeating add after p
+		            Node* temp=new Node(A[i]);
+		            temp->next=tail;
+		            tail->prev->next=temp;
+		            temp->prev=tail->prev;
+		            tail->prev=temp;
+		            
+		            inDLL[A[i]-'a']=temp;
+		            
+		            
+		        }
+		        else
+		        {
+		            //if present remove from DLL
+		            
+		            //V.IMP, for 3rd of more occureneces, u will have already make curr 
+		            //null in the 2nd time so check if curr exists
+		            
+		            
+		            if(curr)
+		            {
+		                
+		                
+		                curr->prev->next=curr->next;
+		            
+    		            curr->next->prev=curr->prev;
+    		            
+    		            
+    		            
+    		            
+    		            curr->next=nullptr;
+    		            curr->prev=nullptr;
+    		            
+    		            delete(curr);
+		                
+		            }
+		            
+		            
+		            
+		            //as we have removed it
+		            inDLL[A[i]-'a']=nullptr;
+		            repeated[A[i]-'a']=true;
+		            
+		            
+		            
+		        }
+		        
+		        //DLL always contains non-repeating char in order
+		        
+		        if(head->next!=tail)
+		        {
+		            ans=ans+head->next->data;
+		        }
+		        else
+		        {
+		            ans=ans+"#";
+		        }
+		        
+		        
+		    }
+		    
+		    return ans;
+		    
+		    
+		    
+		}
+
+};
