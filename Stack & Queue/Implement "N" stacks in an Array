@@ -1,0 +1,101 @@
+Time:O(1), Space:O(N)
+
+https://www.youtube.com/watch?v=lrSXKLmnMV8&t=812
+
+
+class NStack
+{
+public:
+    // Initialize your data structure.
+    
+    int k;
+    int freeSpot;
+    int* arr;
+    int* top;
+    int* next;
+    int N;
+    int S;
+    
+    
+    NStack(int n, int s)
+    {
+        // Write your code here.
+        
+        N=n;
+        S=s;
+        arr=new int[S];
+        
+        top=new int[N]; //index of top element of each stack
+        for(int i=0;i<N;i++)
+        {
+            top[i]=-1;
+        }
+        
+        
+        next=new int[S];
+       
+         //if arr[index] is empty is represents next free spot else it represent the index of element just below top of stack
+        
+        for(int i=0;i<S-1;i++)
+        {
+            next[i]=i+1;
+        }
+        
+        next[S-1]=-1;
+        freeSpot=0;
+        
+    }
+
+    // Pushes 'X' into the Mth stack. Returns true if it gets pushed into the stack, and false otherwise.
+    bool push(int x, int m)
+    {
+        if(freeSpot==-1)
+        {
+            return false;
+        }
+        
+        //index to be pushed
+        int index=freeSpot;
+        
+        //update freeSpo
+        freeSpot=next[index]; 
+        
+        //place element
+        arr[index]=x;
+        
+        //update next; element after current top
+        next[index]=top[m-1]; //0-based indexing,stack 1 means stack 0
+       
+        
+        //update top of that stack
+        top[m-1]=index;
+        
+        return true;
+        
+        
+    }
+
+    // Pops top element from Mth Stack. Returns -1 if the stack is empty, otherwise returns the popped element.
+    int pop(int m)
+    {
+        // Write your code here.
+        
+        if(top[m-1]==-1)
+        {
+            return -1; //no element inserted
+        }
+        
+        int elementIndex=top[m-1];  //index of stack top
+        
+        
+        top[m-1]=next[elementIndex]; //update top with next
+        //since no element at this place, this will denote the next free space
+        next[elementIndex]=freeSpot;
+        
+        //current free spot
+        freeSpot=elementIndex;
+        
+        return arr[elementIndex];;
+        
+        
+    }
