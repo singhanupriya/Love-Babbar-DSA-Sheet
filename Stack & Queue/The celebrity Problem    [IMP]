@@ -44,6 +44,86 @@ class Solution
 
 
 M2-
+
+
+https://www.youtube.com/watch?v=CiiXBvrX-5A
+
+
+1. Push all elements to stack, take top 2 elements, if a knows b, b is a potential celebrity push it to stack else a will be push it to stack
+2. At last we will be left with one element, check that element is known by all and doesnt know anyone
+
+Stack contains potential celebrities.
+
+Time:o(n), Space:O(N)
+
+int celebrity(vector<vector<int> >& grid, int n) 
+    {
+        // code here 
+        
+        //There will be only one celebrity as the one who is celebrity has all 0's means 
+        //he doesnt know anyone else, if one more celebrity was there he had to be known by
+        //earlier celebrity which is not possible.
+        
+        stack<int> s;
+        //in stack we will keep potential celebrities 
+        
+        for(int i=0;i<n;i++)
+        {
+            s.push(i);
+        }
+        
+        while(s.size()>1)
+        {
+            int a=s.top();
+            s.pop();
+            int b=s.top();
+            s.pop();
+            
+            if(grid[a][b]==1) //a knows b, means a is elimitaed else b is elimitaed
+            {
+                s.push(b);
+            }
+            else
+            {
+                s.push(a); //potential celebrity
+            }
+        }
+        
+        //come out when one element left
+        int element=s.top();
+        s.pop();
+        
+        //now we need to check that element doesn't know anyone and is known by all execpt itself
+        
+        
+        //row, doesnt know anyone
+        for(int i=0;i<n;i++)
+        {
+            if(grid[element][i]==1)
+            {
+                return -1;
+            }
+        }
+        
+        //column known by all others
+        
+        for(int i=0;i<n;i++)
+        {
+            if(i!=element && grid[i][element]==0)
+            {
+                return -1;
+            }
+        }
+        
+        return element;
+        
+        
+        
+    }
+
+
+
+M2-
 1. Lets assume c=0 means 0 is celebrity.
 2. Now frm i=1 to n-1, check if 0 knows anyone, if it doesn know i, then 0 can't be celeb, i will be new celeb, eg-if c=2, if will check for i=3,4,etc
 3. We need to confirm if c is celeb or not. loop from 0 to n-1, if i!=c and m[c][i]==1 or m[i][c]==0, return -1 else return c
