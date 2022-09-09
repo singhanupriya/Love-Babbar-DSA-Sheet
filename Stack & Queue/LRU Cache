@@ -1,0 +1,173 @@
+https://practice.geeksforgeeks.org/problems/lru-cache/1
+
+//u will need key, value in DLL,because once map has reached its capavity, u will need
+    //key of the tail->prev node to remove in map.
+
+Time:O(1), Space:O(N)
+
+class Node{
+    
+    public:
+    int key;
+    int value;
+    Node* next;
+    Node* prev;
+    
+    Node(int key, int value)
+    {
+        this->key=key;
+        this->value=value;
+        next=nullptr;
+        prev=nullptr;
+    }
+    
+};
+
+class LRUCache
+{
+    private:
+    
+    Node* head;
+    Node* tail;
+    unordered_map<int,Node*> m;
+    int size;
+
+    public:
+    //Constructor for initializing the cache capacity with the given value.
+    LRUCache(int cap)
+    {
+        // code here
+        
+        size=cap;
+        head=new Node(-1,-1);
+        tail=new Node(-1,-1);
+        head->next=tail;
+        tail->prev=head;
+        
+    }
+    //u will need key, value in DLL,because once map has reached its capavity, u will need
+    //key of the tail->prev node to remove in map.
+    
+    //Function to return value corresponding to the key.
+    int get(int key)
+    {
+        // your code here
+        
+        
+        if(m.find(key)!=m.end())
+        {
+            
+            Node* temp=m[key];
+            int value=temp->value;
+            
+            //remove that node
+            temp->prev->next=temp->next;
+            temp->next->prev=temp->prev;
+            temp->next=nullptr;
+            temp->prev=nullptr;
+            delete(temp);
+            
+            //add next to head
+            Node* curr=new Node(key,value);
+            
+            curr->next=head->next;
+            head->next->prev=curr;
+            head->next=curr;
+            curr->prev=head;
+            
+            //update address
+            m[key]=curr;
+            
+            return value;
+        }
+        
+        return -1;
+        
+        
+    }
+    
+    //Function for storing key-value pair.
+    void set(int key, int value)
+    {
+        // your code here 
+        
+        if(m.find(key)!=m.end())
+        {
+            Node* temp=m[key];
+            
+            //remove that node
+            temp->prev->next=temp->next;
+            temp->next->prev=temp->prev;
+            temp->next=nullptr;
+            temp->prev=nullptr;
+            delete(temp);
+            
+            //add next to head
+            Node* curr=new Node(key,value);
+            
+            curr->next=head->next;
+            head->next->prev=curr;
+            head->next=curr;
+            curr->prev=head;
+            
+            //update address
+            m[key]=curr;
+            
+            
+            
+            
+        }
+        else
+        {
+            if(m.size()<size)
+            {
+                
+                //add next to head
+                Node* curr=new Node(key,value);
+                
+                curr->next=head->next;
+                head->next->prev=curr;
+                head->next=curr;
+                curr->prev=head;
+                
+                //update address
+                m[key]=curr;
+                
+                
+            }
+            else
+            {
+                
+                //delete tail->prev
+                Node* temp=tail->prev;
+                int element=temp->key;
+                temp->prev->next=tail;
+                tail->prev=temp->prev;
+                temp->next=nullptr;
+                temp->prev=nullptr;
+                
+                delete(temp);
+                m.erase(element); //remove from map
+                
+                Node* curr=new Node(key,value);
+            
+                curr->next=head->next;
+                head->next->prev=curr;
+                head->next=curr;
+                curr->prev=head;
+                
+                //update address
+                m[key]=curr;
+                
+                
+                
+                
+                
+            }
+        }
+        
+        
+        
+        
+        
+    }
