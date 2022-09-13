@@ -1,5 +1,65 @@
 https://practice.geeksforgeeks.org/problems/clone-a-linked-list-with-next-and-random-pointer/1
 
+
+Node *copyList(Node *head)
+    {
+        //Write your code here
+        
+        
+        Node* orignal=head;
+        Node* copyHead=nullptr;
+        
+        //create new nodes
+        while(orignal)
+        {
+            Node* temp=new Node(orignal->data);
+            temp->next=orignal->next;
+            orignal->next=temp;
+            orignal=temp->next;
+        }
+        
+        //update random pointer of copy
+        
+        orignal=head;
+        
+        while(orignal)
+        {
+            if(orignal->arb)
+            {
+                orignal->next->arb=orignal->arb->next;
+            }
+            orignal=orignal->next->next;
+            
+            
+        }
+        
+        
+        //update next pointers of copy
+        
+        orignal=head;
+        copyHead=head->next;
+        
+        Node* curr=head->next;
+        
+        while(orignal && curr)
+        {
+            orignal->next=curr->next;
+            if(curr->next)
+            {
+                curr->next=curr->next->next;
+            }
+            orignal=orignal->next; // u need to break links between old and new LL
+            curr=curr->next;
+            
+            
+        }
+        
+        return copyHead;
+        
+        
+        
+    }
+
 M1
 
 1. Use a hash map<Node*,Node*> to store a node of orignal LL and its copy.
