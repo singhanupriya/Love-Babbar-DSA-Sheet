@@ -1,0 +1,71 @@
+https://takeuforward.org/data-structure/flattening-a-linked-list/
+
+Merge sort logic
+
+Time:O(M*n)->total no of nodes.Space:O(1)
+
+Node* merge(Node* head1, Node* head2)
+{
+    Node* first=head1;
+    Node* second=head2;
+    
+    Node* dummy=new Node(-1);
+    Node* p=dummy;
+    
+    
+    while(first && second)
+    {
+        if(first->data <= second->data )
+        {
+            p->bottom=first;
+            p=p->bottom;
+            first=first->bottom;
+        }
+        else
+        {
+            p->bottom=second;
+            p=p->bottom;
+            second=second->bottom;
+        }
+    }
+    
+     while(first)
+    {
+        p->bottom=first;
+        p=p->bottom;
+        first=first->bottom;
+       
+    }
+    
+     while(second)
+    {
+        p->bottom=second;
+        p=p->bottom;
+        second=second->bottom;
+        
+    }
+    
+    p->bottom=nullptr;
+    return dummy->bottom;
+}
+    
+Node *flatten(Node *root)
+{
+   // Your code here
+   if(!root)
+   {
+       return nullptr;
+       
+   }
+   
+   if(!root->next)
+   {
+       return root;
+   }
+   
+   Node* first=flatten(root->next);
+   Node* curr=merge(root,first);
+   return curr;
+   
+   
+}
