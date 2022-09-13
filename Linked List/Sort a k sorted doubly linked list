@@ -1,0 +1,83 @@
+https://www.youtube.com/watch?v=hgcKeJiBCc8
+Sort a k sorted doubly linked list
+https://www.codingninjas.com/codestudio/problems/sort-a-k-sorted-doubly-linked-list_1118118?leftPanelTab=1
+
+BAsed on question: https://www.geeksforgeeks.org/nearly-sorted-algorithm/
+
+M1- Merge sort in LL
+
+Time:O(nlogn), Space:o(1)
+
+M2- Insertion sort +k,-k positions Time:O(nk), Space:O(1)
+
+M3- MIn heap
+
+Read create user-defined min-heap using priority-queue: https://www.geeksforgeeks.org/implement-min-heap-using-stl/
+
+1. As a node will be at max k positions ahead, means in the window size of k+1..
+2.Create a min heap of size k+1, keep popping top element and keep pusing the next element by sliding the window.
+
+Time:O(nlogk)
+Space:O(K)
+
+#include <bits/stdc++.h>
+#include<queue>
+
+
+
+class comp {
+    
+    public:
+    bool operator()(Node* p1,  Node* p2)
+    {
+        return p1->data > p2->data;
+    }
+};
+
+Node *sortedDll(Node *head, int k)
+{
+    // Write your code here
+    
+    if(!head || !head->next)
+    {
+        return head;
+    }
+    
+    priority_queue<Node*, vector<Node*>, comp> pq;
+    
+    int count=k+1;
+    Node* curr=head;
+    Node* dummy=new Node(-1);
+    Node* p=dummy;
+    
+    while(curr && count>0)
+    {
+        pq.push(curr);
+        curr=curr->next;
+        count--;
+    }
+    
+    while(!pq.empty())
+    {
+        Node* temp=pq.top();
+        pq.pop();
+        
+        p->next=temp;
+        temp->prev=p;
+        p=p->next;
+        
+        if(curr)
+        {
+            pq.push(curr);
+            curr=curr->next;
+        }
+        
+        p->next=nullptr;
+        
+        
+        
+        
+    }
+    return dummy->next;
+    
+}
