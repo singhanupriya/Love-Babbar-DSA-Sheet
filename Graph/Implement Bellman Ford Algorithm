@@ -3,8 +3,7 @@ https://www.youtube.com/watch?v=FrLWd1tJ_Wc
 1. Dijikstra can't be used if there is a neg edge in the cycle
 
 Applications of bellman ford
-1. U can't shortest distance of all node from src in a directed graph **with neg edge** as the more no of times u travel, 
-the dist keeps dec due to neg edge, hence, u use it to detect neg cycle.
+1. U can't find min dist if there is a neg cycle **NOT NEG EDGE**, with neg edge and no neg cycle u can find min dist. With bellman ford u can find a neg cycle.
 2. Find a negative weight cycle(a cycle where sum of cycle is a neg no, the more times u travel the cycle, the more negative sum u keep getting)
 3. Bellman dosnt work in undirected grp with neg edge bcoz in undirected graph u--(-2)--v means u-->v(-2) and v->u(-2) means cycle with 2 edges of wt -2, 
 sum of cycle =-4, the more no of times u travel this cycle the lower value u will keep getting, this can go upto infinite times
