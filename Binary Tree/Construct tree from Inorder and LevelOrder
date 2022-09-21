@@ -1,0 +1,77 @@
+https://practice.geeksforgeeks.org/problems/construct-tree-from-inorder-and-levelorder/1
+
+1. Inorder is left, root and right
+2. Level order is level wise left to right
+3. Take start to end index of inorder and find the first element of these inorder subarray which comes forst in level order means that will be the left most,
+  return the inorder index
+ 4. root->left = start,index-1 and root->right= index+1 to end, recurse
+
+Use map to store element to index mapping of level order.
+
+Time:O(N^2), Space:O(1)
+
+int getIndex(int inorder[], int levelOrder[], int start, int end,unordered_map<int,int>& m)
+{
+    int minIndexInLevel=INT_MAX;
+    int inorderIndex=-1;
+    
+    for(int i=start;i<=end;i++)
+    {
+        int inorderElement=inorder[i];
+        int levelIndex=m[inorderElement];
+        
+        if(minIndexInLevel>levelIndex)
+        {
+            minIndexInLevel=levelIndex;
+            inorderIndex=i;
+        }
+    }
+    
+    return inorderIndex;
+    
+    
+    
+}
+
+
+Node* build(int inorder[], int levelOrder[], int start, int end,unordered_map<int,int>& m )
+{
+    
+    if(start>end)
+    {
+        return nullptr;
+    }
+    
+    int index=getIndex(inorder,levelOrder,start,end,m); //these are the elements in inorder
+    //since level has elements of each level from left to right, out of these elements
+    //in inorder whichever comes first in the level order will be the left most
+    //imp-return inorder index to separate left and right
+    
+    Node* root=new Node(inorder[index]);
+    
+    root->left=build(inorder,levelOrder,start,index-1,m);
+    
+    root->right=build(inorder,levelOrder,index+1,end,m);
+    
+    return root;
+    
+    
+}
+
+Node* buildTree(int inorder[], int levelOrder[], int iStart, int iEnd,int n)
+{
+//add code here.
+
+    unordered_map<int,int> m;
+    
+    for(int i=0;i<n;i++)
+    {
+        m[levelOrder[i]]=i;
+    }
+    
+    int start=0;
+    int end=n-1;
+    Node* root=build(inorder,levelOrder,start,end,m);
+    return root;
+
+}
