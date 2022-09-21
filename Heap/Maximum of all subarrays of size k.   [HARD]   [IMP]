@@ -10,108 +10,52 @@ https://www.youtube.com/watch?v=xFJXtB5vSmM
 4. Once u reach the window, front of deque will be max of that sub array, slide, if arr[i]=q.front() pop it
 5. j++
 
-Time:O(N), Space:O(N)
+Time:O(N), SPace:O(K)
 
+IMP- Push indexes, dont push actual element
 
-#include<iostream>
-#include<deque>
-#include<vector>
-
-using namespace std;
-
-
-void maxsub(int arr[],int n, int k)
-{
-	deque<int> q;
-	
-	int i=0,j=0;
-	vector<int> ans;
-	
-	while(j<n)
-	{
-		if(q.empty() || q.back()>=arr[j])
-		{
-			q.push_back(arr[j]);
-		}
-		else
-		{
-			while(!q.empty() && q.back()<arr[j])
-			{
-				q.pop_back();
-			}
-			q.push_back(arr[j]);
-		}
-		if(j-i+1 ==k )
-		{
-			ans.push_back(q.front());
-			
-			if(arr[i]==q.front())
-			{
-				q.pop_front();
-			}
-			i++;
-		}
-		j++;
-	}
-	
-	for(int i=0;i<ans.size();i++)
-	{
-		cout<<ans[i]<<" ";
-	}
-	
-	
-	
-}
-
-
-int main()
-{
-	int arr[] = { 12, 1, 78, 90, 57, 89, 56 };
-    int n = sizeof(arr) / sizeof(arr[0]);
-    int k = 3;
-    maxsub(arr,n,k);
-	
-	return 0;
-}
-
-
-Method 2-
-
-vector<int> max_of_subarrays(vector<int> nums, int n, int k) {
+vector <int> max_of_subarrays(int *arr, int n, int k)
+    {
         // your code here
         
-        deque<int> q;
-        
-        vector<int> result;
+        deque<int> q; //push indexes
         
         for(int i=0;i<k;i++)
         {
-            while(!q.empty() && q.back()<nums[i])
+            while(!q.empty() && arr[q.back()]<=arr[i])
             {
                 q.pop_back();
             }
-            q.push_back(nums[i]);
+            q.push_back(i);
         }
         
-        int i=0,j=k-1;
+        vector<int> ans;
+        int j=k;
         
-        while(j<nums.size())
+        
+        while(j<n)
         {
-            result.push_back(q.front());
+            ans.push_back(arr[q.front()]);
             
-            if(!q.empty() && q.front()==nums[i])
+            while(!q.empty() && q.front()<=j-k) //to keep window size as k
             {
                 q.pop_front();
             }
-            i++;
-            j++;
-            while(!q.empty() && q.back()<nums[j])
+            
+            while(!q.empty() && arr[q.back()]<=arr[j])
             {
                 q.pop_back();
             }
-            q.push_back(nums[j]);
+            q.push_back(j);
             
+            
+            
+            j++;
         }
-        //result.push_back(q.front());
-        return result;
+        
+        ans.push_back(arr[q.front()]);
+            
+            
+            return ans;
+        
     }
