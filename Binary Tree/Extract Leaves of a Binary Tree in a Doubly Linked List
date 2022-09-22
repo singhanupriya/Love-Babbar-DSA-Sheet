@@ -1,0 +1,48 @@
+Time:O(N), Space:O(H)
+
+
+Node* solve(Node* root, Node*& p)
+{
+    if(!root)
+    {
+        return nullptr;
+    }
+    
+    if(!root->left && !root->right)
+    {
+        p->right=root;
+        root->left=p;
+        p=p->right;
+        return nullptr;
+    }
+    
+    root->left=solve(root->left,p);
+    root->right=solve(root->right,p);
+    
+    return root;
+    
+}
+
+Node * convertToDLL(Node *root){
+    // add code here.
+    
+    if(!root)
+    {
+        return nullptr;
+    }
+    
+    
+    
+    Node* dummy=new Node(-1);
+    Node* p=dummy;
+    
+    root=solve(root,p);
+    p->right=nullptr;
+    
+    p=dummy->right;
+    p->left=nullptr; //in case of DLL remove dummy as prev node connection also there
+    
+    return p;
+    
+    
+}
