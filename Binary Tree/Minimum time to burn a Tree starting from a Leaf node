@@ -1,0 +1,115 @@
+https://www.youtube.com/watch?v=2r5wLmQfD6g
+
+1. We will be using BFS.
+2. If a node burns at 1 sec, its child left and right and parent will burn at 2sec, we can find left and right but for parent, we will need sometihg
+3. We will do a level order traversal and store parent of every node in a map
+4. If the node that starts burning is given we can directly use that else we need to find the node as well.
+
+Time:O(N), Space:O(N)
+
+The approach is same for any node that burns first
+
+int minTime(Node* root, int target) 
+    {
+        // Your code goes here
+        
+        Node* burnedFirst=nullptr;
+        //int totalNodes=0;
+        
+        unordered_map<Node*,Node*> nodeToParent;
+        
+        
+        queue<Node*> q;
+        q.push(root);
+        nodeToParent[root]=nullptr;
+        
+        while(!q.empty())
+        {
+            Node* curr=q.front();
+            //totalNodes++;
+            
+            if(curr->data == target)
+            {
+                burnedFirst=curr;
+            }
+            
+            q.pop();
+            
+            if(curr->left)
+            {
+                nodeToParent[curr->left]=curr;
+                q.push(curr->left);
+            }
+            
+            if(curr->right)
+            {
+                nodeToParent[curr->right]=curr;
+                q.push(curr->right);
+            }
+            
+            
+            
+        }
+        
+        
+        //here q is empty
+        //vector<bool> vis(totalNodes+1,false);
+        
+        queue<pair<Node*,int>> qTime; //<node,time>
+        unordered_map<Node*, bool> vis;
+        
+        
+        int timeTaken=0;
+        
+        qTime.push(make_pair(burnedFirst,timeTaken));
+        vis[burnedFirst]=true;
+        
+        while(!qTime.empty())
+        {
+            int len=qTime.size();
+            
+            for(int i=0;i<len;i++)
+            {
+                Node* node=qTime.front().first;
+                timeTaken=qTime.front().second;
+                
+                //cout<<timeTaken<<" ";
+                
+                qTime.pop();
+                
+                if(node->left && !vis[node->left])
+                {
+                    qTime.push(make_pair(node->left,timeTaken+1));
+                    vis[node->left]=true;
+                }
+                
+                if(node->right && !vis[node->right])
+                {
+                    qTime.push(make_pair(node->right,timeTaken+1));
+                    vis[node->right]=true;
+                }
+                
+                if(nodeToParent[node]!=nullptr && !vis[nodeToParent[node]])
+                {
+                    qTime.push(make_pair(nodeToParent[node],timeTaken+1));
+                    vis[nodeToParent[node]]=true;
+                    
+                }
+                
+                
+                
+            }
+            
+            
+            
+            
+            
+            
+        }
+        
+        
+        return timeTaken;
+        
+        
+    }
+
