@@ -1,0 +1,65 @@
+https://www.geeksforgeeks.org/print-nodes-distance-k-leaf-node/
+
+1. At every level of tree reset the value in the path and visited aray
+
+Time:O(N), Space:O(N)
+
+int height(Node* root)
+{
+    if(!root)
+    {
+        return 0;
+    }
+    
+    int left=height(root->left);
+    int right=height(root->right);
+    
+    return 1+max(left,right);
+}
+
+void solve(Node* root, int k, vector<int>& path, vector<bool>& vis, int level, int& count)
+{
+    if(!root)
+    {
+        return;
+    }
+    
+    path[level]=root->data;
+    vis[level]=false; //make it back to false when u revist, like reset
+    
+    
+    
+    if(!root->left && !root->right && level-k>=0 && !vis[level-k])
+    {
+        count++;
+        vis[level-k]=true;
+        return;
+    }
+    
+    solve(root->left,k,path,vis,level+1,count);
+    solve(root->right,k,path,vis,level+1,count);
+}
+
+int printKDistantfromLeaf(Node* root, int k)
+{
+	//Add your code here.
+	
+	if(!root)
+	{
+	    return 0;
+	}
+	
+	int level=0;
+	int count=0;
+	
+	int maxHeight=height(root);
+	
+	vector<int> path(maxHeight);
+	vector<bool> vis(maxHeight);
+	
+	solve(root,k,path,vis,level,count);
+	
+	return count;
+	
+	
+}
