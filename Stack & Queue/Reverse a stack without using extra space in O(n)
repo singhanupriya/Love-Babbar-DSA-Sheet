@@ -1,0 +1,108 @@
+https://www.geeksforgeeks.org/reverse-stack-without-using-extra-space/
+
+Time:O(N), SPace:O(1)
+
+
+#include <iostream>
+
+using namespace std;
+
+class Node{
+    
+    public:
+    int data;
+    Node* next;
+    
+    
+    Node(int x)
+    {
+        data=x;
+        next=nullptr;
+    }
+    
+};
+
+class Stack{
+    
+    Node* top;
+    
+    public:
+    
+    Stack()
+    {
+        top=nullptr;
+    }
+    
+    void push(int x)
+    {
+        if(top==nullptr)
+        {
+            top=new Node(x);
+            return;
+        }
+        
+        Node* temp=new Node(x);
+        temp->next=top;
+        top=temp;
+    }
+    
+    int pop()
+    {
+        int value=top->data;
+        Node* temp=top;
+        top=top->next;
+        delete(temp);
+        return value;
+        
+        
+    }
+    
+    void display()
+    {
+        Node* temp=top;
+        
+        while(temp)
+        {
+            cout<<temp->data<<" ";
+            temp=temp->next;
+        }
+        cout<<endl;
+    }
+    
+    void reverse()
+    {
+        Node* temp=top;
+        Node* prev=nullptr;
+        Node* next=nullptr;
+        
+        while(temp)
+        {
+            next=temp->next;
+            temp->next=prev;
+            prev=temp;
+            temp=next;
+            
+        }
+        
+        top=prev;
+    }
+    
+};
+
+int main()
+{
+    Stack* s=new Stack();
+    s->push(1);
+    s->push(2);
+    s->push(3);
+    s->push(4);
+    s->display();
+    s->reverse();
+    s->display();
+    cout<<s->pop()<<endl;
+    s->display();
+    s->reverse();
+    s->display();
+
+    return 0;
+}
