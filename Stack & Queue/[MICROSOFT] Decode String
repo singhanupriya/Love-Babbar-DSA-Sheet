@@ -1,0 +1,74 @@
+
+https://www.geeksforgeeks.org/decode-string-recursively-encoded-count-followed-substring/
+
+string decodeString(string s) {
+        
+        int len=s.length();
+        
+        stack<char> st;
+        
+        
+        
+        
+        
+        for(int i=0;i<len;i++)
+        {
+            if(s[i]==']')
+            {
+                string temp="";
+                
+                while(!st.empty() && st.top()!='[')
+                {
+                    temp=st.top()+temp;
+                    st.pop();
+                }
+                
+                //pop ]
+                st.pop();
+                //u got temp
+                //now get num
+                
+                string num="";
+                while(!st.empty() && st.top()>='0' && st.top()<='9'  )
+                {
+                    num=st.top()+num;
+                    st.pop();
+                }
+                
+                int times=stoi(num);
+                string result="";
+                
+                while(times>0)
+                {
+                    result=result+temp;
+                    times--;
+                }
+                
+                //now push all chars on the result in stack
+                
+                for(int x=0;x<result.length();x++)
+                {
+                    st.push(result[x]);
+                }
+                
+                
+            }
+            else
+            {
+                st.push(s[i]);
+            }
+            
+            
+        }
+        
+        string ans="";
+        while(!st.empty())
+        {
+            ans=st.top()+ans;
+            st.pop();
+        }
+        
+        return ans;
+        
+        
+    }
