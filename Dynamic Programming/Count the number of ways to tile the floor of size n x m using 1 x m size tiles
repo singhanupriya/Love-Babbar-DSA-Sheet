@@ -1,0 +1,67 @@
+https://www.geeksforgeeks.org/count-number-ways-tile-floor-size-n-x-m-using-1-x-m-size-tiles/
+
+Widhth will always be fulfilled bcoz it is either 1 or m(equal to width of actual tile)
+we need to check if the length can be fulfilled by 1 or m length tiles
+
+	int solve(int n, int m, vector<int>& dp)
+	{
+	    if(n==0)
+	    {
+	        return 1;
+	    }
+	    
+	    if(n<0)
+	    {
+	        return 0;
+	    }
+	    
+	    if(dp[n]!=-1)
+	    {
+	        return dp[n];
+	    }
+	    
+	    int vertical=solve(n-m,m,dp);
+	    int horizontal=solve(n-1,m,dp);
+	    return dp[n]=(vertical%1000000007 + horizontal%1000000007)%1000000007;
+	}
+	
+		int countWays(int n, int m)
+	{
+	    // Code here.
+	    
+	    vector<int> dp(n+1,-1);
+	    return solve(n,m,dp);
+	    
+	    
+	    
+	    
+	}
+  
+  Time:O(N), Space:O(N)
+  
+  int countWays(int n, int m)
+	{
+	    // Code here.
+	    
+	    vector<int> dp(n+1,0);
+	    
+	    dp[0]=1;
+	    
+	    for(int i=1;i<=n;i++)
+	    {
+	        int vertical=0;
+	        
+	        if(i-m>=0)
+	        {
+	            vertical=dp[i-m];
+	        }
+	        int horizontal=dp[i-1];
+	        
+	        dp[i]=(vertical%1000000007 +horizontal%1000000007)%1000000007;
+	    }
+	    return dp[n];
+	    
+	    
+	    
+	    
+	}
