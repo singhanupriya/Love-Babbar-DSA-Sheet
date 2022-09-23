@@ -1,6 +1,29 @@
 https://www.youtube.com/watch?v=ULUNeD0N9yI
 https://www.geeksforgeeks.org/josephus-problem-set-1-a-on-solution/
 
+https://www.youtube.com/watch?v=46zD5d9y9b4
+
+Time:O(N), Space:O(N)
+
+ int solve(int n, int k)
+    {
+        if(n==1)
+        {
+            return 0; //0 index will remain
+        }
+        
+        return (solve(n-1,k)+k)%n;
+    }
+    
+    int josephus(int n, int k)
+    {
+       //Your code here
+       
+       
+       return solve(n,k)+1; //as ans is 1 based indexing
+       
+    }
+
 Method 1:
 
 1. make a circular DLL with head as node 1, run loop (n-1)times, as n-1 ppl will be killed, traverse the node and everytime delete the kth node and 
