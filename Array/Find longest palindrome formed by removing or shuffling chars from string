@@ -1,0 +1,67 @@
+https://www.geeksforgeeks.org/find-longest-palindrome-formed-by-removing-or-shuffling-chars-from-string/
+
+Order doesnt matter her
+
+Word will be made of begin + mid+ end, begin and end will contain n char and mid will contain 1 char which has even occ.
+
+1. All chars that occ even times, half of it will occ at the begin and half at the end
+2. If a char occurs occ no of times, put its 1 occ in mid, now it has even, put half in begin and end
+
+end will be reverse of begin
+
+Time:O(N)
+
+#include <iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+int solve(string s)
+{
+    
+    vector<int> freq(26,0);
+    
+    for(int i=0;i<s.length();i++)
+    {
+        freq[s[i]-'a']++;
+    }
+    
+    string beg="",mid="";
+    
+    for(char x='a';x<='z';x++)
+    {
+        if(freq[x-'a']%2==0)
+        {
+            //if freq of a char is even, half of it will be in beg and half in end 
+            //we will just create beg and end will be reverse of that
+        
+            for(int i=0;i<freq[x-'a']/2;i++)
+            {
+                beg.push_back(x);
+            }
+        }
+        else
+        {
+            //if char freq is odd, add that 1 occ of it in middle and now it has even occ, push half in beg
+            mid=x;
+            freq[x-'a']--;
+            x--; //so that same char is evaluated again, so take the even half
+        }
+    }
+    
+    string end=beg;
+    reverse(end.begin(),end.end());
+    
+    string word=beg+mid+end;
+    
+    return word.length();
+    
+}
+
+int main()
+{
+    cout<<solve("aaaabbcccd");
+
+    return 0;
+}
