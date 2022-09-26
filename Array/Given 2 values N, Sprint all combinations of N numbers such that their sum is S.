@@ -1,0 +1,69 @@
+https://www.geeksforgeeks.org/microsoft-interview-experience-for-sde-1-hyderabad/
+
+
+Question: Given 2 values N, Sprint all combinations of N numbers such that their sum is S.
+Example: Input – N=2, S=6 
+Output : [0,6],[1,5],[2,4],[3,3],[4,2],[5,1],[6,0].
+The problem could have been simple if N = 2, but  N varies and repetitions are allowed and all combinations are allowed. 
+I solved it using a recursion approach where one number is kept constant and started filling other numbers such that sum equals S.
+
+Time:O(sum^n)
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+//Keep one number constant and try all possible variations of the next digit
+//Time: sum^n as every digit will have possibility from 0 to sum i.e. sum+1 times the no of digits
+
+void solve(int sum, int n, vector<int> temp,vector<vector<int>>& ans)
+{
+    
+    if(sum<0 || (sum==0 && n>0) || (sum>0 && n==0))
+    {
+        return;
+    }
+    
+    if(sum==0 && n==0)
+    {
+        /*
+        for(int i=0;i<temp.size();i++)
+        {
+            cout<<temp[i]<<" ";
+        }
+        */
+        //cout<<endl;
+        ans.push_back(temp);
+        return;
+    }
+    
+    for(int i=0;i<=sum;i++)
+    {
+        temp.push_back(i);
+        //cout<<temp.back()<<" ";
+        solve(sum-i,n-1,temp,ans);
+        temp.pop_back();
+    }
+    
+    
+}
+
+int main()
+{
+    vector<vector<int>> ans;
+    vector<int> temp;
+    
+    solve(6,3,temp,ans);
+    
+    for(int i=0;i<ans.size();i++)
+    {
+        for(int j=0;j<ans[i].size();j++)
+        {
+            cout<<ans[i][j]<<' ';
+        }
+        cout<<endl;
+    }
+
+    return 0;
+}
