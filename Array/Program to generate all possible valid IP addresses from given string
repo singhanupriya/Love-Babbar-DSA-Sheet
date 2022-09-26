@@ -1,0 +1,108 @@
+https://practice.geeksforgeeks.org/problems/generate-ip-addresses/1
+
+Do DP approach O(N)
+
+Time:O(2^N), at every space u have an option of putting dot or not
+
+void solve(string s, int start, int n, int level, string temp, vector<string>& ans)
+    {
+        if(level>4)
+        {
+            return;
+        }
+        
+        if(start==n && level==4) //U have to divide string into 4 parts
+        {
+            //start from index 1 as 1st index is .
+            temp=temp.substr(1);
+            ans.push_back(temp);
+            return;
+            
+        }
+        
+        
+        for(int end=start;end<=start+2 && end<n ;end++)
+        {
+            string curr=s.substr(start,end-start+1);
+            
+            if( stoi(curr)>255 || (curr[0]=='0' && curr.length()>1)  )
+            {
+                return; //06 not allowed The numbers cannot be 0 prefixed unless they are 0.
+            }
+            
+            //else add in the temp
+            solve(s,end+1,n,level+1,temp+"."+curr,ans);
+            
+            
+        }
+        
+    }
+  
+    vector<string> genIp(string &s) {
+        // Your code here
+        int n=s.length();
+        string temp="";
+        vector<string> ans;
+        
+        solve(s,0,n,0,temp,ans);
+        
+        return ans;
+        
+    }
+    
+    
+    Method 2:
+    https://www.youtube.com/watch?v=g1SOXwvSqe4&t=697s
+    
+    1. Let space between index 0 and 1 be 0, bw 1 and 2 be 1 ans so on.
+    2. U can put first dot from space index 0 to len-4, so for for 2nd dot and 3rd dot
+    4. If the 4 substrings formed are valid , add them to ans
+    
+    Time:O(N^4)
+    
+    bool isValid(string x)
+    {
+        int n=x.length();
+        
+        if(n==0 || n>3 || stoi(x)>255 || (x[0]=='0' && x.length()>1))
+        {
+            return false;
+        }
+        return true;
+        
+        
+    }
+  
+  
+    vector<string> genIp(string &s) {
+        // Your code here
+        
+        vector<string> ans;
+        int n=s.length();
+        
+        for(int i=0;i<n-3;i++)
+        {
+            for(int j=i+1;j<n-2;j++)
+            {
+                for(int k=j+1;k<n-1;k++)
+                {
+                    
+                    string a=s.substr(0,i+1);
+                    string b=s.substr(i+1,j-i);
+                    string c=s.substr(j+1,k-j);
+                    string d=s.substr(k+1);
+                    
+                    if(isValid(a) && isValid(b) && isValid(c) && isValid(d))
+                    {
+                        string temp=a+"."+b+"."+c+"."+d;
+                        ans.push_back(temp);
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+        return ans;
+        
+    }
