@@ -1,0 +1,41 @@
+https://www.geeksforgeeks.org/reduce-the-array-such-that-each-element-appears-at-most-2-times/
+
+Time:O(N), Space:O(1)
+
+#include <iostream>
+
+using namespace std;
+
+void solve(int arr[], int n)
+{
+    int index=2;
+    int i=2;
+    while(i<n)
+    {
+        
+        if( arr[i]!=arr[index-2])
+        {
+            
+            arr[index]=arr[i];
+            
+            index++;
+            
+        }
+        i++;
+    }
+    
+    for(int i=0;i<index;i++)
+    {
+        cout<<arr[i]<<" ";
+    }
+}
+
+int main()
+{
+    int arr[]={1,2,2,2,3,3,3,4,4};
+    int n=9;
+    
+    solve(arr,n);
+
+    return 0;
+}
