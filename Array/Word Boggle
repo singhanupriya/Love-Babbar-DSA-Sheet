@@ -1,0 +1,97 @@
+https://www.geeksforgeeks.org/boggle-set-2-using-trie/
+https://leetcode.com/problems/word-search-ii/discuss?currentPage=2&orderBy=hot&query=
+
+See trie approarch also
+
+DFS
+
+Time:??? o(N*8^(r*c))
+
+Very imp://u cannot return from here bcoz u need to change back the
+                //char at this from # to whatever as u need to check for the remaining words in dict
+
+bool dfs(vector<vector<char> >& board, string &s, int i, int j, int n, int m, int idx, int dirx[], int diry[]){
+        
+       if(i<0 || i>=n||j<0||j>=m){
+           return false;
+       }
+        
+       if(s[idx]!= board[i][j]){
+           return false;
+       }
+       if(idx == s.size()-1){
+           return true;
+       }
+        
+       char temp = board[i][j];
+       board[i][j]='*';
+       
+       bool flag=false;
+       
+       
+       for(int x=0;x<8;x++)
+        {
+            
+            if(dfs(board,s,i+dirx[x],j+diry[x],n,m,idx+1,dirx,diry))
+            {
+                flag=true; //u cannot return from here bcoz u need to change back the
+                //char at this from # to whatever as u need to check for the remaining words in dict
+                
+            }
+            if(flag)
+            {
+                break;
+            }
+            
+            
+            
+        }
+        
+       
+        
+       board[i][j]=temp; //restoring char
+       return flag;
+        
+        
+   }
+
+	vector<string> wordBoggle(vector<vector<char> >& board, vector<string>& dictionary) {
+	    // Code here
+	    
+	    set<string> ans;
+	    
+	    int row=board.size();
+	    int col=board[0].size();
+	    
+	    int dirx[8]={-1,-1,0,1,1,1,0,-1};
+       int diry[8]={0,1,1,1,0,-1,-1,-1};
+	    
+	    for(int i=0;i<dictionary.size();i++)
+	    {
+	        string word=dictionary[i];
+	        int len=word.length();
+	        
+	        vector<vector<bool>> vis(row,vector<bool> (col,false));
+	        
+	        for(int r=0;r<row;r++)
+	        {
+	            for(int c=0;c<col;c++)
+	            {
+	                if(dfs(board,word,r,c,row,col,0,dirx,diry))
+	                {
+	                    ans.insert(word);
+	                }
+	            }
+	        }
+	    }
+	    vector<string> result;
+	    
+	    for(auto it:ans)
+	    {
+	        result.push_back(it);
+	    }
+	    
+	    
+	    return result;
+	    
+	}
