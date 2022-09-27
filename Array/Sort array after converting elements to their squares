@@ -1,0 +1,54 @@
+https://www.geeksforgeeks.org/sort-array-converting-elements-squares/
+
+Time:O(N), Space:O(N)
+
+#include <iostream>
+
+using namespace std;
+
+void solve(int arr[], int n)
+{
+    //both + and - nos have same square, we can use merge sort logic to merge array
+    //largest elements will be at the end, we will start filling from last index
+    
+    int start=0;
+    int end=n-1;
+    
+    int* temp=new int[n];
+    int index=n-1;
+    
+    while(start<=end)
+    {
+        if(abs(arr[start])>=abs(arr[end]))
+        {
+            temp[index]=arr[start]*arr[start];
+            start++;
+            index--;
+        }
+        else
+        {
+            temp[index]=arr[end]*arr[end];
+            end--;
+            index--;
+        }
+    }
+    
+    
+    for(int i=0;i<n;i++)
+    {
+        arr[i]=temp[i];
+        cout<<arr[i]<<" ";
+    }
+    
+    
+}
+
+int main()
+{
+    int arr[]={-5, -4, -2, 0, 1};
+    int n=5;
+    
+    solve(arr,n);
+
+    return 0;
+}
