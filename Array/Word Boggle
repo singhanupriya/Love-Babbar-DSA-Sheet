@@ -5,7 +5,7 @@ See trie approarch also
 
 DFS
 
-Time:??? o(N*r*c*(8^LEN))
+no_of_word×(m×n×8^(sum_of_lengths_of_all_words))
 
 Very imp://u cannot return from here bcoz u need to change back the
                 //char at this from # to whatever as u need to check for the remaining words in dict
@@ -100,17 +100,14 @@ bool dfs(vector<vector<char> >& board, string &s, int i, int j, int n, int m, in
 	
 Method 2: 	Trie approach:
 	https://www.youtube.com/watch?v=EmvsBM7o-5k
-
+https://leetcode.com/problems/word-search-ii/discuss/2600101/C%2B%2B-or-DFS-%2B-Trie-or-O(M*N*4(word_length))
 
 
 1. Store all dict words in trie
 2. Traverse the matrix and see if that char is present in trie if yes, check if all four directrioj of the word is present in trie
 3. IN case u reach end of word add to ans
 	
-	Time complexity: O(4^(N^2)). 
-Even after applying trie the time complexity remains same. For every cell there are 4 directions and there are N^2 cells. So the time complexity is O(4^(N^2)).
-Auxiliary Space: O(N^2). 
-The maximum length of recursion can be N^2, where N is the side of the matrix. So the space Complexity is O(N^2).
+	m×n×8^(sum_of_lengths_of_all_words)
 	
 	class Trie{
     
