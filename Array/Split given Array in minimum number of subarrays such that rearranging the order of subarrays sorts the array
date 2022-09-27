@@ -1,0 +1,46 @@
+https://www.geeksforgeeks.org/split-given-array-in-minimum-number-of-subarrays-such-that-rearranging-the-order-of-subarrays-sorts-the-array/
+
+Time:O(Nlogn), Space:O(N)
+
+#include <iostream>
+#include<vector>
+#include<unordered_map>
+#include<algorithm>
+
+using namespace std;
+
+int solve(vector<int> arr)
+{
+    vector<int> temp=arr;
+    int n=arr.size();
+    sort(temp.begin(),temp.end());
+    
+    unordered_map<int,int> m; //element,index in orignal array
+    
+    int count=0;
+    
+    for(int i=0;i<n-1;i++)
+    {
+        int currElement=temp[i];
+        int nextElement=temp[i+1];
+        
+        int currIndex=m[currElement];
+        
+        if(currIndex==n-1 || arr[currIndex+1]!=nextElement)
+        {
+            count++;
+        }
+        
+    }
+    
+    return count+1;
+}
+
+int main()
+{
+    vector<int> arr{1, -4, 0, -2};
+    
+    cout<<solve(arr);
+    
+    return 0;
+}
