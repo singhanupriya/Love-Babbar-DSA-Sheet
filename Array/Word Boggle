@@ -5,7 +5,7 @@ See trie approarch also
 
 DFS
 
-Time:??? o(N*8^(r*c))
+Time:??? o(N*r*c*(8^LEN))
 
 Very imp://u cannot return from here bcoz u need to change back the
                 //char at this from # to whatever as u need to check for the remaining words in dict
@@ -93,5 +93,147 @@ bool dfs(vector<vector<char> >& board, string &s, int i, int j, int n, int m, in
 	    
 	    
 	    return result;
+	    
+	}
+	
+	
+	
+Method 2: 	Trie approach:
+	https://www.youtube.com/watch?v=EmvsBM7o-5k
+
+
+
+1. Store all dict words in trie
+2. Traverse the matrix and see if that char is present in trie if yes, check if all four directrioj of the word is present in trie
+3. IN case u reach end of word add to ans
+	
+	Time:O(M*N*4^(len))
+	
+	Space:O(LEN*W)
+	
+	class Trie{
+    
+    public:
+    Trie* children[256];
+    bool endOfWord;
+    string finalWord;
+    
+    Trie()
+    {
+        for(int i=0;i<256;i++)
+        {
+            children[i]=nullptr;
+        }
+        endOfWord=false;
+        finalWord="";
+    }
+    
+};
+
+class Solution {
+public:
+    Trie* root=new Trie();
+
+    void insert( string word)
+    {
+        Trie* curr=root;
+        
+        int len=word.length();
+        
+        for(int i=0;i<len;i++)
+        {
+            int index=word[i]-'A';
+            
+            if(curr->children[index]==nullptr)
+            {
+                
+                curr->children[index]=new Trie();
+            }
+            
+            curr=curr->children[index];
+            
+        }
+        
+        curr->endOfWord=true;
+        curr->finalWord=word;
+    }
+    
+    
+    void solve(int i, int j, int row, int col, vector<vector<char> >& board, Trie* node, int dirx[], int diry[], vector<string>& ans)
+    {
+        int index=board[i][j]-'A';
+        
+        if(node->children[index]==nullptr || board[i][j]=='$')
+        {
+            return;
+        }
+        
+        
+        
+        //means that letter exists in trie
+        char temp=board[i][j];
+        node=node->children[index];
+        
+        if(node->endOfWord)
+        {
+            ans.push_back(node->finalWord);
+            node->endOfWord=false; //so that it is not counted again
+            //return;
+        }
+        
+        
+        
+        
+        board[i][j]='$';
+        
+        for(int x=0;x<8;x++)
+        {
+            if(i+dirx[x]>=0 && i+dirx[x]<row && j+diry[x]>=0 && j+diry[x]<col)
+            {
+                solve(i+dirx[x],j+diry[x],row,col,board,node,dirx,diry,ans);
+            }
+            
+        }
+        
+        board[i][j]=temp;
+        
+    }
+
+	vector<string> wordBoggle(vector<vector<char> >& board, vector<string>& dictionary) {
+	    // Code here
+	    
+	    
+	    
+	    for(int i=0;i<dictionary.size();i++)
+	    {
+	        insert(dictionary[i]);
+	    }
+	    
+	    vector<string> ans;
+	    
+	    int row=board.size();
+	    int col=board[0].size();
+	    
+	     int dirx[]={-1,-1,0,1,1,1,0,-1};
+       int diry[]={0,1,1,1,0,-1,-1,-1};
+	    
+	    for(int i=0;i<row;i++)
+	    {
+	        for(int j=0;j<col;j++)
+	        {
+	            
+	            solve(i,j,row,col,board,root,dirx,diry,ans);
+	            
+	        }
+	    }
+	    
+	   sort(ans.begin(),ans.end());
+	    
+	    
+	    return ans;
+	    
+	    
+	    
+	    
 	    
 	}
