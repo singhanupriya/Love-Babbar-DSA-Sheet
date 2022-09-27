@@ -176,7 +176,9 @@ public:
         {
             ans.push_back(node->finalWord);
             node->endOfWord=false; //so that it is not counted again
-            //return;
+            //return;  VIMP- dont put return one word might be ending at this point there can be one more word with these letters
+	    
+	    //like geek and geeks
         }
         
         
