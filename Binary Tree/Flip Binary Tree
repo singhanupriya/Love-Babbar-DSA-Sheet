@@ -1,0 +1,143 @@
+https://www.geeksforgeeks.org/flip-binary-tree/
+
+Time:O(N), Space:O(H)
+
+#include <iostream>
+#include<unordered_map>
+
+using namespace std;
+
+class Node{
+    
+    public:
+    
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int x)
+    {
+        data=x;
+        left=nullptr;
+        right=nullptr;
+    }
+    
+};
+
+
+Node* build(Node* temp, unordered_map<Node*,Node*>& parent)
+{
+    
+    //if temp is the key then only add it bcoz root is not counted in left most nodes
+    
+    if(!temp)
+    {
+        return nullptr;
+    }
+    
+    if(parent.find(temp)==parent.end()) //this will be root of the orignal tree
+    {
+        temp->left=nullptr;
+        temp->right=nullptr;
+        return temp;
+    }
+    
+    
+    temp->left=parent[temp]->right;
+    temp->right=parent[temp];
+    
+    
+    build(parent[temp],parent);
+    
+    return temp;
+}
+
+Node* solve(Node* root)
+{
+    if(!root || !root->left)
+    {
+        return root;
+    }
+    
+    Node* temp=root;
+    
+    unordered_map<Node*,Node*> parent;
+    
+    while(temp->left)
+    {
+        parent[temp->left]=temp;
+        temp=temp->left;
+    }
+    
+    //temp will point to the left most node
+    
+    Node* curr=build(temp,parent);
+    
+    return curr;
+}
+
+void inorder(Node* root)
+{
+    if(root)
+    {
+        inorder(root->left);
+        cout<<root->data<<" ";
+        inorder(root->right);
+    }
+}
+
+int main()
+{
+    
+    Node* one=new Node(1);
+    Node* two=new Node(2);
+    Node* three=new Node(3);
+    Node* four=new Node(4);
+    Node* five=new Node(5);
+    Node* six=new Node(6);
+    Node* seven=new Node(7);
+    
+    one->left=two;
+    one->right=three;
+    
+    two->left=four;
+    two->right=five;
+    
+    three->left=six;
+    three->right=seven;
+    
+    
+    inorder(one);
+    
+    cout<<endl;
+    Node* curr=solve(one);
+    cout<<endl;
+    inorder(curr);
+
+    return 0;
+}
+
+medthod 2:
+
+No need to use any space
+
+Node* flipBinaryTree(Node* root)
+{
+    // Base cases
+    if (root == NULL)
+        return root;
+    if (root->left == NULL && root->right == NULL)
+        return root;
+ 
+    //  recursively call the same method
+    Node* flippedRoot = flipBinaryTree(root->left);
+ 
+    //  rearranging main root Node after returning
+    // from recursive call
+    root->left->left = root->right;
+    root->left->right = root;
+    root->left = root->right = NULL;
+ 
+    return flippedRoot;
+}
+ 
