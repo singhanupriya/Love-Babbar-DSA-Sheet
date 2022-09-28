@@ -1,0 +1,35 @@
+https://practice.geeksforgeeks.org/problems/length-of-the-longest-substring3036/1
+
+Dont use map will cause TLE. m.size() is O(N) so it makes it O(N^2)
+
+Use vector instead
+
+Time:O(N), Space:O(1)
+
+
+int longestUniqueSubsttr(string S){
+        //code
+        
+        int ans=0;
+        int start=0,end=0;
+        int len=S.length();
+        
+        vector<int> freq(26,0);
+        
+        while(end<len)
+        {
+            freq[S[end]-'a']++;
+            
+            while(freq[S[end]-'a']>1 && start<=end)
+            {
+                freq[S[start]-'a']--;
+                start++;
+            }
+            
+            ans=max(ans,end-start+1);
+            end++;
+        }
+        
+        return ans;
+        
+    }
