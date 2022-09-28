@@ -1,4 +1,61 @@
 https://www.geeksforgeeks.org/reverse-a-list-in-groups-of-given-size/
+Another variation: https://leetcode.com/problems/reverse-nodes-in-k-group/
+
+
+Iterative:
+
+Time:O(N), Space:O(1)
+
+ struct node *reverse (struct node *head, int k)
+    { 
+        // Complete this method
+        
+        node* dummy=new node(0);
+        dummy->next=head;
+        
+        int count=0;
+        node* temp=head;
+        
+        while(temp)
+        {
+            count++;
+            temp=temp->next;
+        }
+        
+        node* curr=dummy;
+        node* prev=dummy;
+        node* next=dummy;
+        
+        while(count>0)
+        {
+            
+            curr=prev->next;
+            next=curr->next;
+            
+            int loop= count>=k ? k : count;
+            
+            for(int i=1;i<loop;i++)
+            {
+                curr->next=next->next;
+                next->next=prev->next;
+                prev->next=next;
+                next=curr->next;
+                
+                
+                
+            }
+            
+            prev=curr;
+            count=count-loop;
+            
+            
+            
+        }
+        
+        return dummy->next;
+        
+        
+    }
 
 rev(head,k)
 1. Use iterative reversal with counter.
