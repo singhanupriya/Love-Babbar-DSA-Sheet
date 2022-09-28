@@ -1,0 +1,107 @@
+
+https://www.geeksforgeeks.org/find-a-pair-with-given-sum-in-bst/
+
+Time:O(N), Space:O(H)
+
+
+int isPairPresent(struct Node *root, int target)
+    {
+    //add code here.
+        stack<Node*> s1; //inorder
+        stack<Node*> s2; //rev inroder
+        
+        Node* curr1=root;
+        Node* curr2=root;
+        
+        bool done1=false;
+        bool done2=false;
+        
+        int val1=0,val2=0;
+        
+        while(1)
+        {
+            
+            while(done1==false)
+            {
+                if(curr1)
+                {
+                    s1.push(curr1);
+                    curr1=curr1->left;
+                }
+                else
+                {
+                    if(s1.empty())
+                    {
+                        done1=true;
+                    }
+                    else
+                    {
+                        curr1=s1.top();
+                        s1.pop();
+                        val1=curr1->data;
+                        curr1=curr1->right;
+                        done1=true;
+                    }
+                }
+                
+                
+            }
+            
+            
+            while(done2==false)
+            {
+                if(curr2)
+                {
+                    s2.push(curr2);
+                    curr2=curr2->right;
+                }
+                else
+                {
+                    if(s2.empty())
+                    {
+                        done2=true;
+                    }
+                    else
+                    {
+                        curr2=s2.top();
+                        s2.pop();
+                        val2=curr2->data;
+                        curr2=curr2->left;
+                        done2=true;
+                    }
+                }
+                
+                
+            }
+            
+            if((val1!=val2) && val1+val2== target)
+            {
+                return true; //as bst no duplicates
+            }
+            
+            else if(val1+ val2 > target)
+            {
+                done2=false; //need next in rev inorder traversal
+            }
+            else if(val1 + val2 <target)
+            {
+                done1=false;
+            }
+            
+            //this will not be a part of if else loop else this will never get execited
+            if(val1 >= val2)
+            {
+                return false; //no pair found
+            }
+            
+            
+            
+            
+            
+            
+        }
+        
+        return false;
+    
+    
+    }
