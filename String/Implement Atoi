@@ -1,0 +1,40 @@
+https://practice.geeksforgeeks.org/problems/implement-atoi/1
+
+
+int atoi(string str) {
+        //Your code here
+        
+        int n=str.length();
+        
+        int digit=0;
+        
+        bool flag=false;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(i==0 && str[i]=='-')
+            {
+                flag=true;
+                continue;
+            }
+            else if(str[i]>='0' && str[i]<='9')
+            {
+                int num=str[i]-'0';
+                digit=10*digit + num;
+            }
+            else
+            {
+                return -1;
+            }
+            
+            
+            
+            
+        }
+        
+        if(flag)
+        {
+            return (-1)*digit;
+        }
+        return digit;
+    }
