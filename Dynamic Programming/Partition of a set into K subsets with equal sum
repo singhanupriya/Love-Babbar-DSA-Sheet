@@ -1,0 +1,63 @@
+
+
+https://www.geeksforgeeks.org/partition-set-k-subsets-equal-sum/
+https://leetcode.com/problems/partition-to-k-equal-sum-subsets/discuss/2259735/C%2B%2B-or-2-Backtracking-solutions-or-O(kn)-or-O(2(kn))-or-Time-Complexity-or-Notes
+
+Time:o(2^(kn)), depth of tree=kn, choose and not choose
+Space"O(KN)+O(N)
+
+bool solve(int a[],int n, vector<bool>& vis, int target, int currSum, int index, int k)
+    {
+        
+        if(k==0)
+        {
+            return true;
+        }
+        
+        if(currSum==target)
+        {
+            return solve(a,n,vis,target,0,0,k-1);
+        }
+        
+        for(int j=index;j<n;j++)
+        {
+            if(vis[j] || currSum+a[j]>target )
+            {
+                continue;
+            }
+            
+            vis[j]=true;
+            
+            if(solve(a,n,vis,target,currSum+a[j],j+1,k))
+            {
+                return true;
+            }
+            
+            vis[j]=false;
+        }
+        
+        return false;
+        
+    }
+  
+    bool isKPartitionPossible(int a[], int n, int k)
+    {
+         //Your code here
+         
+         int sum=0;
+         for(int i=0;i<n;i++)
+         {
+             sum=sum+a[i];
+         }
+         
+         if(sum%k!=0 || (n<k))
+         {
+             return false;
+         }
+         
+         vector<bool> vis(n,false);
+         
+         int target=sum/k;
+         
+         return solve(a,n,vis,target,0,0,k);
+    }
