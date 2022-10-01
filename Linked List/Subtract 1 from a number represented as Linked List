@@ -1,0 +1,99 @@
+https://www.geeksforgeeks.org/subtract-1-from-a-number-represented-as-linked-list/
+
+Time:O(N), Space:O(N) recursion stack
+
+#include <iostream>
+
+using namespace std;
+
+class Node{
+    public:
+    
+    int data;
+    Node* next;
+    
+    Node(int x)
+    {
+        data=x;
+        next=nullptr;
+    }
+};
+
+Node* solve(Node* head, int& carry)
+{
+    if(!head)
+    {
+        return nullptr;
+    }
+    
+    if(!head->next)
+    {
+        if(head->data >=1)
+        {
+            head->data=head->data-1;
+            carry=0;
+            
+        }
+        else
+        {
+            head->data=9;
+            carry=1;
+            
+        }
+        return head;
+    }
+    
+    
+    head->next=solve(head->next,carry);
+    
+    if(carry==1)
+    {
+        if(head->data >= 1)
+        {
+            head->data=head->data-1;
+            carry=0;
+        }
+        else
+        {
+            head->data=9;
+            carry=1;
+        }
+    }
+    
+    return head;
+    
+}
+
+void print(Node* head)
+{
+    Node* curr=head;
+    while(curr)
+    {
+        cout<<curr->data<<" ";
+        curr=curr->next;
+    }
+    
+    cout<<endl;
+}
+
+int main()
+{
+    Node* head=new Node(1);
+    Node* two=new Node(1);
+    Node* three=new Node(0);
+    Node* four=new Node(0);
+    
+    head->next=two;
+    two->next=three;
+    three->next=four;
+    
+    print(head);
+    
+    int carry=0;
+    head=solve(head,carry);
+    print(head);
+    
+    
+
+    return 0;
+}
