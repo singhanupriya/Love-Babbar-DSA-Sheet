@@ -1,0 +1,115 @@
+https://www.geeksforgeeks.org/maximum-distance-between-peaks-in-given-linked-list/
+
+Time:O(N), Space:O(1)
+
+
+#include <iostream>
+
+using namespace std;
+
+class Node{
+    
+    public:
+    
+    int data;
+    Node* next;
+    
+    Node(int x,Node* prev)
+    {
+        data=x;
+        next=prev;
+    }
+    
+};
+
+int solve(Node* head)
+{
+    
+    if(!head || !head->next)
+    {
+        return 0;
+    }
+    
+    Node* prev=new Node(-1,head);
+    
+    
+    Node* curr=head;
+    int lastIndex=-1;
+    int currIndex=0;
+    
+    int maxGap=0;
+    
+    while(curr)
+    {
+        
+        Node* next=curr->next;
+        
+        //if first node peak;
+        if(prev->next==head && curr->data > next->data)
+        {
+            lastIndex=currIndex;
+        }
+        else if(next==nullptr && curr->data > prev->data)
+        {
+            //last node is peak
+            
+            if(lastIndex==-1)
+            {
+                lastIndex=currIndex;
+            }
+            else
+            {
+                int gap=currIndex-lastIndex-1;
+                maxGap=max(maxGap,gap);
+                lastIndex=currIndex;
+            }
+            
+            
+        }
+        else if(prev->data < curr->data && curr->data > next->data)
+        {
+            //intermediate node is peak
+            if(lastIndex==-1)
+            {
+                lastIndex=currIndex;
+            }
+            else
+            {
+                int gap=currIndex-lastIndex-1;
+                maxGap=max(maxGap,gap);
+                lastIndex=currIndex;
+            }
+        }
+        
+        currIndex++;
+        prev=prev->next;
+        curr=curr->next;
+        
+        
+        
+    }
+    
+    return maxGap;
+    
+    
+}
+
+int main()
+{
+     Node* head = new Node(1, NULL);
+    head->next = new Node(3, NULL);
+    head->next->next = new Node(1, NULL);
+    head->next->next->next = new Node(1, NULL);
+    head->next->next->next->next = new Node(1, NULL);
+    head->next->next->next->next->next = new Node(1, NULL);
+    head->next->next->next->next->next->next
+        = new Node(4, NULL);
+    head->next->next->next->next->next->next->next
+        = new Node(2, NULL);
+    head->next->next->next->next->next->next->next->next
+        = new Node(7, NULL);
+    
+    cout<<solve(head);
+
+    return 0;
+}
