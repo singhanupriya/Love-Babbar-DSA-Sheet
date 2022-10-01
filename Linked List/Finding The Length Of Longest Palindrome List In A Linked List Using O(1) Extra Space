@@ -1,0 +1,68 @@
+https://www.geeksforgeeks.org/cpp-program-for-finding-the-length-of-longest-palindrome-list-in-a-linked-list-using-o1-extra-space/
+
+Time:O(N^2), Space:O(1)
+
+
+int countNodes(Node* first,Node* second)
+{
+    int count=0;
+    
+    while(first && second)
+    {
+        if(first->data == second->data)
+        {
+            count++;
+        }
+        else
+        {
+            break;
+        }
+        
+        first=first->next;
+        second=second->next;
+    }
+    
+    return count;
+    
+}
+
+int maxPalindrome(Node *head)
+{
+    //Your code here
+    
+    
+    if(!head)
+    {
+        return 0;
+    }
+    
+    if(!head->next)
+    {
+        return 1;
+    }
+    
+    Node* curr=head;
+    Node* prev=nullptr;
+    Node* next=nullptr;
+    
+    int maxLength=0;
+    
+    
+    while(curr)
+    {
+        next=curr->next;
+        curr->next=prev;
+        
+        //if odd length LL, curr is the middle element
+        maxLength=max(maxLength, 2*countNodes(prev,next)+1);
+        
+        //if even length LL
+        maxLength=max(maxLength, 2*countNodes(curr,next));
+        
+        prev=curr;
+        curr=next;
+        
+        
+    }
+    
+    return maxLength;
