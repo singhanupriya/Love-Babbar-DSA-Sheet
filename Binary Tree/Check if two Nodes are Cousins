@@ -1,0 +1,87 @@
+https://practice.geeksforgeeks.org/problems/check-if-two-nodes-are-cousins/1
+
+Time:O(N), Space:O(N)
+
+
+bool isCousins(Node *root, int a, int b)
+{
+   //add code here.
+   queue<Node*> q;
+   q.push(root);
+   
+   int level=0;
+   
+   int level1=-1;
+   int level2=-1;
+   int parent1=-1;
+   int parent2=-1;
+   
+   bool found=false;
+   
+   while(!q.empty())
+   {
+       int len=q.size();
+       
+       for(int i=0;i<len;i++)
+       {
+           Node* curr=q.front();
+           q.pop();
+           
+           if(curr->data == a)
+           {
+               level1=level;
+               found=true;
+           }
+           
+           if(curr->data ==b)
+           {
+               level2=level;
+               found=true;
+           }
+           
+           if(curr->left)
+           {
+               if(curr->left->data == a)
+               {
+                   parent1=curr->data;
+               }
+               else if(curr->left->data ==b)
+               {
+                   parent2=curr->data;
+               }
+               q.push(curr->left);
+           }
+           
+           if(curr->right)
+           {
+               if(curr->right->data == a)
+               {
+                   parent1=curr->data;
+               }
+               else if(curr->right->data ==b)
+               {
+                   parent2=curr->data;
+               }
+               q.push(curr->right);
+           }
+       }
+       
+       level++;
+       if(found)
+       {
+           break;
+       }
+       
+       
+   }
+   
+   
+   if(level1==level2 && parent1!=parent2)
+   {
+       return true;
+   }
+   
+   return false;
+   
+   
+}
