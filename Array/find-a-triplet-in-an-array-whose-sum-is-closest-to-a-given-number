@@ -1,0 +1,64 @@
+https://www.geeksforgeeks.org/find-a-triplet-in-an-array-whose-sum-is-closest-to-a-given-number/
+
+Time:O(NlogN+N^2)
+Space:O(1)
+
+int threeSumClosest(vector<int> arr, int target) {
+        // Your code goes here
+        
+        int n=arr.size();
+        int minDiff=INT_MAX;
+        int sum=INT_MIN;
+        
+        sort(arr.begin(),arr.end());
+        
+        for(int first=0;first<n-2;first++)
+        {
+            
+            int low=first+1;
+            int high=n-1;
+            
+           
+            
+            while(low<high)
+            {
+                int currSum=arr[low]+arr[high]+arr[first];
+                
+                int diff=abs(target-currSum);
+                
+                if(diff < minDiff)
+                {
+                    minDiff=diff;
+                    sum=currSum;
+                }
+                else if(diff==minDiff)
+                {
+                    sum=max(sum,currSum);
+                }
+                
+                if(currSum==target)
+                {
+                    low++;
+                    high--;
+                    
+                    
+                    
+                }
+                else if(currSum > target)
+                {
+                    high--;
+                }
+                else
+                {
+                    low++;
+                }
+            
+            
+                
+            }
+        }
+        
+        return sum;
+        
+        
+    }
