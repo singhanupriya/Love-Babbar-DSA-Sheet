@@ -1,0 +1,229 @@
+https://practice.geeksforgeeks.org/problems/subtraction-in-linked-list/1
+
+Edge cases:
+1. if both nos ans, ans should be 0
+2. Ans should not have leading 0's
+3. l1 and l2 can have leading 0's
+4. Finf the smaller LL, and pad 0's at front so that length of both LL is same.
+5. Now subract, remove leading 0's from ans, if full ans is 0, u shoul return one node with 0
+
+Time:O(N), Space:O(1)
+
+
+
+Node* subtract(Node* head1, Node* head2, int& carry)
+{
+    if(!head1 && !head2)
+    {
+        return nullptr;
+    }
+    
+    if(!head1->next && !head2->next)
+    {
+        Node* rest;
+        int value;
+        if(head1->data >= head2->data)
+        {
+            value=head1->data - head2->data;
+            carry=0;
+        }
+        else
+        {
+            value=head1->data +10 - head2->data;
+            carry=1;
+            
+        }
+        
+        rest=new Node(value);
+        return rest;
+    }
+    
+    Node* next=subtract(head1->next,head2->next,carry);
+    int value;
+    
+    int first=head1->data;
+    int second=head2->data;
+    
+    if(carry==1)
+    {
+        if(first==0)
+        {
+            value=9-second;
+            carry=1;
+        }
+        else
+        {
+            first=first-1;
+            if(first >= second)
+            {
+                value=first-second;
+                carry=0;
+            }
+            else
+            {
+                value=10+first-second;
+                carry=1;
+            }
+            
+            
+            
+        }
+    }
+    else if(carry==0)
+    {
+        if(first >= second)
+        {
+            value=first-second;
+            carry=0;
+        }
+        else
+        {
+            value=first+10-second;
+            carry=1;
+            
+        }
+    }
+    
+    Node* prev=new Node(value);
+    prev->next=next;
+    
+    return prev;
+    
+}
+
+Node* padZeros(Node* head, int count)
+{
+    while(count>0)
+    {
+        Node* temp=new Node(0);
+        temp->next=head;
+        head=temp;
+        count--;
+    }
+    
+    return head;
+}
+
+int getLength(Node* head)
+{
+    Node* curr=head;
+    int count=0;
+    
+    while(curr)
+    {
+        count++;
+        curr=curr->next;
+        
+    }
+    
+    return count;
+}
+
+
+Node* subLinkedList(Node* l1, Node* l2)
+{
+    //Your code here
+    
+    if(!l1 && !l2)
+    {
+        return nullptr;
+    }
+    
+    if(!l1)
+    {
+        return l2;
+    }
+    
+    if(!l2)
+    {
+        return l1;
+    }
+    
+    //l1 and l2 can have leading 0's as well
+    
+    Node* one=l1;
+    Node* two=l2;
+    
+    //if all nodes are 0, we need one node left
+    while(one && one->next && one->data==0)
+    {
+        one=one->next;
+    }
+    
+    l1=one;
+    
+    //if all nodes are 0, we need one node left
+    while(two && two->next && two->data==0)
+    {
+        two=two->next;
+    }
+    
+    l2=two;
+    
+    int len1=getLength(l1);
+    int len2=getLength(l2);
+    int carry=0;
+    
+    bool first=false; //l1 is largest
+    bool second=false; //l2 is largest
+    
+    Node* newHead=nullptr;
+    
+    if(len1>len2)
+    {
+        l2=padZeros(l2,len1-len2);
+        newHead=subtract(l1,l2,  carry);
+    }
+    else if(len2 > len1)
+    {
+        l1=padZeros(l1,len2-len1);
+        newHead=subtract(l2,l1,carry);
+    }
+    else
+    {
+        Node* curr1=l1;
+        Node* curr2=l2;
+        
+        while(curr1 && curr2)
+        {
+            if(curr1->data > curr2->data)
+            {
+                first=true;
+                break;
+            }
+            else if(curr2->data > curr1->data )
+            {
+                second=true;
+                break;
+            }
+            
+            curr1=curr1->next;
+            curr2=curr2->next;
+        }
+        
+        if(first)
+        {
+            newHead=subtract(l1,l2, carry);
+        }
+        else
+        {
+            newHead=subtract(l2,l1, carry);
+        }
+    }
+    
+    
+    Node* curr=newHead;
+    
+    //remove trailing zeros OR if all nodes in ans is 0, return one node with 0 value hence curr->next
+    while(curr && curr->next && curr->data==0)
+    {
+        curr=curr->next;
+    }
+    
+    
+    return curr;
+    
+    
+    
+    
+}
