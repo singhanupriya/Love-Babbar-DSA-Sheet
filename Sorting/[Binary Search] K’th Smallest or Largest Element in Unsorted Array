@@ -1,0 +1,57 @@
+https://www.geeksforgeeks.org/kth-smallestlargest-element-unsorted-array/
+
+Time:O(N) + O(log(low-high)*N), where low be minimum and high be maximum.
+Space:O(1)
+
+
+int findCount(int element, int arr[], int n)
+    {
+        int count=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(arr[i]<=element)
+            {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+    
+    int kthSmallest(int arr[], int l, int r, int k) {
+        //code here
+        
+        int low=INT_MAX;
+        int high=INT_MIN;
+        
+        int n=r+1;
+        
+        for(int i=0;i<n;i++)
+        {
+            low=min(low,arr[i]); //lowest no in array
+            high=max(high,arr[i]); //highest num in array
+        }
+        
+        int ans=-1;
+        
+        while(low<=high)
+        {
+            int mid=low+(high-low)/2; //possible ans
+            
+            int count=findCount(mid,arr,n);
+            
+            if(count<k)
+            {
+                low=mid+1;
+            }
+            else
+            {
+                ans=mid;
+                high=mid-1;
+            }
+            
+        }
+        
+        return ans;
+    }
