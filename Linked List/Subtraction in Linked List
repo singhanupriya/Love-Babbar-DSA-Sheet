@@ -46,43 +46,24 @@ Node* subtract(Node* head1, Node* head2, int& carry)
     
     if(carry==1)
     {
-        if(first==0)
-        {
-            value=9-second;
-            carry=1;
-        }
-        else
-        {
-            first=first-1;
-            if(first >= second)
-            {
-                value=first-second;
-                carry=0;
-            }
-            else
-            {
-                value=10+first-second;
-                carry=1;
-            }
-            
-            
-            
-        }
+        //u dont need a sep case for 0, bcoz if it is 0 it becomes -1
+        //-1 < second->data so -1+10 becomes 9
+        first=first-1;
+        carry=0;
     }
-    else if(carry==0)
+    
+    if(first >= second)
     {
-        if(first >= second)
-        {
-            value=first-second;
-            carry=0;
-        }
-        else
-        {
-            value=first+10-second;
-            carry=1;
-            
-        }
+        value=first-second;
+        
     }
+    else
+    {
+        value=first+10-second;
+        carry=1;
+            
+    }
+    
     
     Node* prev=new Node(value);
     prev->next=next;
