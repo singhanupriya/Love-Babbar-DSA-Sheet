@@ -1,0 +1,216 @@
+https://leetcode.com/problems/interleaving-string/submissions/
+
+1. If we have a char in s3 which matches char in both s1 and s2, it can be picked from either, we have to check both
+
+This is recursion, check for first char and recur for remaining
+
+Time:2^(len(S3)), len(S3)=S1+S2;
+
+
+
+ bool solve(string s1, string s2, string s3, int index1, int index2, int index3)
+    {
+        if(index1<0 && index2<0 && index3<0)
+        {
+            return true; //no more chars left in any string to be checked
+        }
+        
+        if(index1>=0 && index3>=0 && index2>=0 && s3[index3]==s1[index1] && s3[index3]==s2[index2])
+        {
+            return solve(s1,s2,s3,index1-1,index2,index3-1) || solve(s1,s2,s3,index1,index2-1,index3-1);
+        }
+        else if(index1>=0 && index3>=0 && s3[index3]==s1[index1])
+        {
+            return solve(s1,s2,s3,index1-1,index2,index3-1);
+        }
+        else if(index2>=0 && index3>=0 && s3[index3]==s2[index2])
+        {
+            return solve(s1,s2,s3,index1,index2-1,index3-1);
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+    
+    bool isInterleave(string s1, string s2, string s3) {
+        
+        
+        int len1=s1.length();
+        int len2=s2.length();
+        int len3=s3.length();
+        
+        if(len3!=len1+len2)
+        {
+            return false;
+        }
+        
+        return solve(s1,s2,s3,len1-1,len2-1,len3-1);
+        
+    }
+    
+    Method 2: Bottom up
+    
+    Time:O(M*N), Space:O(M*N)
+    
+     bool isInterleave(string s1, string s2, string s3) {
+        
+        
+        int len1=s1.length();
+        int len2=s2.length();
+        int len3=s3.length();
+        
+        if(len3!=len1+len2)
+        {
+            return false;
+        }
+        
+        vector<vector<bool>> dp(len1+1, vector<bool>(len2+1,false));
+        
+        
+        dp[0][0]=1;
+        
+        for(int i=1;i<=len1;i++) //if s2 is of 0 length, s3 should match s1
+        {
+            dp[i][0]=dp[i-1][0] && (s1[i-1]==s3[i-1]); //last substring should match and curr char
+        }
+        
+        for(int i=1;i<=len2;i++) //if s1 is of 0 length, s3 should match s2
+        {
+            dp[0][i]=dp[0][i-1] && (s2[i-1]==s3[i-1]);
+        }
+        
+        
+        
+        for(int i=1;i<=len1;i++)
+        {
+            for(int j=1;j<=len2;j++)
+            {
+                
+                int k=i+j; //len of third string
+                
+                
+                if( s3[k-1]==s1[i-1] && s3[k-1]==s2[j-1])
+                {
+                    dp[i][j]=dp[i-1][j] || dp[i][j-1];
+                        
+                }
+                else if(s3[k-1]==s1[i-1])
+                {
+                    dp[i][j]=dp[i-1][j];
+                }
+                else if( s3[k-1]==s2[j-1])
+                {
+                    dp[i][j]=dp[i][j-1];
+                }
+                else
+                {
+                    dp[i][j]=false;
+                }
+                
+                
+                
+                
+            }
+        }
+        
+        return dp[len1][len2];
+        
+        
+        
+    }
+    
+    Method 3: Space optimised bottom up
+    
+    Time:O(M*N), Space:O(M)
+    
+    bool isInterleave(string s1, string s2, string s3) {
+        
+        
+        int len1=s1.length();
+        int len2=s2.length();
+        int len3=s3.length();
+        
+        if(len3!=len1+len2)
+        {
+            return false;
+        }
+        
+        vector<vector<bool>> dp(2,vector<bool>(len2+1,false));
+        
+        //now if u see u only need prev row
+        
+        
+        bool row;
+        
+        /*
+        dp[0][0]=1;
+        
+        for(int i=1;i<=len1;i++) //if s2 is of 0 length, s3 should match s1
+        {
+            dp[i][0]=dp[i-1][0] && (s1[i-1]==s3[i-1]); //last substring should match and curr char
+        }
+        
+        for(int i=1;i<=len2;i++) //if s1 is of 0 length, s3 should match s2
+        {
+            dp[0][i]=dp[0][i-1] && (s2[i-1]==s3[i-1]);
+        }
+        */
+        
+        
+        
+        for(int i=0;i<=len1;i++)
+        {
+            
+            row= i & 1;
+            
+            for(int j=0;j<=len2;j++)
+            {
+                
+                int k=i+j; //len of third string
+                
+                
+                if(i==0 && j==0 )
+                {
+                    dp[row][j]=1;
+                    continue;
+                }
+                else if(i==0)
+                {
+                    dp[row][j]=dp[row][j-1] && (s2[j-1]==s3[k-1]);
+                }
+                else if(j==0)
+                {
+                    dp[row][j]=dp[1-row][j] && (s1[i-1]==s3[k-1]);
+                }
+                
+                else if( s3[k-1]==s1[i-1] && s3[k-1]==s2[j-1])
+                {
+                    dp[row][j]=dp[1-row][j] || dp[row][j-1];
+                        
+                }
+                else if(s3[k-1]==s1[i-1])
+                {
+                    dp[row][j]=dp[1-row][j];
+                }
+                else if( s3[k-1]==s2[j-1])
+                {
+                    dp[row][j]=dp[row][j-1];
+                }
+                else
+                {
+                    dp[row][j]=false;
+                }
+                
+                
+                
+                
+            }
+        }
+        
+        return dp[row][len2];
+        
+        
+        
+    }
