@@ -1,0 +1,36 @@
+https://leetcode.com/problems/maximum-number-of-weeks-for-which-you-can-work/
+
+Time:O(N), Space:O(1)
+
+long long numberOfWeeks(vector<int>& milestones) {
+        
+        //similar to rearrang chars in strring so that no two are adj
+        
+        int n=milestones.size();
+        int maxFreq=milestones[0];
+        long long sum=milestones[0];
+        
+        for(int i=1;i<n;i++)
+        {
+            sum+=milestones[i];
+            maxFreq=max(maxFreq,milestones[i]);
+        }
+        
+        long long remFreq=sum-maxFreq;
+        
+        if(remFreq>=maxFreq-1)
+        {
+            return sum;
+        }
+        
+        //else 
+        
+        //dry run and see
+        
+        //5 ,2,1
+        //rest -> 3 since max-1=4
+        // _2_2_1_  -> spaces can be filled total is 2*res+1
+        
+        return 2*remFreq+1;
+        
+    }
