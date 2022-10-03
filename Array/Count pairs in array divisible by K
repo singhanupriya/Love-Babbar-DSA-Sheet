@@ -1,0 +1,38 @@
+https://practice.geeksforgeeks.org/problems/count-pairs-in-array-divisible-by-k/1
+
+1. For every number find remained rem, find no of elemenet with rem = K-rem and add that to ans, this number will form pair with all these nos
+2. Only when rem is 0 WE NEED TO check for existing nos with rem =0 and not rem=K-0=rem
+
+Time:o(N), Space:O(K)
+
+
+long long countKdivPairs(int A[], int n, int K)
+    {
+        //code here
+        
+        long long ans=0;
+        
+        vector<long long> freq(K,0);
+        
+        //remainder will be from 0 to K-1 so we are storing how many numbers have these remainder values
+        
+        for(int i=0;i<n;i++)
+        {
+            long long rem=A[i]%K;
+            
+            if(rem==0)
+            {
+                ans=ans+ freq[0]; //as K-0=K so we need to check in 0
+            }
+            else 
+            {
+                ans=ans+freq[K-rem];
+            }
+            
+            freq[rem]++;
+        }
+        
+        return ans;
+        
+        
+    }
