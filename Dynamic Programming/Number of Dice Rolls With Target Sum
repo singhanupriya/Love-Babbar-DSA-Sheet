@@ -1,0 +1,48 @@
+https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/submissions/
+
+Time:O(K^N)
+
+
+Method 2: Memoization
+
+Time:O(Target*N*K), Space:O(Target*sum)
+
+ int solve(int diceNum, int target, int n, int k,vector<vector<int>>& dp)
+    {
+        
+        
+        if(target<0 || diceNum>n)
+        {
+            return 0;
+        }
+        
+        if(diceNum==n && target==0)
+        {
+            return 1;
+        }
+        
+        if(dp[diceNum][target]!=-1)
+        {
+            return dp[diceNum][target];
+        }
+        
+        int ways=0;
+        
+        for(int i=1;i<=k;i++)
+        {
+            ways=(ways%1000000007 + solve(diceNum+1, target-i, n , k,dp)%1000000007)%1000000007;
+        }
+        
+        return dp[diceNum][target]=ways;
+        
+        
+        
+    }
+    
+    int numRollsToTarget(int n, int k, int target) {
+        
+        vector<vector<int>> dp(n+1,vector<int>(target+1,-1));
+        
+        return solve(0,target,n,k,dp);
+        
+    }
