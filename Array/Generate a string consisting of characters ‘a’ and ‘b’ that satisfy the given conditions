@@ -1,0 +1,84 @@
+https://www.geeksforgeeks.org/generate-a-string-consisting-of-characters-a-and-b-that-satisfy-the-given-conditions/
+
+If occurrence(a) > occurrence(b) then append “aab”
+If occurrence(b) > occurrence(a) then append “bba”
+If occurrence(a) = occurrence(b) then append “ab”
+
+Time:MAX(a,b), Space:O(1)
+
+#include <iostream>
+
+using namespace std;
+
+string solve(int A, int B)
+{
+    string ans="";
+    while(A>0 || B>0)
+    {
+        if(A>B)
+        {
+            if(A>0)
+            {
+                ans=ans+'a';
+                A--;
+            }
+            
+            if(A>0)
+            {
+                ans=ans+'a';
+                A--;
+            }
+            
+            if(B>0)
+            {
+                ans=ans+ 'b';
+                B--;
+            }
+        }
+        else if(B>A)
+        {
+            
+            if(B>0)
+            {
+                ans=ans+'b';
+                B--;
+            }
+            
+            if(B>0)
+            {
+                ans=ans+'b';
+                B--;
+            }
+            
+            if(A>0)
+            {
+                ans=ans+ 'a';
+                A--;
+            }
+            
+        }
+        else 
+        {
+            if(A>0)
+            {
+                ans=ans+'a';
+                A--;
+            }
+            
+            if(B>0)
+            {
+                ans=ans+ 'b';
+                B--;
+            }
+        }
+    }
+    
+    return ans;
+}
+
+int main()
+{
+    cout<<solve(2,6);
+
+    return 0;
+}
