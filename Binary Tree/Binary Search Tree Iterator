@@ -1,0 +1,52 @@
+https://leetcode.com/problems/binary-search-tree-iterator/submissions/
+
+The question is next in the element of inorder traversal and has next is if the inorder successor exists.
+
+As in question we need to do in O(1) time and O(h) space, used stack for inorder traversal
+
+
+
+class BSTIterator {
+    
+    stack<TreeNode*> s;
+    
+    void partialInorder(TreeNode* root)
+    {
+         TreeNode* curr=root;
+        
+        while(curr)
+        {
+            s.push(curr);
+            curr=curr->left;
+        }
+        
+    }
+    
+public:
+    
+    BSTIterator(TreeNode* root) {
+        
+       partialInorder(root);
+            
+        
+    }
+    
+    int next() {
+        
+        TreeNode* temp=s.top();
+        s.pop();
+        partialInorder(temp->right);
+        return temp->val;
+        
+    }
+    
+    bool hasNext() {
+        
+        if(!s.empty())
+        {
+            return true;
+        }
+        return false;
+        
+    }
+};
