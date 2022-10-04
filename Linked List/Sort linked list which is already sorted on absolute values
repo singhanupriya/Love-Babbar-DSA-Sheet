@@ -1,0 +1,41 @@
+https://practice.geeksforgeeks.org/problems/absolute-list-sorting/1
+
+Method 1- Merge sort Time:o(nlogn), Space:O(1)
+
+Method 2: Since nodes are arrange in inc order of absolute values, the negative nos are arranged in reverse order, so whenever u encounter a neg node, move
+it to front
+
+Time:O(N), Space:O(1)
+
+void sortList(Node** head)
+    {
+        // Your Code Here
+        
+        if(!(*head) || !(*head)->next)
+        {
+            return ;
+        }
+        
+        //if one element is negative no issue or positive then also no issues
+        //start checking from 2nd elemenr
+        
+        Node* p=(*head);
+        Node* q=(*head)->next;
+        
+        while(q)
+        {
+            if(q->data >= 0 )
+            {
+                q=q->next;
+                p=p->next;
+            }
+            else
+            {
+                p->next=q->next;
+                q->next=*head;
+                *head=q;
+                q=p->next;
+            }
+        }
+        
+    }
