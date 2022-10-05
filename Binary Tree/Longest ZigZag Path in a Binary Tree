@@ -1,0 +1,67 @@
+https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
+
+Time:O(N), Space:O(H)
+
+void solve(TreeNode* root, bool isLeft, int count, int& ans)
+    {
+        
+        
+        if(!root)
+        {
+            return;
+        }
+        ans=max(ans,count);
+        
+        if(isLeft)
+        {
+            //if u move right
+            solve(root->right,false,count+1,ans);
+            
+            //if u move left
+            
+            solve(root->left,true,1,ans); //if are mving in the same direction reset it to 1.
+            
+            /*
+            //suppose u moved from R->L->R->R->L->R, 
+            1st R->L is 1
+            2nd L->R becomes 2 (1+1)
+            Now u have R->R, if u dont reset it to 1 and take the same count 2 forwars
+            Next R->L becomes 3 which is wrong, then L->R becomes 5
+            
+            which is wrong
+            
+            last R->L->R is 3, if u reset R->R to 1, R->L becmes 2 and then L->R becomes 3
+            
+            
+            */
+            
+            
+        }
+        else //currenlty moving right
+        {
+            //if u move right
+            solve(root->right,false,1,ans);
+            
+            //if u move left
+            
+            solve(root->left,true,count+1,ans);
+        }
+        
+        
+    }
+    
+    int longestZigZag(TreeNode* root) {
+        
+        if(!root)
+        {
+            return 0;
+        }
+        
+        bool isLeft=true; //moving left
+        
+        int ans=0;
+        solve(root,true,0,ans); //move left
+        solve(root,false,0,ans);  //move right
+        
+        return ans;
+    }
