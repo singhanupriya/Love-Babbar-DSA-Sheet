@@ -1,0 +1,71 @@
+https://leetcode.com/problems/minimum-number-of-taps-to-open-to-water-a-garden/discuss/1343925/C%2B%2B-(3-explainedcommented-approaches)
+https://leetcode.com/problems/minimum-number-of-taps-to-open-to-water-a-garden/
+https://www.geeksforgeeks.org/count-minimum-number-of-fountains-to-be-activated-to-cover-the-entire-garden/
+
+int minTaps(int n, vector<int>& ranges) {
+
+            vector<int> dp(n+1,0);
+
+            for(int i=0;i<=n;i++)
+            {
+                int left=max(0,i-ranges[i]); //max index u can reach on left
+                int right=min(n,i+ranges[i]); //max index u can reach on right
+
+                dp[left]=max(dp[left],right-left);
+            }
+            
+            //u are finding that from the leftmost index, how much can u jump
+            //since from index i, u can jump 'right' steps, if u shift this origin
+            //from i to left it will be (right-left) steps.
+            
+            /*
+            
+            Origin    steps
+            
+            i          right
+            left       right-left//from origin shit left steps to the left
+            
+            Now this is same as jump game
+            
+            */
+            
+            if(dp[0]==0)
+            {
+                return -1;
+            }
+            
+            int maxReach=dp[0];
+            int steps=dp[0];
+            int jump=1;
+            
+            for(int i=1;i<=n;i++)
+            {
+                if(i==n)
+                {
+                    return jump;
+                }
+                
+                maxReach=max(maxReach,i+dp[i]);
+                steps--;
+                
+                if(steps==0)
+                {
+                    jump++;
+                    
+                    if(i>=maxReach)
+                    {
+                        return -1;
+                    }
+                    
+                    steps=maxReach-i;
+                }
+                
+                
+            }
+            
+            return -1;
+            
+            
+        
+        
+    }
