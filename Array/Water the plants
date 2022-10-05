@@ -1,0 +1,106 @@
+https://www.youtube.com/watch?v=VI5yl8JdS9s&t=111s
+
+1. GET ALL valid ranges, sort them in increaing order of start range
+2. We want the start from index/target=0
+3. If u multiple sprinklers with same start, select the one whith max range
+
+Time:O(nlogn), space:O(n)
+
+
+
+Mistake:
+
+
+while(index<rangeSize)
+            {
+                if(range[index].first <= leftTarget)
+                {
+                    rightMost=max(rightMost,range[index].second);
+                }
+                index++;
+            }
+            
+ Here index will keep incrementing even if condition doesn' match
+ 
+ 
+ Corerect::
+ 
+ while(index<rangeSize && range[index].first <= leftTarget)
+            {
+                
+                rightMost=max(rightMost,range[index].second);
+                
+                index++;
+            }
+            
+            
+            
+  
+
+int min_sprinklers(int gallery[], int n)
+    {
+        // code here
+        
+        int leftTarget=0; //we need to cover left most index 0 first
+        int count=0;
+       vector<pair<int,int>> range;
+        
+        //make a list of all valid ranges
+        for(int i=0;i<n;i++)
+        {
+            if(gallery[i]!=-1)
+            {
+                range.push_back(make_pair(i-gallery[i],i+gallery[i]));
+            }
+        }
+        
+        //sort in increasing order of Leftrange
+        
+        sort(range.begin(),range.end());
+        
+        
+        
+        
+        int rangeSize=range.size();
+        
+        int index=0;
+        
+        while( leftTarget<n && index<rangeSize)
+        {
+            int rightMost=-1;
+            
+            if(leftTarget < range[index].first)
+            {
+                return -1;
+                
+                //suppose starting left target is 0 but none of the ranges start with 0, no ans
+            }
+            
+            //once u have got range with desired starting point, find the 
+            //max right reach of all spinklers which has the same starting point,
+            //we will choose the spinkler that start at our desired point and 
+            //has max range
+            while(index<rangeSize && range[index].first <= leftTarget) //
+            {
+                
+                rightMost=max(rightMost,range[index].second);
+                
+                index++;
+            }
+            
+            //update next target
+            leftTarget=rightMost+1; //now the left target will be rightmost +1
+            count++;
+            
+            
+        }
+        
+        if(leftTarget>=n)
+        {
+            return count;
+        }
+        
+        
+        return -1;
+        
+    }
