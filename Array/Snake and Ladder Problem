@@ -1,0 +1,80 @@
+https://practice.geeksforgeeks.org/problems/snake-and-ladder-problem4816/1
+
+BFS
+
+Time:O(30), Space:O(30)
+
+
+int minThrow(int N, int arr[]){
+        // code here
+        
+        
+        int steps=0;
+        
+        vector<int> snakeLadder(31,-1);
+        vector<bool> visited(31,false);
+        
+        for(int i=0;i<2*N;i=i+2)
+        {
+            snakeLadder[arr[i]]=arr[i+1];
+        }
+        
+        queue<int> q; //u dont need to save coord bcoz here snake and ladder position//
+        //is given based on number and not corr
+        
+        q.push(1);
+        visited[1]=true;
+        
+        
+        
+        while(!q.empty())
+        {
+            int len=q.size();
+            
+            for(int i=0;i<len;i++)
+            {
+                int num=q.front();
+                
+                
+                q.pop();
+                
+                if(num==30)
+                {
+                    return steps;
+                }
+                
+                if(snakeLadder[num]!=-1) //either snake or ladder
+                {
+                    num=snakeLadder[num];
+                }
+                
+                for(int i=1;i<=6;i++)
+                {
+                    
+                    int nextNum=num+i;
+                    
+                    if(nextNum>=31)
+                    {
+                        break; //other will be greater only
+                    }
+                    
+                    
+                    if(!visited[nextNum])
+                    {
+                        q.push(nextNum);
+                        visited[nextNum]=true;
+                    }
+                    
+                    
+                    
+                }
+                
+                
+            }
+            
+            steps++;
+        }
+        
+        return -1; //not possible
+        
+    }
