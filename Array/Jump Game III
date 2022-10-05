@@ -1,0 +1,111 @@
+https://leetcode.com/problems/jump-game-iii/submissions/
+
+
+BFS
+
+Time:O(N), Space:O(N)
+
+bool canReach(vector<int>& arr, int start) {
+        
+        if(arr[start]==0)
+        {
+            return true;
+        }
+        
+        int n=arr.size();
+        
+        queue<int> q; //index
+        q.push(start);
+        vector<bool> vis(n,false);
+        vis[start]=true;
+        
+        while(!q.empty())
+        {
+            int currIndex=q.front();
+            q.pop();
+            
+            if(arr[currIndex]==0)
+            {
+                return true;
+            }
+            
+            //When you are at index i, you can jump to i + arr[i] or i - arr[i]
+            int left=currIndex-arr[currIndex];
+            int right=currIndex+arr[currIndex];
+            
+            if(left>=0  && !vis[left] )
+            {
+                q.push(left);
+                vis[left]=true; //visited
+            }
+            
+            if( right<n && !vis[right] )
+            {
+                q.push(right);
+                vis[right]=true; //visited
+            }
+            
+            
+        }
+        
+        return false;
+        
+    }
+    
+    Method 2:
+    
+    Without visited array
+    
+     bool canReach(vector<int>& arr, int start) {
+        
+        if(arr[start]==0)
+        {
+            return true;
+        }
+        
+        int n=arr.size();
+        
+        queue<int> q; //index
+        q.push(start);
+        
+        
+        while(!q.empty())
+        {
+            int currIndex=q.front();
+            q.pop();
+            
+            if(arr[currIndex]==0)
+            {
+                return true;
+            }
+            
+            if(arr[currIndex]<0)
+            {
+                continue; //already visited
+            }
+            
+            //When you are at index i, you can jump to i + arr[i] or i - arr[i], 
+            //if u are out of bound u will not jump
+            int left=currIndex-arr[currIndex];
+            int right=currIndex+arr[currIndex];
+            
+            if(left>=0   )
+            {
+                q.push(left);
+                
+            }
+            
+            if( right<n  )
+            {
+                q.push(right);
+                
+            }
+            
+            arr[currIndex]=-1*arr[currIndex]; //vis, if it is 0 it will remain 0
+            
+            
+        }
+        
+        return false;
+        
+    }
