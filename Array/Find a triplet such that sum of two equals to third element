@@ -1,0 +1,49 @@
+https://practice.geeksforgeeks.org/problems/count-the-triplets4615/1
+
+1. Set the biggest element as target
+
+Time:O(N^2 + NLogN)
+Space:O(1)
+
+int countTriplet(int arr[], int n)
+	{
+	    // Your code goes here
+	    
+	    int count=0;
+	    
+	    if(n<=2)
+	    {
+	        return 0;
+	    }
+	    
+	    sort(arr,arr+n);
+	    
+	    //set the biggest element as target
+	    for(int first=n-1;first>=2;first--)
+	    {
+	        int low=0;
+	        int high=first-1;
+	        
+	        while(low<high)
+	        {
+	            if(arr[low]+arr[high]==arr[first])
+	            {
+	                count++;
+	                low++;
+	                high--;
+	            }
+	            else if(arr[low]+arr[high] > arr[first])
+	            {
+	                high--;
+	            }
+	            else
+	            {
+	                low++;
+	            }
+	            
+	        }
+	    }
+	    
+	    return count;
+	    
+	}
