@@ -1,0 +1,99 @@
+https://www.geeksforgeeks.org/number-of-connected-components-of-a-graph-using-disjoint-set-union/
+
+Time:O(ElogN + NlogN)
+Space:O(N)
+
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int findParent(vector<int>& parent, int node)
+{
+    if(parent[node]==node)
+    {
+        return node;
+    }
+    
+    return parent[node]=findParent(parent,parent[node]);
+}
+
+void findUnion(int u, int v, vector<int>& parent, vector<int>& rank)
+{
+    u=findParent(parent,u);
+    v=findParent(parent,v);
+    
+    if(u==v)
+    {
+        return; //same component
+    }
+    
+    if(rank[v] > rank[u])
+    {
+        parent[u]=v;
+    }
+    else if(rank[u] > rank[v])
+    {
+        parent[v]=u;
+    }
+    else 
+    {
+        parent[u]=v;
+        rank[v]++;
+    }
+    
+    
+    
+}
+
+void solve(vector<vector<int>> edges, int N)
+{
+    vector<int> parent(N);
+    vector<int> rank(N,0);
+    
+    for(int i=0;i<N;i++)
+    {
+        parent[i]=i;
+    }
+    
+    for(int i=0;i<edges.size();i++)
+    {
+        int u=edges[i][0];
+        int v=edges[i][1];
+        
+        findUnion(u,v,parent,rank);
+    }
+    
+    vector<bool> components(N,false);
+    int count=0;
+    
+    for(int i=0;i<N;i++)
+    {
+        int v=findParent(parent,i);
+        if(components[v]==false)
+        {
+            count++;
+            components[v]=true;
+        }
+        
+    }
+    
+    cout<<count;
+}
+
+int main()
+{
+    int N = 8;
+ 
+    // Given edges
+    vector<vector<int> > edges = {
+        { 1, 0 }, { 0, 2 }, { 5, 3 }, { 3, 4 }, { 6, 7 }
+    };
+ 
+    // Function call
+    solve(edges,N);
+ 
+
+    return 0;
+}
