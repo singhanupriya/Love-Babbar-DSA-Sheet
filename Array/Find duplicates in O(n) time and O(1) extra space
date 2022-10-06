@@ -1,0 +1,43 @@
+https://www.youtube.com/watch?v=iiYc32-4ZJY
+https://www.geeksforgeeks.org/find-duplicates-in-on-time-and-constant-extra-space/
+
+Time:O(N), Space:O(1)
+
+This solution is possibe only bcoz numbers in the array are in range[0,n-1].
+1. If we use a map, our key would be 0,1,2,3...,n-1, this resembles the indexes of the array.
+2. So we can use our array as hashmap.
+3. Index 0 means freq of element 0 in the array.
+4. We traverse the array suppose arr[0]=2, we need to increment freq of index 2, for doing keep we do arr[2]+n and for getting arr[i]=arr[i]%n as we 
+are changnig the array
+5. We traverse one more time and need to find how many times did we add n to get count which is arr[i]/n.
+
+
+vector<int> duplicates(int arr[], int n) {
+        // code here
+        
+        vector<int> ans;
+        
+        for(int i=0;i<n;i++)
+        {
+            int element=arr[i]%n;
+            arr[element]=arr[element]+n;
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            int count=arr[i]/n;
+            if(count>1)
+            {
+                ans.push_back(i);
+            }
+        }
+        
+        if(ans.size()==0)
+        {
+            vector<int> temp{-1};
+            return temp;
+        }
+        
+        return ans;
+        
+    }
