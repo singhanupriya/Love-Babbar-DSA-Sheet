@@ -1,0 +1,45 @@
+
+https://www.geeksforgeeks.org/linked-list-in-zig-zag-fashion/
+
+Time:O(N), Space:O(1)
+
+
+ Node *zigZag(Node* head)
+    {
+     // your code goes here
+     
+     if(!head || !head->next)
+     {
+         return head;
+         
+     }
+     
+     bool flag=true; //expected <
+     
+     Node* curr=head;
+     
+     while(curr->next)
+     {
+         if(flag) //expected <
+         {
+             if(curr->data > curr->next->data)
+             {
+                 swap(curr->data, curr->next->data);
+             }
+         }
+         else //expected >
+         {
+             if(curr->data < curr->next->data)
+             {
+                 swap(curr->data, curr->next->data);
+             }
+             
+         }
+         
+         curr=curr->next;
+         flag=!flag; //reverse operation
+     }
+     
+     return head;
+     
+    }
