@@ -1,0 +1,102 @@
+https://www.geeksforgeeks.org/find-value-k-in-given-complete-binary-tree-with-values-indexed-from-1-to-n/
+
+1. Since this is 1-based indexing, root i will have 2*i as left child and 2*i+1 as right so given a number num, its parent will be num/2
+2. We try to get path from bottom to root assuming num is a part of the tree, then when we reverse that path and trace it from root to left in the
+orignal tree, if we can successfully trace the path it is present else false
+
+Time:O(logn), Space:O(logn)
+
+
+#include <iostream>
+#include<vector>
+#include<algorithm>
+
+using namespace std;
+
+class Node{
+    
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    
+    Node(int x)
+    {
+        data=x;
+        left=nullptr;
+        right=nullptr;
+    }
+    
+};
+
+vector<int> findSteps(Node* root, int data)
+{
+    vector<int> steps;
+    
+    while(data!=1)
+    {
+        if(data/2.0 > data/2)
+        {
+            //means it is the right child
+            steps.push_back(1);
+        }
+        else
+        {
+            steps.push_back(-1);
+        }
+        
+        int parent=data/2;
+        data=parent;
+    }
+    
+    reverse(steps.begin(),steps.end()); //get steps starting from root 
+    
+    return steps;
+}
+
+bool solve(Node* root, int data)
+{
+    vector<int> steps=findSteps(root,data);
+    
+    for(int i=0;i<steps.size();i++)
+    {
+        if(steps[i]==-1)
+        {
+            if(root->left==nullptr)
+            {
+                return false;
+            }
+            root=root->left;
+        }
+        else
+        {
+            if(root->right==nullptr)
+            {
+                return false;
+            }
+            root=root->right;
+        }
+    }
+    
+    return true;
+}
+
+int main()
+{
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+    root->right->left = new Node(6);
+    root->right->right = new Node(7);
+    root->left->left->left = new Node(8);
+    root->left->left->right = new Node(9);
+    root->left->right->left = new Node(10);
+    
+    
+    cout<<solve(root,11);
+
+    return 0;
+}
