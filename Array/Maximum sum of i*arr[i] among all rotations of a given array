@@ -1,0 +1,34 @@
+https://www.youtube.com/watch?v=3YNs_Ggqb-Q
+
+Time:O(N), Space:O(1)
+https://practice.geeksforgeeks.org/problems/max-sum-in-the-configuration/1
+
+
+int max_sum(int arr[],int n)
+{
+//Your code here
+
+    int sum=0;
+    for(int i=0;i<n;i++)
+    {
+        sum=sum+arr[i];
+    }
+    
+    int currSum=0;
+    for(int i=0;i<n;i++)
+    {
+        currSum=currSum + (arr[i]*i);
+    }
+    
+    int res=currSum;
+    
+    for(int i=1;i<n;i++)
+    {
+        int nextSum=currSum- sum +(arr[i-1]*n);
+        res=max(res,nextSum);
+        currSum=nextSum;
+    }
+    
+    return res;
+
+}
