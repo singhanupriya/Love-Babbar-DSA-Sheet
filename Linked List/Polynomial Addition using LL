@@ -1,0 +1,95 @@
+https://practice.geeksforgeeks.org/problems/polynomial-addition/1
+
+1. Start with least, add values of same power, no concept of carry here
+
+Time:o(n+m), SPACE:o(1)
+
+
+Node* reverse(Node* start)
+    {
+        Node* curr=start;
+        Node* prev=nullptr;
+        Node* next=nullptr;
+        
+        
+        while(curr)
+        {
+            next=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next;
+        }
+        
+        return prev;
+    }
+    
+    Node* addPolynomial(Node *p1, Node *p2)
+    {
+        //Your code here
+        p1=reverse(p1);
+        p2=reverse(p2);
+        
+        Node* curr1=p1;
+        Node* curr2=p2;
+        
+        
+        Node* dummy=new Node(-1,0);
+        Node* temp=dummy;
+        
+        while(curr1 && curr2)
+        {
+            if(curr1->pow==curr2->pow)
+            {
+                int value=curr1->coeff + curr2->coeff ;
+                
+                temp->next=new Node(value,curr1->pow);
+                temp=temp->next;
+                curr1=curr1->next;
+                curr2=curr2->next;
+            }
+            else if(curr1->pow < curr2->pow)
+            {
+                int value=curr1->coeff ;
+                
+                temp->next=new Node(value,curr1->pow);
+                temp=temp->next;
+                curr1=curr1->next;
+                
+            }
+            else
+            {
+                int value=curr2->coeff ;
+                
+                temp->next=new Node(value,curr2->pow);
+                temp=temp->next;
+                curr2=curr2->next;
+            }
+        }
+        
+        while(curr1)
+        {
+            int value=curr1->coeff  ;
+            
+            temp->next=new Node(value,curr1->pow);
+            temp=temp->next;
+            curr1=curr1->next;
+                
+        }
+        
+         while(curr2)
+        {
+            int value=curr2->coeff ;
+            
+            temp->next=new Node(value,curr2->pow);
+            temp=temp->next;
+            curr2=curr2->next;
+                
+        }
+        
+        Node* newHead=reverse(dummy->next);
+        
+        
+        return newHead;
+        
+        
+    }
