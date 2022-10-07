@@ -1,0 +1,79 @@
+https://practice.geeksforgeeks.org/problems/reorder-list/1
+
+1. Reverse the 2nd half of the LL.
+2. Pick element one by one from first and then second half.
+
+len(first half)==len(second half)  or len(first half)==1+ len(second half)
+Time:O(N), Space:O(1)
+
+Node* reverse(Node* start)
+{
+    Node* curr=start;
+    
+    Node* prev=nullptr;
+    Node* next=nullptr;
+    
+    while(curr)
+    {
+        next=curr->next;
+        curr->next=prev;
+        prev=curr;
+        curr=next;
+    }
+    
+    return prev;
+}
+
+void reorderList(Node* head) {
+    // Your code here
+    
+    if(!head || !head->next)
+    {
+        return ;
+    }
+    
+    Node* p=head;
+    Node* q=head->next;
+    
+    while(q && q->next)
+    {
+        p=p->next;
+        q=q->next->next;
+        
+    }
+    
+    Node* start=p->next;
+    p->next=reverse(start);
+    
+    Node* first=head;
+    Node* second=p->next;
+    
+    //break the two halves
+    p->next=nullptr;
+    
+    Node* dummy=new Node(-1);
+    Node* curr=dummy;
+    
+    //len of 1st will be either equal to second half or 1 +len(second half)
+    
+    while(first && second)
+    {
+        curr->next=first;
+        first=first->next;
+        curr=curr->next;
+        curr->next=second;
+        second=second->next;
+        curr=curr->next;
+        
+    }
+    
+    if(first)
+    {
+        curr->next=first;
+    }
+    
+    head=dummy->next;
+    
+    
+    
+}
