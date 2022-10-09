@@ -1,0 +1,81 @@
+https://practice.geeksforgeeks.org/problems/swap-kth-node-from-beginning-and-kth-node-from-end-in-a-singly-linked-list/1
+
+1. Egde cases:
+
+  Kth nodes from start, N-K+1 node from start, 
+  a. If K>NUM return head
+  b. If nodes are node means K==N-K+1 do nothing return head
+  c. They are next to each other, get prev pointers for both and then modify their next pointers and swap next points of nodes to be swapped
+  
+  
+  Time:O(N). Space:O(1)
+
+
+Node *swapkthnode(Node* head, int num, int k)
+{
+    // Your Code here
+    
+    if(!head || !head->next)
+    {
+        return head;
+    }
+    
+    if(k>num)
+    {
+        return head;
+    }
+    
+    //means they both exist
+    
+    Node* dummy=new Node(-1);
+    dummy->next=head;
+    
+    //kth node from start and n-k+1 node from start for kth node from end, if both are same, 
+    //do nothing
+    
+    if(k==num-k+1)
+    {
+        return head;
+    }
+    
+    
+    //Edge cases--- both are next to each other
+    
+    Node* p=dummy;
+    int count=k-1;
+    while(p && count>0)
+    {
+        p=p->next;
+        count--;
+    }
+    
+    Node* firstPrev=p;
+    Node* first=p->next;
+    
+    count=num-k;
+    p=dummy;
+    
+    while(p && count>0)
+    {
+        p=p->next;
+        count--;
+    }
+    
+    Node* secondPrev=p;
+    Node* second=p->next;
+    
+    //this might create a self loop, if nodes are adjacent, in that case we need to break the llop
+    firstPrev->next=second;
+    secondPrev->next=first;
+    
+    //swap the next pointers
+    Node* temp=first->next;
+    first->next=second->next;
+    second->next=temp;
+    
+    
+    return dummy->next;
+    
+    
+    
+}
