@@ -1,0 +1,126 @@
+https://www.geeksforgeeks.org/minimize-cash-flow-among-given-set-friends-borrowed-money/
+
+1. Settle for one by one person.
+2. Get net amount of all ppl, amount[p]=all credits-all debits.
+3. Get the index of person with maxcredit and minCredit.
+4. suppose amount[maxCrediter]=4000 and amount[maxDebiter]=-1000, so we find the min of it i.e 1000 and maxDebiter gives 1000 to maxCrediter, 
+   now amount[maxCrediter]=3000 and amount[maxDebiter]=0, now again search in array the maxDebiter and maxCrediter continue till both amounts become 0 
+   
+   
+   Time:O(N^2), Space:O(N)
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int getMax(vector<int>& amount)
+{
+    //returns the index of maxCrediter
+    int n=amount.size();
+    int index=0;
+    int maxValue=amount[0];
+    
+    for(int i=1;i<n;i++)
+    {
+        if(maxValue<amount[i])
+        {
+            maxValue=amount[i];
+            index=i;
+        }
+    }
+    
+    return index;
+    
+    
+}
+
+
+int getMin(vector<int>& amount)
+{
+    //returns the index of maxDebiter
+    int n=amount.size();
+    int index=0;
+    int minValue=amount[0];
+    
+    for(int i=1;i<n;i++)
+    {
+        if(minValue>amount[i])
+        {
+            minValue=amount[i];
+            index=i;
+        }
+    }
+    
+    return index;
+    
+}
+
+
+void recur(vector<int>& amount)
+{
+    int maxCrediter=getMax(amount); //person who gets most money
+    int maxDebiter=getMin(amount); //person who owes everyone max money
+    
+    //suppose amount[maxCrediter]=4000 and amount[maxDebiter]=-1000, so we find the min of it i.e 1000
+    //and maxDebiter gives 1000 to maxCrediter, now amount[maxCrediter]=3000
+    //and amount[maxDebiter]=0, now again search in array the maxDebiter and maxCrediter
+    //continue till both amounts become 0 
+    
+    if(amount[maxCrediter]==0 && amount[maxDebiter]==0)
+    {
+        return; //all setted
+    }
+    
+    
+    int minValue=min(abs(amount[maxDebiter]), amount[maxCrediter]);
+    
+    cout<<"Person "<<maxDebiter<<" paid "<<minValue <<" to "<<maxCrediter<<endl;
+    
+    amount[maxCrediter]=amount[maxCrediter]-minValue;
+    amount[maxDebiter]=amount[maxDebiter]+minValue;
+    
+    
+    recur(amount);
+}
+
+void solve(vector<vector<int>> graph)
+{
+    //find net amount for all ppl
+    //g[i][j]=i has to pay J
+    
+    int n=graph.size();
+    
+    vector<int> amount(n,0);
+    
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            amount[i]=amount[i]+(graph[j][i]-graph[i][j]); //if ppl owe i, its amount should be pos
+        }
+    }
+    
+    recur(amount);
+    
+}
+
+
+int main()
+{
+   vector<vector<int>> graph { {0, 1000, 2000},
+                        {0, 0, 5000},
+                        {0, 0, 0},};
+ 
+    solve(graph);
+
+    return 0;
+}
