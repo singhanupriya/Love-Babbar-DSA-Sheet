@@ -1,0 +1,50 @@
+Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. 
+Return the answer in any order.
+
+A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+
+Time:O(4^N), Space:O(4^N)
+
+Max length of ans=no of digits, each digit can have max 4 mappings
+
+
+
+void solve(int index, string digits, int len, vector<string>& ans, string& temp, vector<string>& mapping)
+    {
+        if(index==len)
+        {
+            ans.push_back(temp);
+            return;
+        }
+        
+        for(int i=0;i<mapping[digits[index]-'0'].size();i++)
+        {
+            temp.push_back(mapping[digits[index]-'0'][i]);
+            solve(index+1,digits,len,ans,temp,mapping);
+            temp.pop_back();
+        }
+    }
+    
+    vector<string> letterCombinations(string digits) {
+        
+        int n=digits.length();
+        
+        vector<string> ans;
+        
+        if(n==0)
+        {
+            return ans;
+        }
+        
+        vector<string> mapping{"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        
+        string temp="";
+        
+        solve(0,digits,n,ans,temp,mapping);
+        
+        return ans;
+        
+        
+        
+    }
