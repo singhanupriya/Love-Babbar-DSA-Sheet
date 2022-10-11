@@ -187,3 +187,69 @@ bool solve(string pattern, string str, int n, int m)
         
     }
     
+
+Space:O(M*N), Space:O(N)
+
+bool check(int len, string pattern)
+    {
+        for(int i=0;i<len;i++)
+        {
+            if(pattern[i]!='*')
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+
+    int wildCard(string p,string s)
+    {
+        
+         int strLen=s.length();
+        int patLen=p.length();
+        
+        
+        //pIndex- 0 to n-1
+        
+        
+        vector<vector<bool>> dp(2,vector<bool>(patLen+1,false));
+        
+        
+        
+        int row;
+        
+        for(int i=0;i<=strLen;i++)
+        {
+            row=i & 1;
+            
+            for(int j=0;j<=patLen;j++)
+            {
+                if(i==0 && j==0)
+                {
+                    dp[row][j]=true;
+                    continue;
+                }
+                else if(i==0)
+                {
+                    dp[row][j]=check(j,p);
+                    continue;
+                }
+                else if(p[j-1]==s[i-1] || p[j-1]=='?')
+                {
+                    dp[row][j]=dp[1-row][j-1];
+                }
+                else if(p[j-1]=='*')
+                {
+                    dp[row][j]=dp[row][j-1] || dp[1-row][j];
+                }
+                else
+                {
+                    dp[row][j]=false;
+                }
+            }
+        }
+        
+        
+        return dp[row][patLen];
+    }
