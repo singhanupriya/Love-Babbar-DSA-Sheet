@@ -1,0 +1,37 @@
+https://www.youtube.com/watch?v=GYdC4hQSo8A&t=270s
+
+1. Preorder traveral is root, left, right, in BST, left <root<right
+2. First element will be root(i), the first greater element(j) than root in the array will be the root of right subtree
+now all elements in the array after j, should be greater than i, if not false
+recurse for (i+1,j-1) and (j+1, n)
+
+Time:o(N^2)
+
+https://www.geeksforgeeks.org/check-if-a-given-array-can-represent-preorder-traversal-of-binary-search-tree/
+Method 2: Time:O(N), Space:O(N)
+
+int canRepresentBST(int pre[], int n) {
+        // code here
+        
+        int root=INT_MIN;
+        stack<int> s;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(pre[i]<root)
+            {
+                return false; //once u have identified the root, all elements on its right 
+                //should be greater than it
+            }
+            
+            while(!s.empty() && pre[i]>s.top())
+            {
+                root=s.top(); //first greater element that means prev element is root
+                s.pop();
+            }
+            
+            s.push(pre[i]);
+        }
+        
+        return true;
+    }
