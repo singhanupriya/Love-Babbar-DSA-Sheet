@@ -38,31 +38,29 @@ Method 3:
 
 
 int countPartitions(int n, int D, vector<int> &arr) {
-    // Write your code here.
-    //S1-S2=D;
-    //S2=totalSum-S1;
-    //totalSum-D=2*s1
-    //as s1 >=s2, this has to be positive.
-    int totalSum=0;
+    //S1+S2=SUM
+    //S1-S2=d
+    //s1=(sum+d)/2
+    
+    //this must be positive
+    
+    int sum=0;
     for(int i=0;i<n;i++)
     {
-        totalSum+=arr[i];
+        sum+=arr[i];
     }
     
-    
-    
-    if((totalSum-D < 0) || (totalSum-D)%2!=0)
+    if(d + sum <0 || (d+sum)%2!=0)
     {
         return 0;
     }
     
-    int sum=(totalSum-D)/2;
+    int sum1=(d+sum)/2;
     
-    
-    vector<vector<int>> dp(n+1, vector<int>(sum+1,0));
+    vector<vector<int>> dp(n+1, vector<int>(sum1+1,0));
     
     dp[0][0]=1;
-    for(int j=1;j<=sum;j++) //if sum>0 and u have no elements
+    for(int j=1;j<=sum1;j++) //if sum>0 and u have no elements
     {
         dp[0][j]=0;
     }
@@ -72,7 +70,7 @@ int countPartitions(int n, int D, vector<int> &arr) {
     
     for(int i=1;i<=n;i++)
     {
-        for(int j=0;j<=sum;j++)
+        for(int j=0;j<=sum1;j++)
         {
             if(arr[i-1]<=j)
             {
@@ -85,11 +83,7 @@ int countPartitions(int n, int D, vector<int> &arr) {
         }
     }
     
-    return dp[n][sum];
+    return dp[n][sum1];
     
     
-   
-    
-    
-}
 
