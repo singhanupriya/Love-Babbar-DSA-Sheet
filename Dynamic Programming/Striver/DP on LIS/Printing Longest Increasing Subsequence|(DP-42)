@@ -8,6 +8,62 @@ https://www.youtube.com/watch?v=IFfYfonAFGc
 Time:O(N^2), Space:O(N)
 
 
+
+
+
+void solve(int arr[], int n)
+{
+    
+    
+    vector<int> dp(n,1);
+    vector<int> prevIndex(n,-1);
+    int ansIndexEnd=0;
+    
+    int maxLen=1;
+    
+    for(int i=1;i<n;i++)
+    {
+        for(int j=0;j<i;j++)
+        {
+            if(arr[j]<arr[i] && dp[i]<dp[j]+1)
+            {
+                dp[i]=dp[j]+1;
+                prevIndex[i]=j;
+                if(maxLen < dp[i])
+                {
+                    maxLen=dp[i];
+                    ansIndexEnd=i;
+                }
+            }
+        }
+    }
+    
+    
+    int currIndex=ansIndexEnd;
+    
+    while(currIndex!=-1)
+    {
+        cout<<arr[currIndex]<<" ";
+        currIndex=prevIndex[currIndex];
+    }
+    
+}
+
+int main()
+{
+    int arr[]={3, 2, 6, 4, 5, 1};
+    int n=6;
+    
+    solve(arr,n);
+
+    return 0;
+}
+
+Output: 5 4 3 (in exam, reverse this)
+
+-------------------------------
+
+
 #include <iostream>
 #include<vector>
 
