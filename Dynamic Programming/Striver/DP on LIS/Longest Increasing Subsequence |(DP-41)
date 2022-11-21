@@ -1,6 +1,67 @@
 https://leetcode.com/problems/longest-increasing-subsequence/submissions/
 
 
+int find(vector<int>& ans, int element)
+    {
+        //first index >= element
+        int index=-1;
+        int low=0;
+        int high=ans.size()-1;
+        
+        while(low<=high)
+        {
+            int mid=low+(high-low)/2;
+            
+            if(ans[mid]>=element)
+            {
+                index=mid; //potential ans
+                high=mid-1;
+            }
+            else
+            {
+                low=mid+1;
+            }
+        }
+        
+        return index;
+    }
+    
+    
+    int longestSubsequence(int n, int a[])
+    {
+       // your code here
+       
+       if(n==0 || n==1)
+       {
+           return n;
+       }
+       
+       vector<int> ans;
+       
+       ans.push_back(a[0]);
+       
+       for(int i=1;i<n;i++)
+       {
+           int index=find(ans,a[i]);
+           
+           if(index==-1)
+           {
+               ans.push_back(a[i]);
+           }
+           else
+           {
+               
+               ans[index]=a[i];
+           }
+       }
+       
+       return ans.size();
+       
+       
+       
+    }
+
+
 Method 1: Recursion
 
 Time:O(2^n), Space:O(N)
