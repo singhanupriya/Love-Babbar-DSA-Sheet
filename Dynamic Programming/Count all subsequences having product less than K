@@ -1,0 +1,54 @@
+https://www.google.com/search?client=safari&rls=en&q=Count+all+subsequences+having+product+less+than+K&ie=UTF-8&oe=UTF-8#fpstate=ive&vld=cid:e97fbd00,vid:iOjV84903WA
+https://www.geeksforgeeks.org/count-subsequences-product-less-k/
+
+Time:O(K*N)
+Space:O(K*N)
+
+
+
+#include <iostream>
+#include<vector>
+
+using namespace std;
+
+int solve(int arr[], int n, int k)
+{
+    //subset sum variation
+    
+    vector<vector<int>> dp(n+1, vector<int>(k+1,0));
+    
+    //if product is 0, subsequence count is 0, here arr[i]>0
+    //if no arr, count is 0
+    
+    for(int i=1;i<=n;i++) //len n
+    {
+        for(int j=1;j<=k;j++)
+        {
+            //dont take that element, so whatever was the prev ans, will be this initial ans
+            dp[i][j]=dp[i-1][j];
+            
+            
+            //now if that eleemnt<=k, we can take it
+            
+            if(arr[i-1]<=j)
+            {
+                dp[i][j] =dp[i][j]+  1+ dp[i-1][j/arr[i-1]];
+                //1- is for single element
+                //divide that product by that element, now get dp[quotient][index-1]
+            }
+        }
+        
+    }
+    
+    return dp[n][k];
+}
+
+int main()
+{
+    int arr[]={1,2,3,4};
+    int n=4;
+    int k=10;
+    cout<<solve(arr,n,k);
+
+    return 0;
+}
