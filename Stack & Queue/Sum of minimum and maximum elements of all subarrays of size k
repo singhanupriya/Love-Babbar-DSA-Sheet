@@ -1,0 +1,89 @@
+https://www.geeksforgeeks.org/sum-minimum-maximum-elements-subarrays-size-k/
+
+Same approach as median of stream
+
+ In deque 'G', we maintain decreasing order of 
+    values from front to rear
+ b) In deque 'S', we maintain increasing order of 
+    values from front to rear
+
+Time:O(N), Space:O(N)
+
+#include <iostream>
+#include<deque>
+
+using namespace std;
+
+int solve(int arr[], int n, int k)
+{
+    deque<int> incIndex; //increasing order of each subarray of size k
+    deque<int> decIndex;  //decreasing order of each subarray of size k
+    //front of them will give the ans of each window
+    
+    for(int i=0;i<k;i++)
+    {
+        while(!incIndex.empty() && arr[incIndex.back()]>=arr[i])
+        {
+            incIndex.pop_back();
+        }
+        
+        while(!decIndex.empty() && arr[decIndex.back()]<=arr[i])
+        {
+            decIndex.pop_back();
+        }
+        
+        incIndex.push_back(i);
+        decIndex.push_back(i);
+    }
+    
+    int sum=0;
+    
+    for(int i=k;i<n;i++)
+    {
+        sum+=arr[incIndex.front()]+arr[decIndex.front()];
+        
+        //remove all last window elements
+        
+        while(!incIndex.empty() && incIndex.front()<=i-k)
+        {
+            incIndex.pop_front();
+        }
+        
+        while(!decIndex.empty() && decIndex.front()<=i-k)
+        {
+            decIndex.pop_front();
+        }
+        
+        //add
+        while(!incIndex.empty() && arr[incIndex.back()]>=arr[i])
+        {
+            incIndex.pop_back();
+        }
+        
+        while(!decIndex.empty() && arr[decIndex.back()]<=arr[i])
+        {
+            decIndex.pop_back();
+        }
+        
+        incIndex.push_back(i);
+        decIndex.push_back(i);
+    }
+    
+    sum+=arr[incIndex.front()]+arr[decIndex.front()];
+    
+    return sum;
+    
+
+    
+    
+}
+
+int main()
+{
+    int arr[]={2, 5, -1, 7, -3, -1, -2} ;
+    int k=4;
+    int n=7;
+    cout<<solve(arr,n,k);
+
+    return 0;
+}
