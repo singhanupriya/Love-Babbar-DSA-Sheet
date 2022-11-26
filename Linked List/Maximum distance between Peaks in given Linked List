@@ -3,6 +3,18 @@ https://www.geeksforgeeks.org/maximum-distance-between-peaks-in-given-linked-lis
 Time:O(N), Space:O(1)
 
 
+1. Just like u keep reversing nodes in longest pallindrom LL, reverse list, check if curr->Data > prev>data and curr->data > next->data,
+2. Keep a count variable to count no of nodes, once peak element in encountered, subtract from prev count
+3. Return max dist
+
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
 #include <iostream>
 
 using namespace std;
@@ -10,93 +22,100 @@ using namespace std;
 class Node{
     
     public:
-    
     int data;
     Node* next;
     
-    Node(int x,Node* prev)
+    Node(int x,Node* next)
     {
-        data=x;
-        next=prev;
+        this->data=x;
+        this->next=next;
     }
     
 };
 
+int max(int a, int b)
+{
+    if(a>=b)
+    {
+        return a;
+    }
+    return b;
+}
+
 int solve(Node* head)
 {
-    
     if(!head || !head->next)
     {
         return 0;
     }
     
-    Node* prev=new Node(-1,head);
     
+    int prevCount=-1;
+    int currCount=-1;
     
-    Node* curr=head;
-    int lastIndex=-1;
-    int currIndex=0;
+    int diff=0;
     
-    int maxGap=0;
+    int count=2;
+    
+    Node* prev=head;
+    Node* next=nullptr;
+    Node* curr=head->next;
+    
+    if(prev->data > curr->data)
+    {
+        prevCount=1;
+    }
     
     while(curr)
     {
+        next=curr->next;
+        curr->next=prev;
         
-        Node* next=curr->next;
-        
-        //if first node peak;
-        if(prev->next==head && curr->data > next->data)
+        if(next)
         {
-            lastIndex=currIndex;
+            if(curr->data > next->data && curr->data > prev->data)
+            {
+                if(prevCount==-1)
+                {
+                    prevCount=count;
+                }
+                else
+                {
+                    diff=max(diff, count-prevCount-1);
+                    prevCount=count;
+                }
+            }
         }
-        else if(next==nullptr && curr->data > prev->data)
+        else
         {
-            //last node is peak
-            
-            if(lastIndex==-1)
+            if(curr->data > prev->data)
             {
-                lastIndex=currIndex;
-            }
-            else
-            {
-                int gap=currIndex-lastIndex-1;
-                maxGap=max(maxGap,gap);
-                lastIndex=currIndex;
-            }
-            
-            
-        }
-        else if(prev->data < curr->data && curr->data > next->data)
-        {
-            //intermediate node is peak
-            if(lastIndex==-1)
-            {
-                lastIndex=currIndex;
-            }
-            else
-            {
-                int gap=currIndex-lastIndex-1;
-                maxGap=max(maxGap,gap);
-                lastIndex=currIndex;
+                if(prevCount==-1)
+                {
+                    prevCount=count;
+                }
+                else
+                {
+                    diff=max(diff,count-prevCount-1);
+                    prevCount=count;
+                }
             }
         }
         
-        currIndex++;
-        prev=prev->next;
-        curr=curr->next;
+        prev=curr;
+        curr=next;
         
-        
-        
+        count++;
     }
     
-    return maxGap;
+    return diff;
     
     
 }
 
 int main()
 {
-     Node* head = new Node(1, NULL);
+    Node* head = new Node(1, NULL);
     head->next = new Node(3, NULL);
     head->next->next = new Node(1, NULL);
     head->next->next->next = new Node(1, NULL);
@@ -108,8 +127,9 @@ int main()
         = new Node(2, NULL);
     head->next->next->next->next->next->next->next->next
         = new Node(7, NULL);
-    
+        
     cout<<solve(head);
+    
 
     return 0;
 }
