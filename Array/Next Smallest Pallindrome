@@ -1,0 +1,210 @@
+https://www.youtube.com/watch?v=3COJ95juomM
+
+
+Logic:
+
+1. if is pallindrome, add 1 to the number to do step 2 or 3.
+Eg : 99, 99+1=100, 101 by step 2.
+
+2. If Odd
+  left+mid+right
+  
+  copy left to right, if rev(left)<right, mid+1. 25723, -> 57>23, 25752
+  If rev(left)<right and middle is 9, like 35958, 35<58 , add 1 to middle it becomes 36058, now copy left to right-> 36036
+
+2. If even
+  left+right
+  
+  3558, 53<58, 35+1=36, 63>58,   3663
+  
+  if (rev)left<right, left+1, copy left to right.
+  
+  if left ends in 9 and rev(left)<right, 1996, 91<96, left+1 , 2002. 
+  
+  8999, 98<99, 89+1=90, 9009
+  
+  
+  Time:O(N), Space:O(1)
+  
+  /******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include<algorithm>
+
+using namespace std;
+
+bool isPallindrome(string str)
+{
+    int low=0;
+    int high=str.length()-1;
+    
+    while(low<high)
+    {
+        if(str[low]==str[high])
+        {
+            low++;
+            high--;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+string addOne(string str, int start, int end)
+{
+    int carry=0;
+    
+    for(int i=end;i>=start;i--)
+    {
+        if(i==end)
+        {
+            int value= (str[i]-'0') + 1;
+            carry=value/10;
+            value=value%10;
+            
+            str[i]= char(value+'0');
+        }
+        else
+        {
+            int value= (str[i]-'0') + carry;
+            carry=value/10;
+            value=value%10;
+            
+            str[i]= char(value+'0');
+        }
+    }
+    
+    if(carry)
+    {
+        str= to_string(carry)+str;
+    }
+    
+    return str;
+}
+
+string solve(string str)
+{
+    int n=str.length();
+    
+    if(isPallindrome(str))
+    {
+        str=addOne(str,0,n-1);
+    }
+    
+    n=str.length();
+    
+    //cout<<str<<endl;
+    
+    
+    if(n & 1)
+    {
+        //odd
+        
+        string left="";
+        int mid=n/2;
+        
+        for(int i=0;i<mid;i++)
+        {
+            left+= str[i];
+        }
+        
+        
+        
+        string revLeft=left;
+        reverse(revLeft.begin(),revLeft.end());
+        
+        string right="";
+        for(int i=mid+1;i<n;i++)
+        {
+            right+= str[i];
+        }
+        
+        //cout<<revLeft<<" "<<right<<endl;
+        
+        if(revLeft > right)
+        {
+            return left+str[mid]+revLeft;
+        }
+        else
+        {
+            if(str[mid]=='9')
+            {
+                str[mid]='0';
+                left=addOne(left,0,mid-1);
+                string revLeft=left;
+                reverse(revLeft.begin(),revLeft.end());
+                return left+str[mid]+revLeft;
+                
+            }
+            else
+            {
+                int value= (str[mid]-'0') +1;
+                str[mid]= char(value + '0');
+                return left+str[mid]+revLeft;
+            }
+        }
+    }
+    else
+    {
+        int mid=n/2;
+        
+        string left="";
+        
+        
+        for(int i=0;i<mid;i++)
+        {
+            left+= str[i];
+        }
+        
+        
+        
+        string revLeft=left;
+        reverse(revLeft.begin(),revLeft.end());
+        
+        string right="";
+        for(int i=mid;i<n;i++)
+        {
+            right+= str[i];
+        }
+        
+        //cout<<revLeft<<" "<<right<<endl;
+        
+        if(revLeft > right)
+        {
+            return left+revLeft;
+        }
+        else
+        {
+            left= addOne(left,0,mid-1);
+            string revLeft=left;
+            reverse(revLeft.begin(),revLeft.end());
+            
+            
+            return left+revLeft;
+        
+            
+            
+        }
+    }
+    
+    return "";
+}
+
+int main()
+{
+    string str="1221";
+    
+    cout<<solve(str);
+
+    return 0;
+}
