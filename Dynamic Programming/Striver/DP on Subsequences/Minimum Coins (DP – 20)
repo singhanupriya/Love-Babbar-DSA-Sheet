@@ -1,6 +1,83 @@
 https://takeuforward.org/data-structure/minimum-coins-dp-20/
 
 
+Knapsack
+
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution{
+
+	public:
+	
+	int solve(int sum, int n, int num[])
+    {
+        if(sum==0)
+        {
+            return 0;
+        }
+        
+        if(sum<0 || n==0)
+        {
+            return 1000000009;
+        }
+        
+        if(num[n-1]<=sum)
+        {
+            return min(1+ solve(sum-num[n-1],n,num), solve(sum,n-1,num));
+        }
+        else
+        {
+            return solve(sum,n-1,num);
+        }
+    }
+
+	
+	int minCoins(int coins[], int M, int V) 
+	{ 
+	    
+	    int ans=solve(V,M,coins);
+	    
+	    if(ans>=1000000009)
+	    {
+	        return -1;
+	    }
+	    
+	    return ans;
+	    
+	} 
+	  
+};
+
+//{ Driver Code Starts.
+int main() 
+{
+   
+   
+   	int t;
+    cin >> t;
+    while (t--)
+    {
+        int v, m;
+        cin >> v >> m;
+
+        int coins[m];
+        for(int i = 0; i < m; i++)
+        	cin >> coins[i];
+
+      
+	    Solution ob;
+	    cout << ob.minCoins(coins, m, v) << "\n";
+	     
+    }
+    return 0;
+}
+
+// } Driver Code Ends
+
+
 Method 1: Recursion
 
 Time:n^amount
